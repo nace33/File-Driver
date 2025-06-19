@@ -76,15 +76,15 @@ final class Sidebar_Item : Identifiable {
 
 //MARK: Types
 extension Sidebar_Item {
-    enum Category : String {
-        case filing, forms, cases, contacts, tasks, settings
+    enum Category : String, CaseIterable {
+        case filing, templates, cases, contacts, tasks, research, settings
         case inbox, calendar, drive, gemini
-        case user, group, doc, sheet, driveQuery, folder, research, reports
+        case user, group, doc, sheet, driveQuery, folder, reports
         var iconString : String {
             switch self {
             case .filing:
                 "cabinet"
-            case .forms:
+            case .templates:
                 "doc.badge.gearshape"
             case .cases:
                 "briefcase"
@@ -144,7 +144,7 @@ extension Sidebar_Item {
             }
         }
         static var defaults       : [Category] { nlfDefaults + googleDefaults}
-        static var nlfDefaults    : [Category] {[ .filing, .forms, .cases, .contacts, .tasks, .settings,  ]}
+        static var nlfDefaults    : [Category] {[ .filing, .templates, .cases, .contacts, .tasks, .research, .settings,  ]}
         static var googleDefaults : [Category] {[ .inbox, .calendar, .drive, .gemini  ]}
     }
 }

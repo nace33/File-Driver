@@ -11,6 +11,9 @@ import SwiftData
 @main
 struct File_DriverApp: App {
     @State private var google = Google.shared
+    @State private var contacts = ContactsController.shared
+    @State private var templates = TemplatesController.shared
+    @State private var filing = FilingController.shared
     
     @State private var swiftData  = BOF_SwiftData.shared
     var body: some Scene {
@@ -19,9 +22,15 @@ struct File_DriverApp: App {
 //            GoogleDrive_IconDownload(size:.sixtyFour)
         }
             .environment(google)
+            .environment(filing)
+            .environment(contacts)
+            .environment(templates)
             .modelContainer(swiftData.container)
-        
-        
+#if os(macOS)
+            .commands {
+                ImportFromDevicesCommands()
+            }
+#endif
         
 #if os(macOS)
         Settings {

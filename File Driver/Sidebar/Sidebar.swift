@@ -194,6 +194,37 @@ extension Sidebar {
         }
         try? modelContext.save()
     }
+    
+    //eligible new items
+    var eligibleCategories : [Sidebar_Item.Category] {
+        let existing = items.map(\.category)
+        return Sidebar_Item.Category.allCases.filter { !existing.contains($0)}
+    }
+    func insertEligible(_ category:Sidebar_Item.Category) {
+        let order = items.compactMap(\.order).max(by: {$0 > $1}) ?? -1
+        let newItem = Sidebar_Item(url: category.defaultURL, title:category.title, category: category, order: order + 1)
+        modelContext.insert(newItem)
+    }
+    func resortItems() {
+        var index = 0
+        let groups = roots
+        for group in groups {
+            group.order = index
+            var childIndex = 0
+            for child in group.sortedChildren {
+                child.order = childIndex
+                childIndex += 1
+            }
+            index += 1
+        }
+ 
+        printOrder()
+    }
+    func printOrder() {
+        for item in self.items {
+            print("\(item.order): \(item.title)")
+        }
+    }
 }
 
 
@@ -242,8 +273,23 @@ extension Sidebar {
         }
     }
     @ViewBuilder func listMenu() -> some View {
-        Menu("New") {
-            Button("Sidebar Item") { showAddSheet.toggle() }
+        newSidebarItemMenu()
+        Divider()
+        Button("Re-Sort Items")   { resortItems() }
+        Button("Log Item Iorder") { printOrder() }
+    }
+    @ViewBuilder func newSidebarItemMenu() -> some View {
+        let eligibleCategories = eligibleCategories
+        if eligibleCategories.isNotEmpty {
+            Menu("Add Sidebar Item") {
+                Button("Custom") { showAddSheet.toggle() }
+                Divider()
+                ForEach(eligibleCategories, id:\.self) { cat in
+                    Button(cat.title) {
+                        insertEligible(cat)
+                    }
+                }
+            }
         }
     }
 }

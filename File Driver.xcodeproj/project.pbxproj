@@ -7,18 +7,56 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E31D5CB72DF1F18700C3DFF0 /* NLF_Contact_ImageField-Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31D5CB62DF1F18700C3DFF0 /* NLF_Contact_ImageField-Cache.swift */; };
-		E31D5CBD2DF26F6200C3DFF0 /* NLF_Contacts_FileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31D5CBC2DF26F6200C3DFF0 /* NLF_Contacts_FileView.swift */; };
-		E31D5CBF2DF2760100C3DFF0 /* BOF_Finder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31D5CBE2DF2760100C3DFF0 /* BOF_Finder.swift */; };
 		E321D83A2DB9672A006CC081 /* Filing_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D8382DB9672A006CC081 /* Filing_View.swift */; };
-		E321D83C2DB96741006CC081 /* Drive_Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D83B2DB96741006CC081 /* Drive_Navigator.swift */; };
 		E321D83E2DB96758006CC081 /* Case_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D83D2DB96758006CC081 /* Case_List.swift */; };
 		E321D84A2DBA74BA006CC081 /* Google_Drive_Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D8492DBA74BA006CC081 /* Google_Drive_Permissions.swift */; };
-		E321D84C2DBBD033006CC081 /* Drive_Navigator_Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D84B2DBBD033006CC081 /* Drive_Navigator_Inspector.swift */; };
-		E32730D32DE8F02800B6EDBD /* NLF_Form_Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32730D22DE8F02800B6EDBD /* NLF_Form_Category.swift */; };
-		E32730D52DE8F04400B6EDBD /* NLF_Form_DriveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32730D42DE8F04400B6EDBD /* NLF_Form_DriveLabel.swift */; };
-		E32730D72DE8F0BF00B6EDBD /* NLF_Form_Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32730D62DE8F0BF00B6EDBD /* NLF_Form_Label.swift */; };
 		E32730D92DE9220100B6EDBD /* VStack_Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32730D82DE9220100B6EDBD /* VStack_Loader.swift */; };
+		E34BAB1C2DFB66ED0077AACA /* Drive_Imager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */; };
+		E34BAB1F2DFB9E920077AACA /* AddToCase_Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */; };
+		E34BAB242DFB9F9D0077AACA /* Contact.Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */; };
+		E34BAB2A2DFBC5D60077AACA /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB292DFBC5D60077AACA /* Contact.swift */; };
+		E34BAB2D2DFBC82A0077AACA /* ContactDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB2C2DFBC82A0077AACA /* ContactDetail.swift */; };
+		E34BAB2F2DFBCC760077AACA /* ContactDetail_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB2E2DFBCC760077AACA /* ContactDetail_Header.swift */; };
+		E34BAB312DFBCCE80077AACA /* NewContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB302DFBCCE80077AACA /* NewContact.swift */; };
+		E34BAB332DFBCD2E0077AACA /* NewContact_Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB322DFBCD2E0077AACA /* NewContact_Info.swift */; };
+		E34BAB362DFBD0980077AACA /* ContactDetail_Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB352DFBD0980077AACA /* ContactDetail_Info.swift */; };
+		E34BAB382DFBE0050077AACA /* ContactDetail_Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB372DFBE0050077AACA /* ContactDetail_Files.swift */; };
+		E34BAB3A2DFBE3DE0077AACA /* NewContact_File-Drive.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB392DFBE3DE0077AACA /* NewContact_File-Drive.swift */; };
+		E34BAB3C2DFBF4FB0077AACA /* EditContact_File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB3B2DFBF4FB0077AACA /* EditContact_File.swift */; };
+		E34BAB3E2DFC4A720077AACA /* NewContact_File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB3D2DFC4A720077AACA /* NewContact_File.swift */; };
+		E34BAB442DFC560E0077AACA /* ContactDetail_Cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB432DFC560E0077AACA /* ContactDetail_Cases.swift */; };
+		E34BAB482DFC71A10077AACA /* ContactList_Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB472DFC71A10077AACA /* ContactList_Row.swift */; };
+		E34BAB4A2DFC71B30077AACA /* ContactList_Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB492DFC71B30077AACA /* ContactList_Filter.swift */; };
+		E34BAB4C2DFDA6640077AACA /* TemplatesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB4B2DFDA6640077AACA /* TemplatesList.swift */; };
+		E34BAB4E2DFDA7690077AACA /* TemplateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB4D2DFDA7690077AACA /* TemplateController.swift */; };
+		E34BAB522DFDA9120077AACA /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB512DFDA9120077AACA /* Template.swift */; };
+		E34BAB542DFDA9380077AACA /* Template.Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB532DFDA9380077AACA /* Template.Label.swift */; };
+		E34BAB562DFDA95D0077AACA /* Template.DriveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB552DFDA95D0077AACA /* Template.DriveLabel.swift */; };
+		E34BAB582DFDA9740077AACA /* Template.Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB572DFDA9740077AACA /* Template.Category.swift */; };
+		E34BAB5B2DFDAB080077AACA /* NewTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB5A2DFDAB080077AACA /* NewTemplate.swift */; };
+		E34BAB5D2DFDAF820077AACA /* TextField_Suggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB5C2DFDAF820077AACA /* TextField_Suggestions.swift */; };
+		E34BAB5F2DFDBA480077AACA /* Template_Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB5E2DFDBA480077AACA /* Template_Error.swift */; };
+		E34BAB622DFDC0E60077AACA /* TemplateDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB612DFDC0E60077AACA /* TemplateDetail.swift */; };
+		E34BAB642DFDC3D60077AACA /* Template.Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB632DFDC3D60077AACA /* Template.Sort.swift */; };
+		E34BAB662DFDCD5C0077AACA /* EditTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB652DFDCD5C0077AACA /* EditTemplate.swift */; };
+		E34BAB6C2DFDD8C70077AACA /* DuplicateTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB6B2DFDD8C70077AACA /* DuplicateTemplate.swift */; };
+		E34BAB6E2DFE07770077AACA /* ImportTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB6D2DFE07770077AACA /* ImportTemplate.swift */; };
+		E34BAB702DFE16770077AACA /* AddToCase_Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB6F2DFE16770077AACA /* AddToCase_Template.swift */; };
+		E34BAB722DFE1FE40077AACA /* TemplatesDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB712DFE1FE40077AACA /* TemplatesDetail.swift */; };
+		E34BAB752E0050AF0077AACA /* ResearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB742E0050AF0077AACA /* ResearchController.swift */; };
+		E34BAB772E0050B30077AACA /* Research.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB762E0050B30077AACA /* Research.swift */; };
+		E34BAB7A2E0050C10077AACA /* Research.Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB792E0050C10077AACA /* Research.Label.swift */; };
+		E34BAB7C2E0050C60077AACA /* Research.DriveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB7B2E0050C60077AACA /* Research.DriveLabel.swift */; };
+		E34BAB7E2E0050D80077AACA /* ResearchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB7D2E0050D80077AACA /* ResearchList.swift */; };
+		E34BAB802E0050DE0077AACA /* ResearchDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB7F2E0050DE0077AACA /* ResearchDetail.swift */; };
+		E34BAB822E00592B0077AACA /* FilingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB812E00592B0077AACA /* FilingController.swift */; };
+		E34BAB842E0059840077AACA /* FilingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB832E0059840077AACA /* FilingList.swift */; };
+		E34BAB862E005A750077AACA /* Settings_Filing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB852E005A750077AACA /* Settings_Filing.swift */; };
+		E34BAB892E006A2D0077AACA /* FilingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB882E006A2D0077AACA /* FilingItem.swift */; };
+		E34BAB8D2E006A490077AACA /* Filing_Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB8C2E006A490077AACA /* Filing_Error.swift */; };
+		E34BAB902E0074810077AACA /* HappyDog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB8F2E0074810077AACA /* HappyDog.swift */; };
+		E34BAB922E00CF100077AACA /* FilingDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB912E00CF100077AACA /* FilingDetail.swift */; };
+		E34BABA32E00FC9A0077AACA /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BABA22E00FC9A0077AACA /* Loader.swift */; };
 		E369CA302DA0464300FE91DB /* File_DriverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E369CA2B2DA0464300FE91DB /* File_DriverApp.swift */; };
 		E369CA372DA0467700FE91DB /* Fart.caf in Resources */ = {isa = PBXBuildFile; fileRef = E369CA362DA0467700FE91DB /* Fart.caf */; };
 		E369CA3A2DA0478400FE91DB /* BOF_SecretSauce in Frameworks */ = {isa = PBXBuildFile; productRef = E369CA392DA0478400FE91DB /* BOF_SecretSauce */; };
@@ -38,24 +76,20 @@
 		E369CA5D2DA048DB00FE91DB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E369CA5C2DA048DB00FE91DB /* ContentView.swift */; };
 		E369CA7B2DA04A6900FE91DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E369CA7A2DA04A6900FE91DB /* Assets.xcassets */; };
 		E376F6062DDE1874007CBBD7 /* Settings_Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E376F6052DDE1874007CBBD7 /* Settings_Contacts.swift */; };
+		E379925D2E020C58001B0E02 /* Settings_Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = E379925C2E020C58001B0E02 /* Settings_Templates.swift */; };
+		E37992612E022A00001B0E02 /* Google_DriveView_RowLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37992602E022A00001B0E02 /* Google_DriveView_RowLabel.swift */; };
+		E37992632E02EC71001B0E02 /* CaseSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37992622E02EC71001B0E02 /* CaseSelector.swift */; };
+		E37992662E02FBA7001B0E02 /* Google_DriveView_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37992652E02FBA7001B0E02 /* Google_DriveView_Header.swift */; };
+		E37992682E0345EB001B0E02 /* Google_DriveView_ListBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37992672E0345EB001B0E02 /* Google_DriveView_ListBody.swift */; };
+		E379926A2E03462C001B0E02 /* Google_DriveView_HeaderActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37992692E03462C001B0E02 /* Google_DriveView_HeaderActions.swift */; };
 		E37E51AE2DEEB21B00EF860C /* Inbox_Filing_DownloadItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51AD2DEEB21B00EF860C /* Inbox_Filing_DownloadItemView.swift */; };
 		E37E51B12DEEC30200EF860C /* Filing_WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51B02DEEC30200EF860C /* Filing_WebView.swift */; };
 		E37E51B32DEF3E3900EF860C /* Case_Filing_Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51B22DEF3E3900EF860C /* Case_Filing_Selector.swift */; };
 		E37E51B52DEF4A9600EF860C /* Case_Filing_DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51B42DEF4A9600EF860C /* Case_Filing_DetailView.swift */; };
 		E37E51BF2DEF575300EF860C /* Cases_Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51BE2DEF575300EF860C /* Cases_Table.swift */; };
-		E37E51C12DEF7AD700EF860C /* Contacts_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51C02DEF7AD700EF860C /* Contacts_List.swift */; };
-		E37E51C42DEF7CCB00EF860C /* NLF_Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51C32DEF7CCB00EF860C /* NLF_Contact.swift */; };
-		E37E51C62DEF7CE100EF860C /* NLF_Contact_Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51C52DEF7CE100EF860C /* NLF_Contact_Label.swift */; };
-		E37E51C82DEF7CFD00EF860C /* NLF_Contact_Drive_Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51C72DEF7CF700EF860C /* NLF_Contact_Drive_Label.swift */; };
-		E37E51CA2DEF7D9100EF860C /* NLF_ContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51C92DEF7D9100EF860C /* NLF_ContactsController.swift */; };
-		E37E51CF2DEF7ECE00EF860C /* NLF_Contact_New.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51CE2DEF7ECE00EF860C /* NLF_Contact_New.swift */; };
 		E37E51D12DEF97EC00EF860C /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51D02DEF97EC00EF860C /* Filter.swift */; };
-		E37E51D32DEFA95800EF860C /* NLF_Contact_LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51D22DEFA95800EF860C /* NLF_Contact_LabelView.swift */; };
-		E37E51D62DEFAE1500EF860C /* NLF_Contact_NameField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51D52DEFAE1500EF860C /* NLF_Contact_NameField.swift */; };
 		E37E51D82DEFB25F00EF860C /* Drive_SetDefaultID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51D72DEFB25F00EF860C /* Drive_SetDefaultID.swift */; };
 		E37E51DA2DEFC6BB00EF860C /* Drive_FileSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51D92DEFC6BB00EF860C /* Drive_FileSelect.swift */; };
-		E37E51DE2DEFD19300EF860C /* Drive_Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51DD2DEFD19300EF860C /* Drive_Selector.swift */; };
-		E37E51E22DF06E5500EF860C /* NLF_Contact_ImageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37E51E12DF06E5500EF860C /* NLF_Contact_ImageField.swift */; };
 		E380F8102DA04E5500540A3B /* Google_Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380F80B2DA04E5500540A3B /* Google_Error.swift */; };
 		E380F8112DA04E5500540A3B /* GTLRDrive_File_Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380F7F92DA04E5500540A3B /* GTLRDrive_File_Ext.swift */; };
 		E380F8122DA04E5500540A3B /* Google_Drive_Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380F7F72DA04E5500540A3B /* Google_Drive_Preview.swift */; };
@@ -72,35 +106,26 @@
 		E380F8262DA0534A00540A3B /* BOF_NavModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380F8252DA0534A00540A3B /* BOF_NavModel.swift */; };
 		E380F8292DA05AC900540A3B /* Inbox_View_OLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380F8282DA05AC900540A3B /* Inbox_View_OLD.swift */; };
 		E380F82B2DA05B2500540A3B /* Settings_Inbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380F82A2DA05B2500540A3B /* Settings_Inbox.swift */; };
-		E38A42202DF09A1C0059028D /* NLF_Contact_Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A421F2DF09A1C0059028D /* NLF_Contact_Info.swift */; };
-		E38A42312DF0F5190059028D /* NLF_Contact_SheetRow_Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42302DF0F5190059028D /* NLF_Contact_SheetRow_Add.swift */; };
-		E38A42342DF103C30059028D /* NLF_Contact_SheetRow_Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42332DF103C30059028D /* NLF_Contact_SheetRow_Category.swift */; };
-		E38A42362DF103E50059028D /* NLF_Contact_SheetRow_Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42352DF103E50059028D /* NLF_Contact_SheetRow_Label.swift */; };
-		E38A42382DF105370059028D /* NLF_Contact_SheetRow_Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42372DF105370059028D /* NLF_Contact_SheetRow_Value.swift */; };
-		E38A423C2DF113A10059028D /* NLF_Contact_SheetRow_Delete.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A423B2DF113A10059028D /* NLF_Contact_SheetRow_Delete.swift */; };
-		E38A423E2DF1220D0059028D /* NLF_Contact_SheetRow_Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A423D2DF1220A0059028D /* NLF_Contact_SheetRow_Update.swift */; };
-		E38A42402DF130ED0059028D /* NLF_Contact_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A423F2DF130ED0059028D /* NLF_Contact_View.swift */; };
-		E38A42432DF132610059028D /* NLF_Contact_View_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42422DF132610059028D /* NLF_Contact_View_Header.swift */; };
-		E38A42452DF133260059028D /* NLF_Contact_Info_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42442DF133260059028D /* NLF_Contact_Info_View.swift */; };
-		E38A42472DF1339A0059028D /* NLF_Contact_Info_Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42462DF1339A0059028D /* NLF_Contact_Info_Category.swift */; };
-		E38A42492DF133B70059028D /* NLF_Contact_Info_SheetRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A42482DF133B70059028D /* NLF_Contact_Info_SheetRow.swift */; };
-		E38A424B2DF1CB590059028D /* Contacts_List_Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38A424A2DF1CB590059028D /* Contacts_List_Filter.swift */; };
-		E3B910B32DE0B3D500F86A15 /* Settings_Forms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910B22DE0B3D500F86A15 /* Settings_Forms.swift */; };
-		E3B910C82DE3734300F86A15 /* NLF_Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910C72DE3734300F86A15 /* NLF_Form.swift */; };
-		E3B910CA2DE5FA7800F86A15 /* NLF_Forms_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910C92DE5FA7800F86A15 /* NLF_Forms_List.swift */; };
+		E38CB03F2DF8B2CA0074D514 /* Contact.DriveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38CB03E2DF8B2CA0074D514 /* Contact.DriveLabel.swift */; };
+		E38CB0412DF8B31A0074D514 /* Contact.Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38CB0402DF8B31A0074D514 /* Contact.Label.swift */; };
+		E38CB0492DF8C3B30074D514 /* Contact_Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38CB0482DF8C3B30074D514 /* Contact_Error.swift */; };
+		E38CB0542DF8E8370074D514 /* Contact.Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38CB0532DF8E8370074D514 /* Contact.Info.swift */; };
+		E39582362DF9380000AA5780 /* Contact.Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39582352DF9380000AA5780 /* Contact.Image.swift */; };
+		E39582382DF93E4A00AA5780 /* Drive_Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39582372DF93E4A00AA5780 /* Drive_Cache.swift */; };
 		E3B910DB2DE6878600F86A15 /* GoogleDrive_IconDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910DA2DE6878600F86A15 /* GoogleDrive_IconDownload.swift */; };
 		E3B910DD2DE6931000F86A15 /* GoogleDriveIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B910DC2DE6931000F86A15 /* GoogleDriveIcons.xcassets */; };
-		E3B910DF2DE6990700F86A15 /* NLF_Form_Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910DE2DE6990700F86A15 /* NLF_Form_Inspector.swift */; };
-		E3B910E42DE7319100F86A15 /* NLF_Form_Edit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910E32DE7319100F86A15 /* NLF_Form_Edit.swift */; };
-		E3B910E62DE731AB00F86A15 /* NLF_Form_Use.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910E52DE731AB00F86A15 /* NLF_Form_Use.swift */; };
-		E3BD45D82DE733000094FFB1 /* NLF_Form_New.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45D72DE733000094FFB1 /* NLF_Form_New.swift */; };
-		E3BD45DA2DE735130094FFB1 /* NLF_FormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45D92DE735130094FFB1 /* NLF_FormController.swift */; };
-		E3BD45DC2DE7394C0094FFB1 /* NLF_Form_Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45DB2DE7394C0094FFB1 /* NLF_Form_Fields.swift */; };
-		E3BD45DF2DE757880094FFB1 /* NLF_Form_Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45DE2DE757880094FFB1 /* NLF_Form_Import.swift */; };
-		E3BD45E12DE758EF0094FFB1 /* NLF_Form_Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45E02DE758EF0094FFB1 /* NLF_Form_Filter.swift */; };
-		E3BD45E32DE75E4A0094FFB1 /* NLF_Form_Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45E22DE75E4A0094FFB1 /* NLF_Form_Sort.swift */; };
-		E3BD45E52DE77B4F0094FFB1 /* NLF_Form_Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45E42DE77B4F0094FFB1 /* NLF_Form_Duplicate.swift */; };
-		E3BD45E72DE780C20094FFB1 /* NLF_Form_DriveID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BD45E62DE780C20094FFB1 /* NLF_Form_DriveID.swift */; };
+		E3E8B6D22E01202200F976DA /* Google_DriveView_PathBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D12E01202200F976DA /* Google_DriveView_PathBar.swift */; };
+		E3E8B6D52E01204A00F976DA /* Google_DriveDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D42E01204A00F976DA /* Google_DriveDelegate.swift */; };
+		E3E8B6D72E01213C00F976DA /* Google_DriveView_Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D62E01213C00F976DA /* Google_DriveView_Row.swift */; };
+		E3E8B6D92E01216400F976DA /* Google_DriveView_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D82E01216400F976DA /* Google_DriveView_List.swift */; };
+		E3E8B6DD2E019F0100F976DA /* Google_DriveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6DC2E019F0100F976DA /* Google_DriveView.swift */; };
+		E3E8B6DF2E01CE1C00F976DA /* Google_DriveView_ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6DE2E01CE1C00F976DA /* Google_DriveView_ActionButton.swift */; };
+		E3EC429F2DF9F72100E28ABE /* Contact.File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EC429E2DF9F72100E28ABE /* Contact.File.swift */; };
+		E3EE94C42DFA52EA00B60565 /* ContactsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EE94C32DFA52EA00B60565 /* ContactsList.swift */; };
+		E3EE94C62DFA533A00B60565 /* ContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EE94C52DFA533A00B60565 /* ContactsController.swift */; };
+		E3EE94C82DFA6CE300B60565 /* EditForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EE94C72DFA6CE300B60565 /* EditForm.swift */; };
+		E3EE94CA2DFA716400B60565 /* EditContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EE94C92DFA716400B60565 /* EditContact.swift */; };
+		E3EE94D52DFAFA2200B60565 /* PreviewContact_File.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EE94D42DFAFA2200B60565 /* PreviewContact_File.swift */; };
 		E3F544B62DEE910E0039E913 /* Web_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F544B52DEE910E0039E913 /* Web_View.swift */; };
 		E3F544B82DEEA1150039E913 /* Inbox_Filing_URLItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F544B72DEEA1150039E913 /* Inbox_Filing_URLItemView.swift */; };
 		E3F5A1862DAFF276004100C3 /* Case_Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F5A1812DAFF276004100C3 /* Case_Folder.swift */; };
@@ -119,25 +144,61 @@
 		E3F5A1AE2DB0819D004100C3 /* Case_Contact_Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F5A1AD2DB0819D004100C3 /* Case_Contact_Row.swift */; };
 		E3F5A1B12DB082FB004100C3 /* Case_Contact_Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F5A1B02DB082FB004100C3 /* Case_Contact_Details.swift */; };
 		E3F5A1B32DB08356004100C3 /* Case_Contacts_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F5A1B22DB08356004100C3 /* Case_Contacts_List.swift */; };
-		E3FB15122DE9DA8B00DDCF58 /* NLF_Form_ExampleList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FB15112DE9DA8B00DDCF58 /* NLF_Form_ExampleList.swift */; };
-		E3FB15142DE9EF4900DDCF58 /* NLF_Form_MultipleSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FB15132DE9EF4900DDCF58 /* NLF_Form_MultipleSelection.swift */; };
 		E3FB15172DEA0E1C00DDCF58 /* Drive_Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FB15162DEA0E1C00DDCF58 /* Drive_Rename.swift */; };
 		E3FB152B2DEB5BA900DDCF58 /* Inbox_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FB152A2DEB5BA900DDCF58 /* Inbox_View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E31D5CB62DF1F18700C3DFF0 /* NLF_Contact_ImageField-Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NLF_Contact_ImageField-Cache.swift"; sourceTree = "<group>"; };
-		E31D5CBC2DF26F6200C3DFF0 /* NLF_Contacts_FileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contacts_FileView.swift; sourceTree = "<group>"; };
-		E31D5CBE2DF2760100C3DFF0 /* BOF_Finder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BOF_Finder.swift; sourceTree = "<group>"; };
 		E321D8382DB9672A006CC081 /* Filing_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filing_View.swift; sourceTree = "<group>"; };
-		E321D83B2DB96741006CC081 /* Drive_Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Navigator.swift; sourceTree = "<group>"; };
 		E321D83D2DB96758006CC081 /* Case_List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_List.swift; sourceTree = "<group>"; };
 		E321D8492DBA74BA006CC081 /* Google_Drive_Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_Drive_Permissions.swift; sourceTree = "<group>"; };
-		E321D84B2DBBD033006CC081 /* Drive_Navigator_Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Navigator_Inspector.swift; sourceTree = "<group>"; };
-		E32730D22DE8F02800B6EDBD /* NLF_Form_Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Category.swift; sourceTree = "<group>"; };
-		E32730D42DE8F04400B6EDBD /* NLF_Form_DriveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_DriveLabel.swift; sourceTree = "<group>"; };
-		E32730D62DE8F0BF00B6EDBD /* NLF_Form_Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Label.swift; sourceTree = "<group>"; };
 		E32730D82DE9220100B6EDBD /* VStack_Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VStack_Loader.swift; sourceTree = "<group>"; };
+		E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Imager.swift; sourceTree = "<group>"; };
+		E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCase_Contact.swift; sourceTree = "<group>"; };
+		E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.Case.swift; sourceTree = "<group>"; };
+		E34BAB292DFBC5D60077AACA /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		E34BAB2C2DFBC82A0077AACA /* ContactDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetail.swift; sourceTree = "<group>"; };
+		E34BAB2E2DFBCC760077AACA /* ContactDetail_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetail_Header.swift; sourceTree = "<group>"; };
+		E34BAB302DFBCCE80077AACA /* NewContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContact.swift; sourceTree = "<group>"; };
+		E34BAB322DFBCD2E0077AACA /* NewContact_Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContact_Info.swift; sourceTree = "<group>"; };
+		E34BAB352DFBD0980077AACA /* ContactDetail_Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetail_Info.swift; sourceTree = "<group>"; };
+		E34BAB372DFBE0050077AACA /* ContactDetail_Files.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetail_Files.swift; sourceTree = "<group>"; };
+		E34BAB392DFBE3DE0077AACA /* NewContact_File-Drive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewContact_File-Drive.swift"; sourceTree = "<group>"; };
+		E34BAB3B2DFBF4FB0077AACA /* EditContact_File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContact_File.swift; sourceTree = "<group>"; };
+		E34BAB3D2DFC4A720077AACA /* NewContact_File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewContact_File.swift; sourceTree = "<group>"; };
+		E34BAB432DFC560E0077AACA /* ContactDetail_Cases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetail_Cases.swift; sourceTree = "<group>"; };
+		E34BAB472DFC71A10077AACA /* ContactList_Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactList_Row.swift; sourceTree = "<group>"; };
+		E34BAB492DFC71B30077AACA /* ContactList_Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactList_Filter.swift; sourceTree = "<group>"; };
+		E34BAB4B2DFDA6640077AACA /* TemplatesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesList.swift; sourceTree = "<group>"; };
+		E34BAB4D2DFDA7690077AACA /* TemplateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateController.swift; sourceTree = "<group>"; };
+		E34BAB512DFDA9120077AACA /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
+		E34BAB532DFDA9380077AACA /* Template.Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.Label.swift; sourceTree = "<group>"; };
+		E34BAB552DFDA95D0077AACA /* Template.DriveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.DriveLabel.swift; sourceTree = "<group>"; };
+		E34BAB572DFDA9740077AACA /* Template.Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.Category.swift; sourceTree = "<group>"; };
+		E34BAB5A2DFDAB080077AACA /* NewTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTemplate.swift; sourceTree = "<group>"; };
+		E34BAB5C2DFDAF820077AACA /* TextField_Suggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField_Suggestions.swift; sourceTree = "<group>"; };
+		E34BAB5E2DFDBA480077AACA /* Template_Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template_Error.swift; sourceTree = "<group>"; };
+		E34BAB612DFDC0E60077AACA /* TemplateDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDetail.swift; sourceTree = "<group>"; };
+		E34BAB632DFDC3D60077AACA /* Template.Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.Sort.swift; sourceTree = "<group>"; };
+		E34BAB652DFDCD5C0077AACA /* EditTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplate.swift; sourceTree = "<group>"; };
+		E34BAB6B2DFDD8C70077AACA /* DuplicateTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTemplate.swift; sourceTree = "<group>"; };
+		E34BAB6D2DFE07770077AACA /* ImportTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTemplate.swift; sourceTree = "<group>"; };
+		E34BAB6F2DFE16770077AACA /* AddToCase_Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCase_Template.swift; sourceTree = "<group>"; };
+		E34BAB712DFE1FE40077AACA /* TemplatesDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatesDetail.swift; sourceTree = "<group>"; };
+		E34BAB742E0050AF0077AACA /* ResearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchController.swift; sourceTree = "<group>"; };
+		E34BAB762E0050B30077AACA /* Research.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Research.swift; sourceTree = "<group>"; };
+		E34BAB792E0050C10077AACA /* Research.Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Research.Label.swift; sourceTree = "<group>"; };
+		E34BAB7B2E0050C60077AACA /* Research.DriveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Research.DriveLabel.swift; sourceTree = "<group>"; };
+		E34BAB7D2E0050D80077AACA /* ResearchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchList.swift; sourceTree = "<group>"; };
+		E34BAB7F2E0050DE0077AACA /* ResearchDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchDetail.swift; sourceTree = "<group>"; };
+		E34BAB812E00592B0077AACA /* FilingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilingController.swift; sourceTree = "<group>"; };
+		E34BAB832E0059840077AACA /* FilingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilingList.swift; sourceTree = "<group>"; };
+		E34BAB852E005A750077AACA /* Settings_Filing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings_Filing.swift; sourceTree = "<group>"; };
+		E34BAB882E006A2D0077AACA /* FilingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilingItem.swift; sourceTree = "<group>"; };
+		E34BAB8C2E006A490077AACA /* Filing_Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filing_Error.swift; sourceTree = "<group>"; };
+		E34BAB8F2E0074810077AACA /* HappyDog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HappyDog.swift; sourceTree = "<group>"; };
+		E34BAB912E00CF100077AACA /* FilingDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilingDetail.swift; sourceTree = "<group>"; };
+		E34BABA22E00FC9A0077AACA /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		E369CA152DA0463D00FE91DB /* File Driver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "File Driver.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E369CA2A2DA0464300FE91DB /* File_Driver.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = File_Driver.entitlements; sourceTree = "<group>"; };
 		E369CA2B2DA0464300FE91DB /* File_DriverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File_DriverApp.swift; sourceTree = "<group>"; };
@@ -155,24 +216,20 @@
 		E369CA5C2DA048DB00FE91DB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E369CA7A2DA04A6900FE91DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E376F6052DDE1874007CBBD7 /* Settings_Contacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings_Contacts.swift; sourceTree = "<group>"; };
+		E379925C2E020C58001B0E02 /* Settings_Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings_Templates.swift; sourceTree = "<group>"; };
+		E37992602E022A00001B0E02 /* Google_DriveView_RowLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_RowLabel.swift; sourceTree = "<group>"; };
+		E37992622E02EC71001B0E02 /* CaseSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseSelector.swift; sourceTree = "<group>"; };
+		E37992652E02FBA7001B0E02 /* Google_DriveView_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_Header.swift; sourceTree = "<group>"; };
+		E37992672E0345EB001B0E02 /* Google_DriveView_ListBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_ListBody.swift; sourceTree = "<group>"; };
+		E37992692E03462C001B0E02 /* Google_DriveView_HeaderActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_HeaderActions.swift; sourceTree = "<group>"; };
 		E37E51AD2DEEB21B00EF860C /* Inbox_Filing_DownloadItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inbox_Filing_DownloadItemView.swift; sourceTree = "<group>"; };
 		E37E51B02DEEC30200EF860C /* Filing_WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filing_WebView.swift; sourceTree = "<group>"; };
 		E37E51B22DEF3E3900EF860C /* Case_Filing_Selector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_Filing_Selector.swift; sourceTree = "<group>"; };
 		E37E51B42DEF4A9600EF860C /* Case_Filing_DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_Filing_DetailView.swift; sourceTree = "<group>"; };
 		E37E51BE2DEF575300EF860C /* Cases_Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cases_Table.swift; sourceTree = "<group>"; };
-		E37E51C02DEF7AD700EF860C /* Contacts_List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contacts_List.swift; sourceTree = "<group>"; };
-		E37E51C32DEF7CCB00EF860C /* NLF_Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact.swift; sourceTree = "<group>"; };
-		E37E51C52DEF7CE100EF860C /* NLF_Contact_Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_Label.swift; sourceTree = "<group>"; };
-		E37E51C72DEF7CF700EF860C /* NLF_Contact_Drive_Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_Drive_Label.swift; sourceTree = "<group>"; };
-		E37E51C92DEF7D9100EF860C /* NLF_ContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_ContactsController.swift; sourceTree = "<group>"; };
-		E37E51CE2DEF7ECE00EF860C /* NLF_Contact_New.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_New.swift; sourceTree = "<group>"; };
 		E37E51D02DEF97EC00EF860C /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
-		E37E51D22DEFA95800EF860C /* NLF_Contact_LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_LabelView.swift; sourceTree = "<group>"; };
-		E37E51D52DEFAE1500EF860C /* NLF_Contact_NameField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_NameField.swift; sourceTree = "<group>"; };
 		E37E51D72DEFB25F00EF860C /* Drive_SetDefaultID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_SetDefaultID.swift; sourceTree = "<group>"; };
 		E37E51D92DEFC6BB00EF860C /* Drive_FileSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_FileSelect.swift; sourceTree = "<group>"; };
-		E37E51DD2DEFD19300EF860C /* Drive_Selector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Selector.swift; sourceTree = "<group>"; };
-		E37E51E12DF06E5500EF860C /* NLF_Contact_ImageField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_ImageField.swift; sourceTree = "<group>"; };
 		E380F7F52DA04E5500540A3B /* Google.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google.swift; sourceTree = "<group>"; };
 		E380F7F62DA04E5500540A3B /* Google_Drive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_Drive.swift; sourceTree = "<group>"; };
 		E380F7F72DA04E5500540A3B /* Google_Drive_Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_Drive_Preview.swift; sourceTree = "<group>"; };
@@ -188,35 +245,26 @@
 		E380F8252DA0534A00540A3B /* BOF_NavModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BOF_NavModel.swift; sourceTree = "<group>"; };
 		E380F8282DA05AC900540A3B /* Inbox_View_OLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inbox_View_OLD.swift; sourceTree = "<group>"; };
 		E380F82A2DA05B2500540A3B /* Settings_Inbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings_Inbox.swift; sourceTree = "<group>"; };
-		E38A421F2DF09A1C0059028D /* NLF_Contact_Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_Info.swift; sourceTree = "<group>"; };
-		E38A42302DF0F5190059028D /* NLF_Contact_SheetRow_Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_SheetRow_Add.swift; sourceTree = "<group>"; };
-		E38A42332DF103C30059028D /* NLF_Contact_SheetRow_Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_SheetRow_Category.swift; sourceTree = "<group>"; };
-		E38A42352DF103E50059028D /* NLF_Contact_SheetRow_Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_SheetRow_Label.swift; sourceTree = "<group>"; };
-		E38A42372DF105370059028D /* NLF_Contact_SheetRow_Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_SheetRow_Value.swift; sourceTree = "<group>"; };
-		E38A423B2DF113A10059028D /* NLF_Contact_SheetRow_Delete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_SheetRow_Delete.swift; sourceTree = "<group>"; };
-		E38A423D2DF1220A0059028D /* NLF_Contact_SheetRow_Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_SheetRow_Update.swift; sourceTree = "<group>"; };
-		E38A423F2DF130ED0059028D /* NLF_Contact_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_View.swift; sourceTree = "<group>"; };
-		E38A42422DF132610059028D /* NLF_Contact_View_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_View_Header.swift; sourceTree = "<group>"; };
-		E38A42442DF133260059028D /* NLF_Contact_Info_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_Info_View.swift; sourceTree = "<group>"; };
-		E38A42462DF1339A0059028D /* NLF_Contact_Info_Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_Info_Category.swift; sourceTree = "<group>"; };
-		E38A42482DF133B70059028D /* NLF_Contact_Info_SheetRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Contact_Info_SheetRow.swift; sourceTree = "<group>"; };
-		E38A424A2DF1CB590059028D /* Contacts_List_Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contacts_List_Filter.swift; sourceTree = "<group>"; };
-		E3B910B22DE0B3D500F86A15 /* Settings_Forms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings_Forms.swift; sourceTree = "<group>"; };
-		E3B910C72DE3734300F86A15 /* NLF_Form.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form.swift; sourceTree = "<group>"; };
-		E3B910C92DE5FA7800F86A15 /* NLF_Forms_List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Forms_List.swift; sourceTree = "<group>"; };
+		E38CB03E2DF8B2CA0074D514 /* Contact.DriveLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.DriveLabel.swift; sourceTree = "<group>"; };
+		E38CB0402DF8B31A0074D514 /* Contact.Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.Label.swift; sourceTree = "<group>"; };
+		E38CB0482DF8C3B30074D514 /* Contact_Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact_Error.swift; sourceTree = "<group>"; };
+		E38CB0532DF8E8370074D514 /* Contact.Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.Info.swift; sourceTree = "<group>"; };
+		E39582352DF9380000AA5780 /* Contact.Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.Image.swift; sourceTree = "<group>"; };
+		E39582372DF93E4A00AA5780 /* Drive_Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Cache.swift; sourceTree = "<group>"; };
 		E3B910DA2DE6878600F86A15 /* GoogleDrive_IconDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDrive_IconDownload.swift; sourceTree = "<group>"; };
 		E3B910DC2DE6931000F86A15 /* GoogleDriveIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = GoogleDriveIcons.xcassets; sourceTree = "<group>"; };
-		E3B910DE2DE6990700F86A15 /* NLF_Form_Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Inspector.swift; sourceTree = "<group>"; };
-		E3B910E32DE7319100F86A15 /* NLF_Form_Edit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Edit.swift; sourceTree = "<group>"; };
-		E3B910E52DE731AB00F86A15 /* NLF_Form_Use.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Use.swift; sourceTree = "<group>"; };
-		E3BD45D72DE733000094FFB1 /* NLF_Form_New.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_New.swift; sourceTree = "<group>"; };
-		E3BD45D92DE735130094FFB1 /* NLF_FormController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_FormController.swift; sourceTree = "<group>"; };
-		E3BD45DB2DE7394C0094FFB1 /* NLF_Form_Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Fields.swift; sourceTree = "<group>"; };
-		E3BD45DE2DE757880094FFB1 /* NLF_Form_Import.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Import.swift; sourceTree = "<group>"; };
-		E3BD45E02DE758EF0094FFB1 /* NLF_Form_Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Filter.swift; sourceTree = "<group>"; };
-		E3BD45E22DE75E4A0094FFB1 /* NLF_Form_Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Sort.swift; sourceTree = "<group>"; };
-		E3BD45E42DE77B4F0094FFB1 /* NLF_Form_Duplicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_Duplicate.swift; sourceTree = "<group>"; };
-		E3BD45E62DE780C20094FFB1 /* NLF_Form_DriveID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_DriveID.swift; sourceTree = "<group>"; };
+		E3E8B6D12E01202200F976DA /* Google_DriveView_PathBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_PathBar.swift; sourceTree = "<group>"; };
+		E3E8B6D42E01204A00F976DA /* Google_DriveDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveDelegate.swift; sourceTree = "<group>"; };
+		E3E8B6D62E01213C00F976DA /* Google_DriveView_Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_Row.swift; sourceTree = "<group>"; };
+		E3E8B6D82E01216400F976DA /* Google_DriveView_List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_List.swift; sourceTree = "<group>"; };
+		E3E8B6DC2E019F0100F976DA /* Google_DriveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView.swift; sourceTree = "<group>"; };
+		E3E8B6DE2E01CE1C00F976DA /* Google_DriveView_ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveView_ActionButton.swift; sourceTree = "<group>"; };
+		E3EC429E2DF9F72100E28ABE /* Contact.File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.File.swift; sourceTree = "<group>"; };
+		E3EE94C32DFA52EA00B60565 /* ContactsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsList.swift; sourceTree = "<group>"; };
+		E3EE94C52DFA533A00B60565 /* ContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsController.swift; sourceTree = "<group>"; };
+		E3EE94C72DFA6CE300B60565 /* EditForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditForm.swift; sourceTree = "<group>"; };
+		E3EE94C92DFA716400B60565 /* EditContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditContact.swift; sourceTree = "<group>"; };
+		E3EE94D42DFAFA2200B60565 /* PreviewContact_File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContact_File.swift; sourceTree = "<group>"; };
 		E3F544B52DEE910E0039E913 /* Web_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web_View.swift; sourceTree = "<group>"; };
 		E3F544B72DEEA1150039E913 /* Inbox_Filing_URLItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inbox_Filing_URLItemView.swift; sourceTree = "<group>"; };
 		E3F5A17F2DAFF276004100C3 /* Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.swift; sourceTree = "<group>"; };
@@ -235,8 +283,6 @@
 		E3F5A1AD2DB0819D004100C3 /* Case_Contact_Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_Contact_Row.swift; sourceTree = "<group>"; };
 		E3F5A1B02DB082FB004100C3 /* Case_Contact_Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_Contact_Details.swift; sourceTree = "<group>"; };
 		E3F5A1B22DB08356004100C3 /* Case_Contacts_List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_Contacts_List.swift; sourceTree = "<group>"; };
-		E3FB15112DE9DA8B00DDCF58 /* NLF_Form_ExampleList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_ExampleList.swift; sourceTree = "<group>"; };
-		E3FB15132DE9EF4900DDCF58 /* NLF_Form_MultipleSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NLF_Form_MultipleSelection.swift; sourceTree = "<group>"; };
 		E3FB15162DEA0E1C00DDCF58 /* Drive_Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Rename.swift; sourceTree = "<group>"; };
 		E3FB152A2DEB5BA900DDCF58 /* Inbox_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inbox_View.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,49 +304,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E31D5CB82DF1F22000C3DFF0 /* Contact */ = {
-			isa = PBXGroup;
-			children = (
-				E38A423F2DF130ED0059028D /* NLF_Contact_View.swift */,
-				E38A42422DF132610059028D /* NLF_Contact_View_Header.swift */,
-				E31D5CB92DF1F71600C3DFF0 /* Actions */,
-				E38A42392DF111C80059028D /* Fields */,
-			);
-			path = Contact;
-			sourceTree = "<group>";
-		};
-		E31D5CB92DF1F71600C3DFF0 /* Actions */ = {
-			isa = PBXGroup;
-			children = (
-				E37E51CE2DEF7ECE00EF860C /* NLF_Contact_New.swift */,
-			);
-			path = Actions;
-			sourceTree = "<group>";
-		};
-		E31D5CBA2DF1F75900C3DFF0 /* Actions */ = {
-			isa = PBXGroup;
-			children = (
-				E38A42302DF0F5190059028D /* NLF_Contact_SheetRow_Add.swift */,
-				E38A423D2DF1220A0059028D /* NLF_Contact_SheetRow_Update.swift */,
-				E38A423B2DF113A10059028D /* NLF_Contact_SheetRow_Delete.swift */,
-			);
-			path = Actions;
-			sourceTree = "<group>";
-		};
-		E31D5CBB2DF26F5A00C3DFF0 /* Files */ = {
-			isa = PBXGroup;
-			children = (
-				E31D5CBC2DF26F6200C3DFF0 /* NLF_Contacts_FileView.swift */,
-				E31D5CBE2DF2760100C3DFF0 /* BOF_Finder.swift */,
-			);
-			path = Files;
-			sourceTree = "<group>";
-		};
 		E321D8392DB9672A006CC081 /* Filing */ = {
 			isa = PBXGroup;
 			children = (
-				E321D8382DB9672A006CC081 /* Filing_View.swift */,
-				E37E51BD2DEF574400EF860C /* Case_Filing */,
+				E34BAB812E00592B0077AACA /* FilingController.swift */,
+				E34BAB832E0059840077AACA /* FilingList.swift */,
+				E34BAB912E00CF100077AACA /* FilingDetail.swift */,
+				E34BAB8E2E006A540077AACA /* Model */,
+				E34BAB872E006A240077AACA /* OLD */,
 			);
 			path = Filing;
 			sourceTree = "<group>";
@@ -311,6 +322,161 @@
 				E321D8492DBA74BA006CC081 /* Google_Drive_Permissions.swift */,
 			);
 			path = Permissions;
+			sourceTree = "<group>";
+		};
+		E34BAB1D2DFB78730077AACA /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				E3B910DA2DE6878600F86A15 /* GoogleDrive_IconDownload.swift */,
+				E3FB15162DEA0E1C00DDCF58 /* Drive_Rename.swift */,
+				E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */,
+				E39582372DF93E4A00AA5780 /* Drive_Cache.swift */,
+				E37E51D72DEFB25F00EF860C /* Drive_SetDefaultID.swift */,
+				E37E51D92DEFC6BB00EF860C /* Drive_FileSelect.swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		E34BAB342DFBD0290077AACA /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB422DFC55D90077AACA /* Contact */,
+				E34BAB402DFC4FD10077AACA /* Info */,
+				E34BAB3F2DFC4FCC0077AACA /* Files */,
+				E34BAB452DFC646A0077AACA /* Cases */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		E34BAB3F2DFC4FCC0077AACA /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB3D2DFC4A720077AACA /* NewContact_File.swift */,
+				E34BAB392DFBE3DE0077AACA /* NewContact_File-Drive.swift */,
+				E34BAB3B2DFBF4FB0077AACA /* EditContact_File.swift */,
+				E3EE94D42DFAFA2200B60565 /* PreviewContact_File.swift */,
+			);
+			path = Files;
+			sourceTree = "<group>";
+		};
+		E34BAB402DFC4FD10077AACA /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB322DFBCD2E0077AACA /* NewContact_Info.swift */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
+		E34BAB412DFC54810077AACA /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB2C2DFBC82A0077AACA /* ContactDetail.swift */,
+				E34BAB2E2DFBCC760077AACA /* ContactDetail_Header.swift */,
+				E34BAB352DFBD0980077AACA /* ContactDetail_Info.swift */,
+				E34BAB372DFBE0050077AACA /* ContactDetail_Files.swift */,
+				E34BAB432DFC560E0077AACA /* ContactDetail_Cases.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		E34BAB422DFC55D90077AACA /* Contact */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB302DFBCCE80077AACA /* NewContact.swift */,
+				E3EE94C92DFA716400B60565 /* EditContact.swift */,
+			);
+			path = Contact;
+			sourceTree = "<group>";
+		};
+		E34BAB452DFC646A0077AACA /* Cases */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */,
+			);
+			path = Cases;
+			sourceTree = "<group>";
+		};
+		E34BAB462DFC71980077AACA /* ContactList */ = {
+			isa = PBXGroup;
+			children = (
+				E3EE94C32DFA52EA00B60565 /* ContactsList.swift */,
+				E34BAB472DFC71A10077AACA /* ContactList_Row.swift */,
+				E34BAB492DFC71B30077AACA /* ContactList_Filter.swift */,
+			);
+			path = ContactList;
+			sourceTree = "<group>";
+		};
+		E34BAB502DFDA90D0077AACA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB512DFDA9120077AACA /* Template.swift */,
+				E34BAB632DFDC3D60077AACA /* Template.Sort.swift */,
+				E34BAB532DFDA9380077AACA /* Template.Label.swift */,
+				E34BAB552DFDA95D0077AACA /* Template.DriveLabel.swift */,
+				E34BAB572DFDA9740077AACA /* Template.Category.swift */,
+				E34BAB5E2DFDBA480077AACA /* Template_Error.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E34BAB592DFDAAFC0077AACA /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB5A2DFDAB080077AACA /* NewTemplate.swift */,
+				E34BAB652DFDCD5C0077AACA /* EditTemplate.swift */,
+				E34BAB6B2DFDD8C70077AACA /* DuplicateTemplate.swift */,
+				E34BAB6D2DFE07770077AACA /* ImportTemplate.swift */,
+				E34BAB6F2DFE16770077AACA /* AddToCase_Template.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		E34BAB602DFDC0DB0077AACA /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB612DFDC0E60077AACA /* TemplateDetail.swift */,
+				E34BAB712DFE1FE40077AACA /* TemplatesDetail.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		E34BAB732E00509A0077AACA /* Research */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB742E0050AF0077AACA /* ResearchController.swift */,
+				E34BAB7D2E0050D80077AACA /* ResearchList.swift */,
+				E34BAB7F2E0050DE0077AACA /* ResearchDetail.swift */,
+				E34BAB782E0050B70077AACA /* Model */,
+			);
+			path = Research;
+			sourceTree = "<group>";
+		};
+		E34BAB782E0050B70077AACA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB762E0050B30077AACA /* Research.swift */,
+				E34BAB792E0050C10077AACA /* Research.Label.swift */,
+				E34BAB7B2E0050C60077AACA /* Research.DriveLabel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E34BAB872E006A240077AACA /* OLD */ = {
+			isa = PBXGroup;
+			children = (
+				E321D8382DB9672A006CC081 /* Filing_View.swift */,
+				E37E51BD2DEF574400EF860C /* Case_Filing */,
+			);
+			path = OLD;
+			sourceTree = "<group>";
+		};
+		E34BAB8E2E006A540077AACA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB882E006A2D0077AACA /* FilingItem.swift */,
+				E34BAB8C2E006A490077AACA /* Filing_Error.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		E369CA0C2DA0463D00FE91DB = {
@@ -334,17 +500,22 @@
 			isa = PBXGroup;
 			children = (
 				E369CA2A2DA0464300FE91DB /* File_Driver.entitlements */,
-				E369CA2C2DA0464300FE91DB /* Info.plist */,
 				E369CA7A2DA04A6900FE91DB /* Assets.xcassets */,
 				E3B910DC2DE6931000F86A15 /* GoogleDriveIcons.xcassets */,
+				E369CA2C2DA0464300FE91DB /* Info.plist */,
 				E369CA2B2DA0464300FE91DB /* File_DriverApp.swift */,
 				E369CA5C2DA048DB00FE91DB /* ContentView.swift */,
-				E3B910AD2DE0AF3B00F86A15 /* Forms */,
-				E376F6042DDE1728007CBBD7 /* Contacts */,
+				E3EE94C72DFA6CE300B60565 /* EditForm.swift */,
+				E34BAB5C2DFDAF820077AACA /* TextField_Suggestions.swift */,
+				E34BABA22E00FC9A0077AACA /* Loader.swift */,
+				E37992622E02EC71001B0E02 /* CaseSelector.swift */,
 				E369CA452DA0489D00FE91DB /* Sidebar */,
 				E321D8392DB9672A006CC081 /* Filing */,
-				E3F5A17E2DAFF26F004100C3 /* Case */,
+				E3F5A17E2DAFF26F004100C3 /* Cases */,
+				E3EE94C22DFA529D00B60565 /* Contacts */,
+				E3B910AD2DE0AF3B00F86A15 /* Templates */,
 				E380F8272DA05AB900540A3B /* Inbox */,
+				E34BAB732E00509A0077AACA /* Research */,
 				E369CA472DA048B100FE91DB /* Helpers */,
 				E369CA462DA048A400FE91DB /* Settings */,
 				E380F80F2DA04E5500540A3B /* Google */,
@@ -372,11 +543,10 @@
 		E369CA452DA0489D00FE91DB /* Sidebar */ = {
 			isa = PBXGroup;
 			children = (
-				E369CA502DA048CE00FE91DB /* Edit */,
-				E369CA522DA048CE00FE91DB /* Model */,
 				E369CA532DA048CE00FE91DB /* Sidebar.swift */,
 				E369CA542DA048CE00FE91DB /* Sidebar_Row.swift */,
-				E369CA552DA048CE00FE91DB /* Sidebar_Settings.swift */,
+				E369CA502DA048CE00FE91DB /* Edit */,
+				E369CA522DA048CE00FE91DB /* Model */,
 			);
 			path = Sidebar;
 			sourceTree = "<group>";
@@ -386,7 +556,10 @@
 			children = (
 				E369CA4A2DA048C400FE91DB /* Settings.swift */,
 				E369CA4B2DA048C400FE91DB /* Settings_View.swift */,
+				E369CA552DA048CE00FE91DB /* Sidebar_Settings.swift */,
+				E34BAB852E005A750077AACA /* Settings_Filing.swift */,
 				E376F6052DDE1874007CBBD7 /* Settings_Contacts.swift */,
+				E379925C2E020C58001B0E02 /* Settings_Templates.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -394,6 +567,7 @@
 		E369CA472DA048B100FE91DB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				E34BAB8F2E0074810077AACA /* HappyDog.swift */,
 				E37E51D02DEF97EC00EF860C /* Filter.swift */,
 				E37E51B02DEEC30200EF860C /* Filing_WebView.swift */,
 				E369CA482DA048BE00FE91DB /* BOF_SwiftData.swift */,
@@ -420,14 +594,26 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		E376F6042DDE1728007CBBD7 /* Contacts */ = {
+		E379925E2E020D2A001B0E02 /* List */ = {
 			isa = PBXGroup;
 			children = (
-				E37E51C92DEF7D9100EF860C /* NLF_ContactsController.swift */,
-				E37E51CC2DEF7EB700EF860C /* Views */,
-				E37E51CD2DEF7EBE00EF860C /* Model */,
+				E3E8B6D82E01216400F976DA /* Google_DriveView_List.swift */,
+				E37992672E0345EB001B0E02 /* Google_DriveView_ListBody.swift */,
+				E3E8B6D62E01213C00F976DA /* Google_DriveView_Row.swift */,
+				E37992602E022A00001B0E02 /* Google_DriveView_RowLabel.swift */,
 			);
-			path = Contacts;
+			path = List;
+			sourceTree = "<group>";
+		};
+		E37992642E02FB97001B0E02 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				E37992652E02FBA7001B0E02 /* Google_DriveView_Header.swift */,
+				E3E8B6D12E01202200F976DA /* Google_DriveView_PathBar.swift */,
+				E37992692E03462C001B0E02 /* Google_DriveView_HeaderActions.swift */,
+				E3E8B6DE2E01CE1C00F976DA /* Google_DriveView_ActionButton.swift */,
+			);
+			path = Header;
 			sourceTree = "<group>";
 		};
 		E37E51AF2DEEB28D00EF860C /* Filing Views */ = {
@@ -448,29 +634,6 @@
 			path = Case_Filing;
 			sourceTree = "<group>";
 		};
-		E37E51CC2DEF7EB700EF860C /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E37E51C02DEF7AD700EF860C /* Contacts_List.swift */,
-				E38A424A2DF1CB590059028D /* Contacts_List_Filter.swift */,
-				E31D5CB82DF1F22000C3DFF0 /* Contact */,
-				E38A42322DF103B90059028D /* Spreadsheet */,
-				E31D5CBB2DF26F5A00C3DFF0 /* Files */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		E37E51CD2DEF7EBE00EF860C /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				E37E51C32DEF7CCB00EF860C /* NLF_Contact.swift */,
-				E38A421F2DF09A1C0059028D /* NLF_Contact_Info.swift */,
-				E37E51C52DEF7CE100EF860C /* NLF_Contact_Label.swift */,
-				E37E51C72DEF7CF700EF860C /* NLF_Contact_Drive_Label.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		E380F7F82DA04E5500540A3B /* Web_Preview */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,24 +651,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		E380F7FE2DA04E5500540A3B /* Finders */ = {
-			isa = PBXGroup;
-			children = (
-				E321D83B2DB96741006CC081 /* Drive_Navigator.swift */,
-				E37E51DD2DEFD19300EF860C /* Drive_Selector.swift */,
-				E321D84B2DBBD033006CC081 /* Drive_Navigator_Inspector.swift */,
-				E3FB15152DEA0E1400DDCF58 /* Misc */,
-			);
-			path = Finders;
-			sourceTree = "<group>";
-		};
 		E380F8042DA04E5500540A3B /* Drive */ = {
 			isa = PBXGroup;
 			children = (
 				E380F7F62DA04E5500540A3B /* Google_Drive.swift */,
+				E3E8B6D32E01203B00F976DA /* Google_DriveView */,
+				E34BAB1D2DFB78730077AACA /* Misc */,
 				E380F7F82DA04E5500540A3B /* Web_Preview */,
 				E380F7FB2DA04E5500540A3B /* Model */,
-				E380F7FE2DA04E5500540A3B /* Finders */,
 				E321D8482DBA74AF006CC081 /* Permissions */,
 			);
 			path = Drive;
@@ -532,8 +685,6 @@
 		E380F80E2DA04E5500540A3B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				E37E51D72DEFB25F00EF860C /* Drive_SetDefaultID.swift */,
-				E37E51D92DEFC6BB00EF860C /* Drive_FileSelect.swift */,
 				E380F80B2DA04E5500540A3B /* Google_Error.swift */,
 				E380F80C2DA04E5500540A3B /* Google_Fetcher.swift */,
 				E380F80D2DA04E5500540A3B /* Google_Scopes.swift */,
@@ -545,7 +696,6 @@
 			isa = PBXGroup;
 			children = (
 				E380F7F52DA04E5500540A3B /* Google.swift */,
-				E3B910DA2DE6878600F86A15 /* GoogleDrive_IconDownload.swift */,
 				E380F8042DA04E5500540A3B /* Drive */,
 				E380F8072DA04E5500540A3B /* Drive_Labels */,
 				E3F5A18D2DAFF4D8004100C3 /* Sheets */,
@@ -574,106 +724,65 @@
 			path = Inbox;
 			sourceTree = "<group>";
 		};
-		E38A42322DF103B90059028D /* Spreadsheet */ = {
+		E38CB0422DF8B4200074D514 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				E38A42412DF1324E0059028D /* Contact Info */,
-				E31D5CBA2DF1F75900C3DFF0 /* Actions */,
-				E38A423A2DF111D10059028D /* Fields */,
-			);
-			path = Spreadsheet;
-			sourceTree = "<group>";
-		};
-		E38A42392DF111C80059028D /* Fields */ = {
-			isa = PBXGroup;
-			children = (
-				E37E51D22DEFA95800EF860C /* NLF_Contact_LabelView.swift */,
-				E37E51D52DEFAE1500EF860C /* NLF_Contact_NameField.swift */,
-				E37E51E12DF06E5500EF860C /* NLF_Contact_ImageField.swift */,
-				E31D5CB62DF1F18700C3DFF0 /* NLF_Contact_ImageField-Cache.swift */,
-			);
-			path = Fields;
-			sourceTree = "<group>";
-		};
-		E38A423A2DF111D10059028D /* Fields */ = {
-			isa = PBXGroup;
-			children = (
-				E38A42332DF103C30059028D /* NLF_Contact_SheetRow_Category.swift */,
-				E38A42352DF103E50059028D /* NLF_Contact_SheetRow_Label.swift */,
-				E38A42372DF105370059028D /* NLF_Contact_SheetRow_Value.swift */,
-			);
-			path = Fields;
-			sourceTree = "<group>";
-		};
-		E38A42412DF1324E0059028D /* Contact Info */ = {
-			isa = PBXGroup;
-			children = (
-				E38A42442DF133260059028D /* NLF_Contact_Info_View.swift */,
-				E38A42462DF1339A0059028D /* NLF_Contact_Info_Category.swift */,
-				E38A42482DF133B70059028D /* NLF_Contact_Info_SheetRow.swift */,
-			);
-			path = "Contact Info";
-			sourceTree = "<group>";
-		};
-		E3B910AD2DE0AF3B00F86A15 /* Forms */ = {
-			isa = PBXGroup;
-			children = (
-				E3BD45D92DE735130094FFB1 /* NLF_FormController.swift */,
-				E3B910C92DE5FA7800F86A15 /* NLF_Forms_List.swift */,
-				E3BD45DD2DE7575C0094FFB1 /* Actions */,
-				E3B910E72DE731BF00F86A15 /* Misc Views */,
-				E3BD45D62DE732330094FFB1 /* Model */,
-				E3B910B52DE0B45200F86A15 /* Settings */,
-			);
-			path = Forms;
-			sourceTree = "<group>";
-		};
-		E3B910B52DE0B45200F86A15 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				E3B910B22DE0B3D500F86A15 /* Settings_Forms.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		E3B910E72DE731BF00F86A15 /* Misc Views */ = {
-			isa = PBXGroup;
-			children = (
-				E3BD45E02DE758EF0094FFB1 /* NLF_Form_Filter.swift */,
-				E3B910DE2DE6990700F86A15 /* NLF_Form_Inspector.swift */,
-				E3FB15112DE9DA8B00DDCF58 /* NLF_Form_ExampleList.swift */,
-				E3BD45DB2DE7394C0094FFB1 /* NLF_Form_Fields.swift */,
-			);
-			path = "Misc Views";
-			sourceTree = "<group>";
-		};
-		E3BD45D62DE732330094FFB1 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				E3B910C72DE3734300F86A15 /* NLF_Form.swift */,
-				E32730D62DE8F0BF00B6EDBD /* NLF_Form_Label.swift */,
-				E32730D42DE8F04400B6EDBD /* NLF_Form_DriveLabel.swift */,
-				E32730D22DE8F02800B6EDBD /* NLF_Form_Category.swift */,
+				E34BAB292DFBC5D60077AACA /* Contact.swift */,
+				E38CB0482DF8C3B30074D514 /* Contact_Error.swift */,
+				E38CB0452DF8B5C80074D514 /* Sub-Model */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
-		E3BD45DD2DE7575C0094FFB1 /* Actions */ = {
+		E38CB0452DF8B5C80074D514 /* Sub-Model */ = {
 			isa = PBXGroup;
 			children = (
-				E3BD45E62DE780C20094FFB1 /* NLF_Form_DriveID.swift */,
-				E3BD45D72DE733000094FFB1 /* NLF_Form_New.swift */,
-				E3B910E32DE7319100F86A15 /* NLF_Form_Edit.swift */,
-				E3B910E52DE731AB00F86A15 /* NLF_Form_Use.swift */,
-				E3BD45DE2DE757880094FFB1 /* NLF_Form_Import.swift */,
-				E3BD45E42DE77B4F0094FFB1 /* NLF_Form_Duplicate.swift */,
-				E3BD45E22DE75E4A0094FFB1 /* NLF_Form_Sort.swift */,
-				E3FB15132DE9EF4900DDCF58 /* NLF_Form_MultipleSelection.swift */,
+				E38CB0402DF8B31A0074D514 /* Contact.Label.swift */,
+				E38CB03E2DF8B2CA0074D514 /* Contact.DriveLabel.swift */,
+				E38CB0532DF8E8370074D514 /* Contact.Info.swift */,
+				E3EC429E2DF9F72100E28ABE /* Contact.File.swift */,
+				E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */,
+				E39582352DF9380000AA5780 /* Contact.Image.swift */,
 			);
-			path = Actions;
+			path = "Sub-Model";
 			sourceTree = "<group>";
 		};
-		E3F5A17E2DAFF26F004100C3 /* Case */ = {
+		E3B910AD2DE0AF3B00F86A15 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				E34BAB4D2DFDA7690077AACA /* TemplateController.swift */,
+				E34BAB4B2DFDA6640077AACA /* TemplatesList.swift */,
+				E34BAB602DFDC0DB0077AACA /* Detail */,
+				E34BAB592DFDAAFC0077AACA /* Sheets */,
+				E34BAB502DFDA90D0077AACA /* Model */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		E3E8B6D32E01203B00F976DA /* Google_DriveView */ = {
+			isa = PBXGroup;
+			children = (
+				E3E8B6DC2E019F0100F976DA /* Google_DriveView.swift */,
+				E3E8B6D42E01204A00F976DA /* Google_DriveDelegate.swift */,
+				E37992642E02FB97001B0E02 /* Header */,
+				E379925E2E020D2A001B0E02 /* List */,
+			);
+			path = Google_DriveView;
+			sourceTree = "<group>";
+		};
+		E3EE94C22DFA529D00B60565 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				E3EE94C52DFA533A00B60565 /* ContactsController.swift */,
+				E34BAB462DFC71980077AACA /* ContactList */,
+				E34BAB412DFC54810077AACA /* Detail */,
+				E34BAB342DFBD0290077AACA /* Sheets */,
+				E38CB0422DF8B4200074D514 /* Model */,
+			);
+			path = Contacts;
+			sourceTree = "<group>";
+		};
+		E3F5A17E2DAFF26F004100C3 /* Cases */ = {
 			isa = PBXGroup;
 			children = (
 				E37E51BE2DEF575300EF860C /* Cases_Table.swift */,
@@ -682,7 +791,7 @@
 				E3F5A1852DAFF276004100C3 /* Model */,
 				E3F5A1842DAFF276004100C3 /* Sheets */,
 			);
-			path = Case;
+			path = Cases;
 			sourceTree = "<group>";
 		};
 		E3F5A1842DAFF276004100C3 /* Sheets */ = {
@@ -745,14 +854,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		E3FB15152DEA0E1400DDCF58 /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-				E3FB15162DEA0E1C00DDCF58 /* Drive_Rename.swift */,
-			);
-			path = Misc;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -789,7 +890,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					E369CA142DA0463D00FE91DB = {
 						CreatedOnToolsVersion = 16.3;
@@ -838,113 +939,136 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34BAB7E2E0050D80077AACA /* ResearchList.swift in Sources */,
+				E379925D2E020C58001B0E02 /* Settings_Templates.swift in Sources */,
 				E3FB152B2DEB5BA900DDCF58 /* Inbox_View.swift in Sources */,
-				E32730D52DE8F04400B6EDBD /* NLF_Form_DriveLabel.swift in Sources */,
 				E3F5A1912DB00762004100C3 /* Case_Error.swift in Sources */,
 				E376F6062DDE1874007CBBD7 /* Settings_Contacts.swift in Sources */,
 				E321D83E2DB96758006CC081 /* Case_List.swift in Sources */,
-				E32730D72DE8F0BF00B6EDBD /* NLF_Form_Label.swift in Sources */,
-				E3FB15142DE9EF4900DDCF58 /* NLF_Form_MultipleSelection.swift in Sources */,
+				E34BAB3C2DFBF4FB0077AACA /* EditContact_File.swift in Sources */,
+				E37992682E0345EB001B0E02 /* Google_DriveView_ListBody.swift in Sources */,
+				E38CB0492DF8C3B30074D514 /* Contact_Error.swift in Sources */,
+				E34BAB2F2DFBCC760077AACA /* ContactDetail_Header.swift in Sources */,
+				E34BAB902E0074810077AACA /* HappyDog.swift in Sources */,
+				E37992632E02EC71001B0E02 /* CaseSelector.swift in Sources */,
+				E34BABA32E00FC9A0077AACA /* Loader.swift in Sources */,
+				E34BAB892E006A2D0077AACA /* FilingItem.swift in Sources */,
+				E34BAB702DFE16770077AACA /* AddToCase_Template.swift in Sources */,
 				E369CA492DA048BE00FE91DB /* BOF_SwiftData.swift in Sources */,
+				E3E8B6D92E01216400F976DA /* Google_DriveView_List.swift in Sources */,
+				E3E8B6D22E01202200F976DA /* Google_DriveView_PathBar.swift in Sources */,
 				E369CA302DA0464300FE91DB /* File_DriverApp.swift in Sources */,
+				E34BAB242DFB9F9D0077AACA /* Contact.Case.swift in Sources */,
 				E369CA4C2DA048C400FE91DB /* Settings.swift in Sources */,
 				E37E51D12DEF97EC00EF860C /* Filter.swift in Sources */,
 				E3F5A1942DB015DD004100C3 /* FolderNew.swift in Sources */,
-				E3BD45E32DE75E4A0094FFB1 /* NLF_Form_Sort.swift in Sources */,
+				E34BAB3A2DFBE3DE0077AACA /* NewContact_File-Drive.swift in Sources */,
 				E369CA562DA048CE00FE91DB /* Sidebar_Settings.swift in Sources */,
 				E3F5A19C2DB03850004100C3 /* Case_Label.swift in Sources */,
-				E3BD45DC2DE7394C0094FFB1 /* NLF_Form_Fields.swift in Sources */,
-				E38A42492DF133B70059028D /* NLF_Contact_Info_SheetRow.swift in Sources */,
+				E34BAB772E0050B30077AACA /* Research.swift in Sources */,
 				E3F5A1AE2DB0819D004100C3 /* Case_Contact_Row.swift in Sources */,
 				E37E51B52DEF4A9600EF860C /* Case_Filing_DetailView.swift in Sources */,
-				E38A42382DF105370059028D /* NLF_Contact_SheetRow_Value.swift in Sources */,
-				E38A424B2DF1CB590059028D /* Contacts_List_Filter.swift in Sources */,
-				E37E51CF2DEF7ECE00EF860C /* NLF_Contact_New.swift in Sources */,
-				E3BD45E52DE77B4F0094FFB1 /* NLF_Form_Duplicate.swift in Sources */,
+				E34BAB722DFE1FE40077AACA /* TemplatesDetail.swift in Sources */,
+				E34BAB6C2DFDD8C70077AACA /* DuplicateTemplate.swift in Sources */,
+				E34BAB4A2DFC71B30077AACA /* ContactList_Filter.swift in Sources */,
 				E380F8102DA04E5500540A3B /* Google_Error.swift in Sources */,
+				E39582362DF9380000AA5780 /* Contact.Image.swift in Sources */,
 				E37E51DA2DEFC6BB00EF860C /* Drive_FileSelect.swift in Sources */,
 				E380F8262DA0534A00540A3B /* BOF_NavModel.swift in Sources */,
-				E38A42472DF1339A0059028D /* NLF_Contact_Info_Category.swift in Sources */,
+				E38CB0542DF8E8370074D514 /* Contact.Info.swift in Sources */,
+				E34BAB582DFDA9740077AACA /* Template.Category.swift in Sources */,
 				E380F8112DA04E5500540A3B /* GTLRDrive_File_Ext.swift in Sources */,
-				E3FB15122DE9DA8B00DDCF58 /* NLF_Form_ExampleList.swift in Sources */,
-				E38A42342DF103C30059028D /* NLF_Contact_SheetRow_Category.swift in Sources */,
+				E34BAB1C2DFB66ED0077AACA /* Drive_Imager.swift in Sources */,
+				E3EE94D52DFAFA2200B60565 /* PreviewContact_File.swift in Sources */,
+				E34BAB922E00CF100077AACA /* FilingDetail.swift in Sources */,
 				E380F8122DA04E5500540A3B /* Google_Drive_Preview.swift in Sources */,
 				E380F8132DA04E5500540A3B /* Google_SignInView.swift in Sources */,
-				E37E51C62DEF7CE100EF860C /* NLF_Contact_Label.swift in Sources */,
 				E380F8142DA04E5500540A3B /* Google_Label.swift in Sources */,
 				E380F8152DA04E5500540A3B /* Google_Scopes.swift in Sources */,
 				E37E51AE2DEEB21B00EF860C /* Inbox_Filing_DownloadItemView.swift in Sources */,
-				E37E51D62DEFAE1500EF860C /* NLF_Contact_NameField.swift in Sources */,
-				E37E51C42DEF7CCB00EF860C /* NLF_Contact.swift in Sources */,
-				E31D5CBD2DF26F6200C3DFF0 /* NLF_Contacts_FileView.swift in Sources */,
-				E37E51CA2DEF7D9100EF860C /* NLF_ContactsController.swift in Sources */,
-				E321D84C2DBBD033006CC081 /* Drive_Navigator_Inspector.swift in Sources */,
-				E3B910C82DE3734300F86A15 /* NLF_Form.swift in Sources */,
+				E38CB03F2DF8B2CA0074D514 /* Contact.DriveLabel.swift in Sources */,
+				E34BAB362DFBD0980077AACA /* ContactDetail_Info.swift in Sources */,
 				E37E51BF2DEF575300EF860C /* Cases_Table.swift in Sources */,
 				E3F5A1862DAFF276004100C3 /* Case_Folder.swift in Sources */,
+				E34BAB312DFBCCE80077AACA /* NewContact.swift in Sources */,
+				E34BAB662DFDCD5C0077AACA /* EditTemplate.swift in Sources */,
 				E3F5A1872DAFF276004100C3 /* Case_Sheets.swift in Sources */,
-				E37E51D32DEFA95800EF860C /* NLF_Contact_LabelView.swift in Sources */,
+				E3E8B6DF2E01CE1C00F976DA /* Google_DriveView_ActionButton.swift in Sources */,
 				E3F5A1882DAFF276004100C3 /* Case_Contact.swift in Sources */,
+				E34BAB5D2DFDAF820077AACA /* TextField_Suggestions.swift in Sources */,
+				E34BAB5B2DFDAB080077AACA /* NewTemplate.swift in Sources */,
 				E3F5A18C2DAFF35A004100C3 /* Case_View.swift in Sources */,
-				E38A42452DF133260059028D /* NLF_Contact_Info_View.swift in Sources */,
+				E34BAB6E2DFE07770077AACA /* ImportTemplate.swift in Sources */,
 				E37E51B12DEEC30200EF860C /* Filing_WebView.swift in Sources */,
-				E32730D32DE8F02800B6EDBD /* NLF_Form_Category.swift in Sources */,
+				E34BAB822E00592B0077AACA /* FilingController.swift in Sources */,
+				E3E8B6D52E01204A00F976DA /* Google_DriveDelegate.swift in Sources */,
 				E3F5A1892DAFF276004100C3 /* Case.swift in Sources */,
 				E3F5A1B12DB082FB004100C3 /* Case_Contact_Details.swift in Sources */,
 				E3F544B82DEEA1150039E913 /* Inbox_Filing_URLItemView.swift in Sources */,
-				E3B910CA2DE5FA7800F86A15 /* NLF_Forms_List.swift in Sources */,
-				E3BD45E72DE780C20094FFB1 /* NLF_Form_DriveID.swift in Sources */,
 				E3F5A18A2DAFF276004100C3 /* Case_Tag.swift in Sources */,
-				E3B910E42DE7319100F86A15 /* NLF_Form_Edit.swift in Sources */,
 				E380F8292DA05AC900540A3B /* Inbox_View_OLD.swift in Sources */,
-				E3B910B32DE0B3D500F86A15 /* Settings_Forms.swift in Sources */,
-				E38A42402DF130ED0059028D /* NLF_Contact_View.swift in Sources */,
+				E37992612E022A00001B0E02 /* Google_DriveView_RowLabel.swift in Sources */,
+				E34BAB622DFDC0E60077AACA /* TemplateDetail.swift in Sources */,
+				E34BAB802E0050DE0077AACA /* ResearchDetail.swift in Sources */,
+				E38CB0412DF8B31A0074D514 /* Contact.Label.swift in Sources */,
 				E3F544B62DEE910E0039E913 /* Web_View.swift in Sources */,
-				E3BD45DA2DE735130094FFB1 /* NLF_FormController.swift in Sources */,
 				E3FB15172DEA0E1C00DDCF58 /* Drive_Rename.swift in Sources */,
-				E31D5CBF2DF2760100C3DFF0 /* BOF_Finder.swift in Sources */,
+				E379926A2E03462C001B0E02 /* Google_DriveView_HeaderActions.swift in Sources */,
+				E34BAB522DFDA9120077AACA /* Template.swift in Sources */,
 				E3F5A19A2DB02266004100C3 /* FolderEdit.swift in Sources */,
 				E37E51B32DEF3E3900EF860C /* Case_Filing_Selector.swift in Sources */,
-				E3B910E62DE731AB00F86A15 /* NLF_Form_Use.swift in Sources */,
+				E3EE94C82DFA6CE300B60565 /* EditForm.swift in Sources */,
 				E380F81B2DA04E5500540A3B /* Google.swift in Sources */,
 				E3F5A18F2DAFF4F7004100C3 /* Google_Sheets.swift in Sources */,
-				E3BD45DF2DE757880094FFB1 /* NLF_Form_Import.swift in Sources */,
+				E3E8B6D72E01213C00F976DA /* Google_DriveView_Row.swift in Sources */,
 				E380F81C2DA04E5500540A3B /* Google_Labels.swift in Sources */,
-				E38A42432DF132610059028D /* NLF_Contact_View_Header.swift in Sources */,
+				E3E8B6DD2E019F0100F976DA /* Google_DriveView.swift in Sources */,
 				E3F5A1962DB015FA004100C3 /* FolderMenu.swift in Sources */,
-				E38A42312DF0F5190059028D /* NLF_Contact_SheetRow_Add.swift in Sources */,
+				E3EC429F2DF9F72100E28ABE /* Contact.File.swift in Sources */,
 				E380F81D2DA04E5500540A3B /* Google_Drive.swift in Sources */,
+				E34BAB4E2DFDA7690077AACA /* TemplateController.swift in Sources */,
 				E380F81E2DA04E5500540A3B /* GTLRDrive_Drive_Ext.swift in Sources */,
 				E380F81F2DA04E5500540A3B /* Google_Fetcher.swift in Sources */,
-				E38A42202DF09A1C0059028D /* NLF_Contact_Info.swift in Sources */,
-				E37E51C12DEF7AD700EF860C /* Contacts_List.swift in Sources */,
 				E321D83A2DB9672A006CC081 /* Filing_View.swift in Sources */,
+				E34BAB4C2DFDA6640077AACA /* TemplatesList.swift in Sources */,
+				E34BAB382DFBE0050077AACA /* ContactDetail_Files.swift in Sources */,
+				E37992662E02FBA7001B0E02 /* Google_DriveView_Header.swift in Sources */,
 				E3F5A1982DB01E80004100C3 /* FolderSuggestions.swift in Sources */,
-				E38A42362DF103E50059028D /* NLF_Contact_SheetRow_Label.swift in Sources */,
 				E3B910DB2DE6878600F86A15 /* GoogleDrive_IconDownload.swift in Sources */,
+				E34BAB442DFC560E0077AACA /* ContactDetail_Cases.swift in Sources */,
+				E34BAB542DFDA9380077AACA /* Template.Label.swift in Sources */,
+				E34BAB482DFC71A10077AACA /* ContactList_Row.swift in Sources */,
+				E34BAB5F2DFDBA480077AACA /* Template_Error.swift in Sources */,
 				E380F8212DA04E5500540A3B /* Google_SignIn.swift in Sources */,
-				E38A423C2DF113A10059028D /* NLF_Contact_SheetRow_Delete.swift in Sources */,
 				E369CA572DA048CE00FE91DB /* Sidebar_ItemNew.swift in Sources */,
 				E3F5A1B32DB08356004100C3 /* Case_Contacts_List.swift in Sources */,
+				E3EE94C62DFA533A00B60565 /* ContactsController.swift in Sources */,
 				E369CA5D2DA048DB00FE91DB /* ContentView.swift in Sources */,
-				E37E51C82DEF7CFD00EF860C /* NLF_Contact_Drive_Label.swift in Sources */,
-				E38A423E2DF1220D0059028D /* NLF_Contact_SheetRow_Update.swift in Sources */,
+				E34BAB332DFBCD2E0077AACA /* NewContact_Info.swift in Sources */,
 				E369CA582DA048CE00FE91DB /* Sidebar_Row.swift in Sources */,
-				E3B910DF2DE6990700F86A15 /* NLF_Form_Inspector.swift in Sources */,
-				E37E51E22DF06E5500EF860C /* NLF_Contact_ImageField.swift in Sources */,
+				E34BAB2A2DFBC5D60077AACA /* Contact.swift in Sources */,
 				E37E51D82DEFB25F00EF860C /* Drive_SetDefaultID.swift in Sources */,
+				E34BAB752E0050AF0077AACA /* ResearchController.swift in Sources */,
+				E34BAB842E0059840077AACA /* FilingList.swift in Sources */,
 				E369CA592DA048CE00FE91DB /* Sidebar_Item.swift in Sources */,
+				E34BAB562DFDA95D0077AACA /* Template.DriveLabel.swift in Sources */,
 				E369CA5A2DA048CE00FE91DB /* Sidebar_ItemEdit.swift in Sources */,
-				E321D83C2DB96741006CC081 /* Drive_Navigator.swift in Sources */,
-				E3BD45D82DE733000094FFB1 /* NLF_Form_New.swift in Sources */,
+				E34BAB7C2E0050C60077AACA /* Research.DriveLabel.swift in Sources */,
+				E34BAB2D2DFBC82A0077AACA /* ContactDetail.swift in Sources */,
+				E3EE94C42DFA52EA00B60565 /* ContactsList.swift in Sources */,
+				E34BAB3E2DFC4A720077AACA /* NewContact_File.swift in Sources */,
 				E369CA5B2DA048CE00FE91DB /* Sidebar.swift in Sources */,
 				E32730D92DE9220100B6EDBD /* VStack_Loader.swift in Sources */,
-				E3BD45E12DE758EF0094FFB1 /* NLF_Form_Filter.swift in Sources */,
-				E31D5CB72DF1F18700C3DFF0 /* NLF_Contact_ImageField-Cache.swift in Sources */,
+				E39582382DF93E4A00AA5780 /* Drive_Cache.swift in Sources */,
+				E34BAB1F2DFB9E920077AACA /* AddToCase_Contact.swift in Sources */,
+				E3EE94CA2DFA716400B60565 /* EditContact.swift in Sources */,
+				E34BAB8D2E006A490077AACA /* Filing_Error.swift in Sources */,
 				E369CA4D2DA048C400FE91DB /* Settings_View.swift in Sources */,
+				E34BAB7A2E0050C10077AACA /* Research.Label.swift in Sources */,
+				E34BAB642DFDC3D60077AACA /* Template.Sort.swift in Sources */,
 				E321D84A2DBA74BA006CC081 /* Google_Drive_Permissions.swift in Sources */,
+				E34BAB862E005A750077AACA /* Settings_Filing.swift in Sources */,
 				E380F82B2DA05B2500540A3B /* Settings_Inbox.swift in Sources */,
-				E37E51DE2DEFD19300EF860C /* Drive_Selector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -960,6 +1084,7 @@
 				CODE_SIGN_ENTITLEMENTS = "File Driver/File_Driver.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = GUYJ73MNCU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1003,6 +1128,7 @@
 				CODE_SIGN_ENTITLEMENTS = "File Driver/File_Driver.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = GUYJ73MNCU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -1071,6 +1197,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = GUYJ73MNCU;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1133,6 +1260,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = GUYJ73MNCU;
 				ENABLE_NS_ASSERTIONS = NO;

@@ -67,10 +67,8 @@ extension Google {
    
         do {
             return try await withCheckedThrowingContinuation { continuation in
-                
                 let serviceTicket = fetcher.service.executeQuery(query) { ticket, object, error in
-//                    print("Object: \(object)")
-//                    print("Error: \(error)")
+      
                     shared.isLoading = false
                     guard error == nil else {
                         continuation.resume(throwing: error!)

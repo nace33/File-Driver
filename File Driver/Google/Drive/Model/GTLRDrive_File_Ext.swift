@@ -20,7 +20,8 @@ extension GTLRDrive_File : @retroactive Identifiable   {
 
 //MARK: -MimeType
 public extension GTLRDrive_File   {
-    enum MimeType : String, CaseIterable {
+    enum MimeType : String, CaseIterable, Identifiable {
+        public var id : String { rawValue }
         //https://developers.google.com/drive/api/guides/mime-types
         case file       = "application/vnd.google-apps.file"
         case folder     = "application/vnd.google-apps.folder"
@@ -62,7 +63,7 @@ public extension GTLRDrive_File   {
         case json = "application/vnd.google-apps.script+json"
         case unknown    = "null"
         static let googleTypes : [MimeType] = [.doc, .sheet, .slides]
-        
+        static var allTypesExceptFolder : [MimeType] {allCases.filter { $0 != .folder} }
         static let standardSearchTypes : [MimeType] = [
             .pdf, .doc, .sheet, .email, .folder, .image, .video, .audio, .shortcut, .zip
         ]
@@ -182,6 +183,12 @@ public extension GTLRDrive_File   {
     }
     var mime : MimeType { MimeType(rawValue: mimeType ?? "") ?? .unknown }
     var isFolder : Bool { mime == .folder }
+    var isShortcutFolder : Bool {
+        guard mime == .shortcut else { return false }
+        guard let ogMimeStr = shortcutDetails?.targetMimeType,
+              let ogMime    = GTLRDrive_File.MimeType(rawValue: ogMimeStr)  else { return false }
+        return ogMime == .folder
+    }
     var isLeaf: Bool { !isFolder }
     var isGoogleType : Bool { MimeType.googleTypes.contains(mime) }
     var imageString : String {

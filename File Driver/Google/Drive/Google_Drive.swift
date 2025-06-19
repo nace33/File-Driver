@@ -20,6 +20,17 @@ extension GTLRDrive_Drive {
         folder.identifier = identifier
         folder.name = name
         folder.mimeType = GTLRDrive_File.MimeType.folder.rawValue
+        folder.driveId = identifier
+        return folder
+    }
+}
+extension GTLRDrive_File {
+    var asFolder : GTLRDrive_File {
+        let folder = GTLRDrive_File()
+        folder.identifier = identifier
+        folder.name = name
+        folder.mimeType = GTLRDrive_File.MimeType.folder.rawValue
+        folder.driveId = driveId
         return folder
     }
 }
@@ -29,6 +40,7 @@ extension Google_Drive {
     func sharedDriveList() async throws -> GTLRDrive_DriveList {
         let fetcher = Google_Fetcher<GTLRDrive_DriveList>(service:service, scopes:scopes)
         let query = GTLRDriveQuery_DrivesList.query()
+        query.pageSize = 100
         do {
             guard let driveList = try await Google.execute(query, fetcher: fetcher) else {
                 throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
@@ -52,6 +64,7 @@ extension Google_Drive {
         do {
             let fetcher = Google_Fetcher<GTLRDrive_Drive>(service:service, scopes:scopes)
             let query = GTLRDriveQuery_DrivesGet.query(withDriveId: id)
+         
             guard let drive = try await Google.execute(query, fetcher: fetcher) else {
                 throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
             }
@@ -213,9 +226,7 @@ extension Google_Drive {
 
 //MARK: Folders
 extension Google_Drive {
-    func getContents(driveID:String, onlyFolders:Bool = false, orderBy:String = "name", fetcher:Google_Fetcher<GTLRDrive_FileList>? = nil) async throws ->  [GTLRDrive_File] {
-        print(#function)
-        print("DriveID: \(driveID)")
+    func getContents(driveID:String, labelIDs:[String]? = nil, onlyFolders:Bool = false, orderBy:String = "name", fetcher:Google_Fetcher<GTLRDrive_FileList>? = nil) async throws ->  [GTLRDrive_File] {
         let f = fetcher ?? Google_Fetcher(service:service, scopes:scopes)
         let query = GTLRDriveQuery_FilesList.query()
         query.supportsAllDrives = true
@@ -223,6 +234,9 @@ extension Google_Drive {
         query.orderBy = orderBy
         query.driveId = driveID
         query.corpora = "drive"
+        if !onlyFolders, let labelIDs {
+            query.includeLabels = labelIDs.commify
+        }
         query.fields = GTLRDrive_File.queryFolderFields
         query.q = onlyFolders ?  "mimeType='application/vnd.google-apps.folder' and trashed=false" : "trashed=false"
         do {
@@ -236,13 +250,19 @@ extension Google_Drive {
             throw error
         }
     }
-    func getContents(of folderID:String, onlyFolders:Bool = false, orderBy:String = "name", fetcher:Google_Fetcher<GTLRDrive_FileList>? = nil) async throws ->  [GTLRDrive_File] {
+    func getContents(of folderID:String?, labelIDs:[String]? = nil, onlyFolders:Bool = false, orderBy:String = "name", fetcher:Google_Fetcher<GTLRDrive_FileList>? = nil) async throws ->  [GTLRDrive_File] {
+        guard let folderID else {
+            return try await Google_Drive.shared.sharedDrivesAsFolders()
+        }
         let f = fetcher ?? Google_Fetcher(service:service, scopes:scopes)
         
         let query = GTLRDriveQuery_FilesList.query()
         query.supportsAllDrives = true
         query.includeItemsFromAllDrives = true
         query.orderBy = orderBy
+        if !onlyFolders, let labelIDs {
+            query.includeLabels = labelIDs.commify
+        }
         query.fields = GTLRDrive_File.queryFolderFields
         if onlyFolders {
             query.q = "mimeType='application/vnd.google-apps.folder' and '\(folderID)' in parents and trashed=false"
@@ -477,9 +497,33 @@ extension Google_Drive {
             throw error
         }
     }
+    func move(tuples:[(fileID:String, parentID:String, destinationID:String)]) async throws -> GTLRBatchResult {
+        let batch = GTLRBatchQuery()
+        for tuple in tuples {
+            let query = GTLRDriveQuery_FilesUpdate.query(withObject: GTLRDrive_File(), fileId:tuple.fileID, uploadParameters: nil)
+            query.removeParents = tuple.parentID
+            query.addParents = tuple.destinationID
+            
+            query.fields = GTLRDrive_File.queryFileFields
+            query.supportsAllDrives = true
+            
+            batch.addQuery(query)
+        }
+        let fetcher = Google_Fetcher<GTLRBatchResult>(service: service, scopes: scopes)
+        do {
+            guard let result = try await Google.executeBatch(batch, fetcher: fetcher) else {
+                throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            }
+            return result
+        } catch {
+            throw error
+        }
+    }
 }
 
 //MARK: -Update
+///the GTLRDrive_File can NOT contain values that are not writable (such as an 'id')
+///This is because the server will reject the update because it is trying to over-write an unwritable property
 extension Google_Drive {
     func update(id:String, with file:GTLRDrive_File) async throws -> GTLRDrive_File {
         let query = GTLRDriveQuery_FilesUpdate.query(withObject: file, fileId: id, uploadParameters: nil)
@@ -500,6 +544,24 @@ extension Google_Drive {
         file.name = newName
         do {
             return try await update(id:id, with: file)
+        } catch {
+            throw error
+        }
+    }
+    func update(tuples:[(id:String, file:GTLRDrive_File)]) async throws -> GTLRBatchResult {
+        let batch = GTLRBatchQuery()
+        for tuple in tuples {
+            let query = GTLRDriveQuery_FilesUpdate.query(withObject: tuple.file, fileId: tuple.id, uploadParameters: nil)
+            query.supportsAllDrives = true
+            query.fields = GTLRDrive_File.queryFileFields
+            batch.addQuery(query)
+        }
+        let fetcher = Google_Fetcher<GTLRBatchResult>(service: service, scopes: scopes)
+        do {
+            guard let result = try await Google.executeBatch(batch, fetcher: fetcher) else {
+                throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            }
+            return result
         } catch {
             throw error
         }
@@ -702,7 +764,7 @@ extension Google_Drive {
         let parameters = GTLRUploadParameters.init(fileURL: url, mimeType: "")
         let query = GTLRDriveQuery_FilesCreate.query(withObject: file, uploadParameters: parameters)
         query.supportsAllDrives = true
-        
+        query.fields = GTLRDrive_File.queryFileFields
         return query
     }
     private func uploadQuery(data:Data, name:String, type:String,  toParentID:String, description:String? = nil, properties:GTLRDrive_File_Properties? = nil, appProperties:GTLRDrive_File_AppProperties? = nil) -> GTLRDriveQuery_FilesCreate {

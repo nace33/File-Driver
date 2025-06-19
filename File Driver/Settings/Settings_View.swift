@@ -23,14 +23,16 @@ struct Settings_View : View {
                 .padding(.top)
             
             switch sheet {
+            case .filing:
+                Settings_Filing()
             case .inbox:
                 Settings_Inbox()
             case .sidebar:
                 Sidebar_Settings()
             case .contacts:
                 Settings_Contacts()
-            case .forms:
-                Settings_Forms()
+            case .templates:
+                Settings_Templates()
             }
         }
             .frame(minWidth:400, minHeight: 400)

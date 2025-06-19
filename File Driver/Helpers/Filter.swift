@@ -16,7 +16,9 @@ class Filter  {
     }
     var tokens    : [Token]    = []
     var allTokens : [Token]    = []
-    
+    var isEmpty   : Bool {
+        tokens.isEmpty && string.isEmpty
+    }
  
     struct Token : Identifiable, Hashable {
         let id : String
@@ -88,6 +90,36 @@ class Filter  {
             ForEach(tokenSuggestions) { token in
                 Text(token.title)
                     .searchCompletion(tokenPrefix.rawValue+token.title)
+            }
+        }
+    }
+}
+//MARK: - Contact List Row
+struct Filter_Footer<S:View> : View {
+    let count : Int
+    let title : String
+    @ViewBuilder var form : () -> S
+    @State private var isExpanded = false
+    @State private var isInside = false
+
+    var body: some View {
+        VStack(spacing:0) {
+            Divider()
+            HStack {
+                Text("- \(count) \(title) -")
+                    .font(.caption)
+                    .onHover { isInside = $0}
+                    .foregroundStyle(isInside ? .blue : .secondary)
+                    .onTapGesture {
+                        isExpanded.toggle()
+                    }
+                    .padding(.vertical, 8)
+            }
+            if isExpanded {
+                Form {
+                    form()
+                }
+                .padding(.bottom, 8)
             }
         }
     }

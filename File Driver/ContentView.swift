@@ -46,7 +46,9 @@ struct ContentView: View {
 #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 180, ideal: 200)
 #endif
-            } detail: {  detailView(navigation.sidebar)  }
+            } detail: {
+                detailView(navigation.sidebar)
+            }
                 .onAppear() {
                     BOF_SwiftData.shared.container.mainContext.undoManager = undoManager
                     loadNavigationPassedFromWindowGroupIfAny()
@@ -91,21 +93,27 @@ extension ContentView {
         if let item = Sidebar_Item.fetchItem(with:id, in:modelContext) {
             switch item.category {
             case .filing:
-                Filing_View()
-            case .forms:
-                NLF_Forms_List()
+                FilingList()
+                    .navigationTitle(item.category.title)
+        
+            case .templates:
+                TemplatesList()
+                    .navigationTitle(item.category.title)
             case .inbox:
                 Inbox_View(url: item.category.defaultURL)
+                    .navigationTitle(item.category.title)
             case .settings:
                 Settings_View()
+                    .navigationTitle(item.category.title)
             case .cases:
                 Case_List()
-//                Case_View(aCase: Case.exampleCase)
+                    .navigationTitle(item.category.title)
             case .contacts:
-                Contacts_List()
+                ContactsList()
                     .navigationTitle(item.category.title)
             case .drive:
                 BOF_WebView(URL(string:"https://drive.google.com")!, navDelegate: .init(), uiDelegate: .init())
+                    .navigationTitle(item.category.title)
             default:
                 Text("Jimmy Build \(item.category.title)")
             }

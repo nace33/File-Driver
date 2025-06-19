@@ -9,18 +9,28 @@ import Foundation
 
 enum BOF_Settings : String, CaseIterable {
     //Sidebar
-   case sidebar, inbox, contacts, forms
+   case sidebar, filing, inbox, contacts, templates
     
     enum Key : String {
+        //General
+        case textSuggestionStyle
+        //filing
+        case filingDrive
+        
         //Inbox
         case inboxImmediateFilingKey
         //Contacts
-        case contactsDriveIDKey, contactTemplateIDKey, contactsGroupKey, contactIconSizeKey, contactSheetKey, contactsShowVisibleKey, contactsShowHiddenKey, contactsShowPurgeKey, contactsShowColorsKey
-        //forms
-        case formDriveIDKey, formViewModeKey, formsShowExamplesKey, formsMasterIDKey,formsShowRetiredKey, formsShowActiveKey, formsShowDraftingKey, formsSortKey
+        case contactsDriveIDKey, contactTemplateIDKey, contactsSortKey, contactsLastNameFirst, contactIconSizeKey, contactSheetKey, contactsShowVisibleKey, contactsShowHiddenKey, contactsShowPurgeKey, contactsShowColorsKey, contactsShowImage
+
+        //templates
+        case templateDriveID, templatesShowDrafting, templatesShowActive, templatesShowRetired, templatesSortKey, templatesListSort
+        
         //cases
         case casesFilingShowSeetingsKey, casesFilingTableSortKey, casesFilingTableColumnKey, casesFilingSortKey, casesFilingFilterClosedKey, caseFilingShowStatusColorsKey
 
-        
+        //Research
+        case researchDriveID, researchTemplateID
     }
 }
+
+
