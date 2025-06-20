@@ -220,7 +220,7 @@ public extension Contact {
             let categoryFolder = try await Google_Drive.shared.get(folder:newFile.wrappedValue.category, parentID: parentFolderID, createIfNotFound: true, caseInsensitive: true)
             
             //Upload
-            let uploadedFile = try await Google_Drive.shared.upload(url: upload.url, filename: newFile.wrappedValue.filename, toParentID: categoryFolder.id)
+            let uploadedFile = try await Google_Drive.shared.upload(url: upload.url, filename: newFile.wrappedValue.filename, to: categoryFolder.id)
           
             //Update local Model
             newFile.wrappedValue.fileID   = uploadedFile.id

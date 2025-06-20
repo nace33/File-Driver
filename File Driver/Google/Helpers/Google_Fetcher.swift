@@ -15,7 +15,7 @@ class Google_Fetcher<T> {
     var ticket : GTLRServiceTicket?
     var continuation : CheckedContinuation<T?, Error>?
    
-    typealias Progress =  (Float) -> ()
+    typealias Progress =  (Double) -> ()
     let progress : Progress?
     
     typealias Cancel =  () -> ()

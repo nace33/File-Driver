@@ -782,9 +782,55 @@ extension Google_Drive {
         
         return query
     }
-    
+    fileprivate func totalFilesToUpload(in url:URL) -> Int {
+        if url.isDirectory, let enumerator = FileManager.default.enumerator(at: url,
+                                                               includingPropertiesForKeys: [.isRegularFileKey],
+                                                               options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+               return enumerator.allObjects.count + 1
+        } else {
+            return 1
+        }
+    }
+   
     //calls
-    func upload(url:URL, filename:String? = nil, id:String? = nil, toParentID:String, description:String? = nil, properties:GTLRDrive_File_Properties? = nil, appProperties:GTLRDrive_File_AppProperties? = nil, progress:((Float) -> ())? = nil) async throws -> GTLRDrive_File {
+    func upload(url:URL, filename:String? = nil, id:String? = nil, to parentID:String, progress:((Double) -> ())? = nil) async throws -> GTLRDrive_File{
+        let total = Double(totalFilesToUpload(in:url))
+        do {
+            var runningTotal:Double = 0.0
+            var completedUnits = 0.0
+
+            let newFile = try await recursiveUpload(url: url, filename: filename, id: id, to:parentID) { update in
+                if update == 1 {
+                    completedUnits += 1.0
+                    runningTotal = completedUnits
+                } else {
+                    runningTotal = completedUnits + update
+                }
+                progress?(runningTotal / total)
+            }
+            return newFile
+        } catch {
+            throw error
+        }
+    }
+    fileprivate func recursiveUpload(url:URL, filename:String? = nil, id:String? = nil, to parentID:String, progress:((Double) -> ())? = nil) async throws -> GTLRDrive_File {
+        if url.isDirectory {
+            let newDirectory = try await create(folder: url.lastPathComponent, in: parentID)
+            progress?(1)
+
+            let children = FileManager.contents(directory: url)
+            for childURL in children {
+               _ = try await recursiveUpload(url: childURL, to: newDirectory.id, progress: progress)
+            }
+            return newDirectory
+        } else {
+            let file = try await upload(url: url, filename: filename, id:id, toParentID: parentID) { prog in
+                progress?(prog)
+            }
+            return file
+        }
+    }
+    fileprivate func upload(url:URL, filename:String? = nil, id:String? = nil, toParentID:String, description:String? = nil, properties:GTLRDrive_File_Properties? = nil, appProperties:GTLRDrive_File_AppProperties? = nil, progress:((Double) -> ())? = nil) async throws -> GTLRDrive_File {
         let fetcher = Google_Fetcher<GTLRDrive_File>(service: service, scopes: scopes, progress: progress)
         let query = uploadQuery(url:url,filename:filename, id:id, toParentID: toParentID, description: description, properties: properties, appProperties: appProperties)
         do {
@@ -796,7 +842,9 @@ extension Google_Drive {
             throw error
         }
     }
-    func upload(data:Data, toParentID:String, name:String, type:String, description:String? = nil, properties:GTLRDrive_File_Properties? = nil, appProperties:GTLRDrive_File_AppProperties? = nil, progress:((Float) -> ())? = nil) async throws -> GTLRDrive_File {
+   
+    //Data Upload
+    func upload(data:Data, toParentID:String, name:String, type:String, description:String? = nil, properties:GTLRDrive_File_Properties? = nil, appProperties:GTLRDrive_File_AppProperties? = nil, progress:((Double) -> ())? = nil) async throws -> GTLRDrive_File {
         let fetcher = Google_Fetcher<GTLRDrive_File>(service:service, scopes:scopes, progress: progress)
         let query = uploadQuery(data: data, name: name, type: type, toParentID: toParentID, description: description, properties: properties, appProperties: appProperties)
         

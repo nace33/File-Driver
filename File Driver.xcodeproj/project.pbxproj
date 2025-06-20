@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF2D66D92E04E3E800377BDE /* FilingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2D66D82E04E3E800377BDE /* FilingView.swift */; };
+		BF2D66DC2E04EE3500377BDE /* Google_DriveSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2D66DB2E04EE3500377BDE /* Google_DriveSelector.swift */; };
 		E321D83A2DB9672A006CC081 /* Filing_View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D8382DB9672A006CC081 /* Filing_View.swift */; };
 		E321D83E2DB96758006CC081 /* Case_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D83D2DB96758006CC081 /* Case_List.swift */; };
 		E321D84A2DBA74BA006CC081 /* Google_Drive_Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E321D8492DBA74BA006CC081 /* Google_Drive_Permissions.swift */; };
@@ -149,6 +151,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF2D66D82E04E3E800377BDE /* FilingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilingView.swift; sourceTree = "<group>"; };
+		BF2D66DB2E04EE3500377BDE /* Google_DriveSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_DriveSelector.swift; sourceTree = "<group>"; };
 		E321D8382DB9672A006CC081 /* Filing_View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filing_View.swift; sourceTree = "<group>"; };
 		E321D83D2DB96758006CC081 /* Case_List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case_List.swift; sourceTree = "<group>"; };
 		E321D8492DBA74BA006CC081 /* Google_Drive_Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Google_Drive_Permissions.swift; sourceTree = "<group>"; };
@@ -304,10 +308,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF2D66DA2E04EE2C00377BDE /* Selectors */ = {
+			isa = PBXGroup;
+			children = (
+				BF2D66DB2E04EE3500377BDE /* Google_DriveSelector.swift */,
+			);
+			path = Selectors;
+			sourceTree = "<group>";
+		};
 		E321D8392DB9672A006CC081 /* Filing */ = {
 			isa = PBXGroup;
 			children = (
 				E34BAB812E00592B0077AACA /* FilingController.swift */,
+				BF2D66D82E04E3E800377BDE /* FilingView.swift */,
 				E34BAB832E0059840077AACA /* FilingList.swift */,
 				E34BAB912E00CF100077AACA /* FilingDetail.swift */,
 				E34BAB8E2E006A540077AACA /* Model */,
@@ -764,6 +777,7 @@
 			children = (
 				E3E8B6DC2E019F0100F976DA /* Google_DriveView.swift */,
 				E3E8B6D42E01204A00F976DA /* Google_DriveDelegate.swift */,
+				BF2D66DA2E04EE2C00377BDE /* Selectors */,
 				E37992642E02FB97001B0E02 /* Header */,
 				E379925E2E020D2A001B0E02 /* List */,
 			);
@@ -955,6 +969,7 @@
 				E34BAB892E006A2D0077AACA /* FilingItem.swift in Sources */,
 				E34BAB702DFE16770077AACA /* AddToCase_Template.swift in Sources */,
 				E369CA492DA048BE00FE91DB /* BOF_SwiftData.swift in Sources */,
+				BF2D66DC2E04EE3500377BDE /* Google_DriveSelector.swift in Sources */,
 				E3E8B6D92E01216400F976DA /* Google_DriveView_List.swift in Sources */,
 				E3E8B6D22E01202200F976DA /* Google_DriveView_PathBar.swift in Sources */,
 				E369CA302DA0464300FE91DB /* File_DriverApp.swift in Sources */,
@@ -1050,6 +1065,7 @@
 				E37E51D82DEFB25F00EF860C /* Drive_SetDefaultID.swift in Sources */,
 				E34BAB752E0050AF0077AACA /* ResearchController.swift in Sources */,
 				E34BAB842E0059840077AACA /* FilingList.swift in Sources */,
+				BF2D66D92E04E3E800377BDE /* FilingView.swift in Sources */,
 				E369CA592DA048CE00FE91DB /* Sidebar_Item.swift in Sources */,
 				E34BAB562DFDA95D0077AACA /* Template.DriveLabel.swift in Sources */,
 				E369CA5A2DA048CE00FE91DB /* Sidebar_ItemEdit.swift in Sources */,

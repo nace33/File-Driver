@@ -7,16 +7,17 @@
 
 import SwiftUI
 import GoogleAPIClientForREST_Drive
-
+import UniformTypeIdentifiers
 
 
 @Observable
 public
 class Google_DriveDelegate  {
-    init(actions: [Google_DriveDelegate.Action] = [.refresh], labelIDs:[String]? = nil, mimeTypes:[GTLRDrive_File.MimeType]? = nil) {
+    init(rootID:String? = nil, actions: [Google_DriveDelegate.Action] = [.refresh], labelIDs:[String]? = nil, mimeTypes:[GTLRDrive_File.MimeType]? = nil) {
         self.actions = actions
         self.labelIDs = labelIDs
         self.mimeTypes = mimeTypes
+        self.rootID = rootID
     }
     static func selecter(labelIDs:[String]? = nil, mimeTypes:[GTLRDrive_File.MimeType]? = nil) -> Google_DriveDelegate {
         Google_DriveDelegate(actions: [.select], labelIDs: labelIDs, mimeTypes: mimeTypes)
@@ -25,6 +26,7 @@ class Google_DriveDelegate  {
         Google_DriveDelegate(actions:Google_DriveDelegate.Action.allCases, labelIDs: labelIDs, mimeTypes: mimeTypes)
     }
     
+    var rootID : String?
     var doubleClicked : GTLRDrive_File?  = nil
     var selected      : GTLRDrive_File?  = nil
     private(set)var files  : [GTLRDrive_File] = []
@@ -123,6 +125,7 @@ extension Google_DriveDelegate {
 extension Google_DriveDelegate {
     func refresh() {
         Task {
+            stackWillReloadSoon = true
             await loadStack()
         }
     }
@@ -160,7 +163,13 @@ extension Google_DriveDelegate {
                 files = try await Google_Drive.shared.getContents(of: last.id, labelIDs: labelIDs, onlyFolders: onlyFolders)
                                                      .filter { validatedMimeTypes?.contains($0.mime) ?? true }
                 selected = last
-            } else {
+            } else if let rootID {
+                let root = try await Google_Drive.shared.get(fileID: rootID, labelIDs: labelIDs)
+                guard root.isFolder else { throw NSError.quick("Root is not a folder")}
+
+                addToStack(root)            
+            }
+            else {
                 files = try await Google_Drive.shared.sharedDrivesAsFolders()
                 selected = nil
             }
@@ -443,6 +452,8 @@ extension Google_DriveDelegate {
         guard let folder else { return }
         let parentID = folder.id
         guard  !parentID.isEmpty else { return }
+        
+        
         for url in urls {
             Task {
                 _ = url.startAccessingSecurityScopedResource()
@@ -464,7 +475,8 @@ extension Google_DriveDelegate {
             
                 
                 uploadItems.append(uploadItem)
-                let uploadedFile =  try await Google_Drive.shared.upload(url:url, toParentID: parentID) { progress in
+                let uploadedFile : GTLRDrive_File
+                 uploadedFile =  try await Google_Drive.shared.upload(url:url, to: parentID) { progress in
                     if let index = self.uploadItems.firstIndex(where: {$0.id == uploadItem.id}) {
                         self.uploadItems[index].progress = progress
                     }
@@ -483,6 +495,9 @@ extension Google_DriveDelegate {
     struct UploadItem : Identifiable {
         var id       : String
         var title    : String
-        var progress : Float = 0
+        var progress : Double = 0
     }
+    static var urlTypes : [UTType] {[
+        .folder, .audio, .video, .image, .pdf, .text, .movie, .emailMessage, .message, .spreadsheet, .presentation, .package, .script, .fileURL, UTType(filenameExtension: "pages")!
+    ]}
 }

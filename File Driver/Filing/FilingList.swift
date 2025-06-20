@@ -11,6 +11,7 @@ import BOF_SecretSauce
 struct FilingList: View {
     @Environment(FilingController.self) var controller
     @AppStorage(BOF_Settings.Key.filingDrive.rawValue)        var driveID       : String = ""
+    @State private var driveDelegate = Google_DriveDelegate.selecter(mimeTypes: [.folder])
 
     @State private var selectedID   : FilingItem.ID?
     @State private var isTargeted   : Bool        = false
@@ -51,7 +52,7 @@ struct FilingList: View {
                 }
             }
         }
-//            .fileImporter(isPresented: $showAddSheet, allowedContentTypes: Contact.File.urlTypes) { result in
+//            .fileImporter(isPresented: $showAddSheet, allowedContentTypes:Google_DriveDelegate.urlTypes) { result in
 //                switch result {
 //                case .success(let url):
 //                    add([url])
@@ -121,14 +122,20 @@ extension FilingList {
 //MARK: - View Builders
 extension FilingList {
     @ViewBuilder var setDriveIDView  : some View {
-        Text("Drive Navigator Here")
+        Google_DriveView("Select a drive to save Contacts in", delegate: $driveDelegate, canLoad: { _ in false})
+            .onAppear {
+                driveDelegate.mimeTypes = [.folder]
+            }
+            .onChange(of: driveDelegate.selectItem) { _, newValue in
+                if let newValue, newValue.id == newValue.driveId {
+                    self.driveID = newValue.id
+                    UserDefaults.standard.synchronize()
+                    Task {
+                        await load()
+                    }
+                }
+            }
 
-//        Drive_Selector(rootTitle: "Select Drive To Upload Files to.", rootID: "", mimeTypes: [.folder]) { _ in
-//            false
-//        } select: { folder in
-//            driveID = folder.id
-//            Task { await load() }
-//        }
     }
     @ViewBuilder func nothingToFileView() -> some View {
         HappyDog("All Filing Is Done!")
@@ -155,7 +162,6 @@ extension FilingList {
                         }
             }
                 .listRowSeparator(.hidden)
-
         }
     }
 

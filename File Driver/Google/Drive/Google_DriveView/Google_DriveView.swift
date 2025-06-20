@@ -121,7 +121,7 @@ struct Google_DriveView<H:View, L:View, B:View, R:View>: View {
             loadHeader()
             if let error = delegate.error {
                 errorView(error)
-            }else if delegate.isLoading {
+            }else if delegate.isLoading || delegate.stackWillReloadSoon {
                 loadingView()
             } else {
                theListView()
@@ -147,10 +147,10 @@ struct Google_DriveView<H:View, L:View, B:View, R:View>: View {
                     .importsPDFs(directory:URL.applicationSupportDirectory, filename: "\(Date().yyyymmdd) Scan.pdf", imported: {
                         delegate.upload([$0], to:delegate.stack.last)
                     })
-                    .fileImporter(isPresented: Bindable(delegate).showUploadSheet, allowedContentTypes: Contact.File.urlTypes) { result in
+                    .fileImporter(isPresented: Bindable(delegate).showUploadSheet, allowedContentTypes: Google_DriveDelegate.urlTypes, allowsMultipleSelection:true) { result in
                         switch result {
-                        case .success(let url):
-                            delegate.upload([url], to:delegate.uploadToFolder)
+                        case .success(let urls):
+                            delegate.upload(urls, to:delegate.uploadToFolder ?? delegate.stack.last)
                         case .failure(let failure):
                             delegate.error = failure
                         }

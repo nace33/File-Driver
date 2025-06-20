@@ -93,7 +93,7 @@ extension ContentView {
         if let item = Sidebar_Item.fetchItem(with:id, in:modelContext) {
             switch item.category {
             case .filing:
-                FilingList()
+                FilingView()
                     .navigationTitle(item.category.title)
         
             case .templates:

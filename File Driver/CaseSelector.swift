@@ -152,7 +152,6 @@ fileprivate extension CaseSelector {
         }
         //same modififers as Google_DriveView_Header
         .frame(minHeight:22)
-        .disabled(delegate.isLoading )
         .buttonStyle(.plain)
         .lineLimit(1)
         .padding(8)

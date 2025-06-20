@@ -30,7 +30,7 @@ struct Google_DriveView_PathBar<Action:View> : View {
     
     var body: some View {
         HStack {
-            if !title.isEmpty {
+            if !title.isEmpty, delegate.rootID == nil {
                 if delegate.stack.isNotEmpty {
                     Button(title) {
                         delegate.removeAllFromStack()

@@ -62,7 +62,7 @@ extension FilingController {
             
             do {
 //                boundItem.wrappedValue.status = .uploading //this is set in the init FilingItem(fileURL: url)
-                let uploadedFile =  try await Google_Drive.shared.upload(url:url, toParentID: driveID) { progress in
+                let uploadedFile =  try await Google_Drive.shared.upload(url:url, to: driveID) { progress in
                     if progress == 1 {
                         withAnimation {
                             boundItem.wrappedValue.progress =  1

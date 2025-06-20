@@ -14,7 +14,7 @@ struct FilingItem : Identifiable {
     var file     : GTLRDrive_File?
     var name     : String { localURL?.deletingPathExtension().lastPathComponent ?? file?.name ?? "No Filename"}
     var status   : Status
-    var progress : Float = 0
+    var progress : Double = 0
     var error    : Filing_Error?
     var dateAdded: Date
  

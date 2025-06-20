@@ -60,8 +60,8 @@ extension Google {
         fetcher.service.shouldFetchNextPages = true
        
         query.executionParameters.uploadProgressBlock = { _, bytesUploaded, totalToUpload in
-            let b = Float(bytesUploaded)
-            let t = Float(totalToUpload)
+            let b = Double(bytesUploaded)
+            let t = Double(totalToUpload)
             fetcher.progress?(b/t)
         }
    
