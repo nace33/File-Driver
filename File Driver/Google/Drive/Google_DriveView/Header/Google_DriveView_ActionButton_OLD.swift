@@ -9,7 +9,36 @@ import SwiftUI
 import GoogleAPIClientForREST_Drive
 import BOF_SecretSauce
 
-struct Google_DriveView_ActionButton : View {
+
+/*
+struct Google_DriveView_HeaderActions_OLD: View {
+    let file : GTLRDrive_File?
+    let style : Google_DriveView_ActionButton_OLD.Style
+    @Environment(Google_DriveDelegate.self) var delegate
+    var body: some View {
+        HStack {
+            Google_DriveView_HeaderActionButtons_OLD(file: file, style: style)
+        }
+    }
+}
+
+struct Google_DriveView_HeaderActionButtons_OLD: View {
+    let file : GTLRDrive_File?
+    let style : Google_DriveView_ActionButton_OLD.Style
+    @Environment(Google_DriveDelegate.self) var delegate
+    var body: some View {
+        ForEach(delegate.actions, id:\.self) { action in
+            if Google_DriveDelegate.Action.toolbarActions.contains(action) {
+                Google_DriveView_ActionButton_OLD(action: action, style:style, file: file)
+            }
+        }
+    }
+}
+
+
+
+
+struct Google_DriveView_ActionButton_OLD : View {
     @Environment(Google_DriveDelegate.self) var delegate
     let action : Google_DriveDelegate.Action
     let style : Style
@@ -103,3 +132,4 @@ struct Google_DriveView_ActionButton : View {
         }
     }
 }
+*/

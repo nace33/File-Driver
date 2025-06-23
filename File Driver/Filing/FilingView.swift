@@ -10,15 +10,16 @@ import SwiftUI
 struct FilingView: View {
     @Environment(FilingController.self) var controller
     @AppStorage(BOF_Settings.Key.filingDrive.rawValue) var driveID : String = ""
-    @State private var driveDelegate = Google_DriveDelegate(actions: [.upload, .delete])
-    
+    @State private var driveDelegate = Google_DriveDelegate(actions: [.newFolder, .move, .rename, .upload, .delete])
+//    @State private var driveDelegate = Google_DriveDelegate(actions:Google_DriveDelegate.Action.allCases)
+
     
     var body: some View {
         if driveID.isEmpty {
             Google_DriveSelector("Select Filing Drive", canLoadFolders: false, fileID: $driveID)
         } else {
             HSplitView {
-                Google_DriveView(delegate: $driveDelegate, header:{ })
+                Google_DriveView(delegate: $driveDelegate, header:{ Google_DriveView_Header(showActionBar: false) })
                     .onAppear() {   driveDelegate.rootID = driveID }
                     .frame(minWidth:400, idealWidth: 400, maxWidth: 400)
                     .toolbar {
@@ -28,7 +29,7 @@ struct FilingView: View {
                         }
                     }
                 Group {
-                    if let selectedFile = driveDelegate.selected {
+                    if driveDelegate.selection.count > 0  {
                         CaseSelector() {
                             Button("Add To Case") { }
                                 .buttonStyle(.borderedProminent)

@@ -34,7 +34,8 @@ struct Google_DriveView_List<Row:View, B:View>  : View {
     @State private var isTargeted = false
     
     var body: some View {
-        List(selection:Bindable(delegate).selected) {
+//        List(selection:Bindable(delegate).selected) {
+        List(selection:Bindable(delegate).selection) {
             if !delegate.isLoading, delegate.files.isEmpty {
                 Text("Directory is empty.")
                     .foregroundStyle(.secondary)

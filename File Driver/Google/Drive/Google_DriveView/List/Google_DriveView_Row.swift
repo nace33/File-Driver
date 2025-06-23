@@ -25,27 +25,53 @@ struct Google_DriveView_Row : View {
                 content
                     .dropStyle(isTargeted:$isTargeted)
                     .dropDestination(for: DropItem.self, action: { items, _ in
-                        for item in items {
-                            switch item {
-                            case .file(let id):
-                                guard delegate.actions.contains(.move) else { continue }
-                                if !delegate.canMove(id: id, newParentID: file.id) {
-                                    break
-                                } else {
-                                    Task { try? await delegate.move(id:id, newParentID: file.id) }
-                                }
-                            case .url(let url):
-                                guard delegate.actions.contains(.upload) else { continue }
-                                delegate.upload([url], to: file.wrappedValue)
-                            }
-                        }
-                        return true
+                       processItems(items)
                     }, isTargeted: {self.isTargeted = $0})
             }
             .if(delegate.actions.contains(.move) && delegate.canDrag(file: file.wrappedValue)) { content in
                 content
                     .draggable(file.wrappedValue.id)
             }
+    }
+    
+    fileprivate func processItems(_ items: [DropItem]) -> Bool {
+        processFileMoveItems(items)
+        processFileUploadItems(items)
+        return true
+    }
+    fileprivate func processFileMoveItems(_ items: [DropItem])  {
+        guard delegate.actions.contains(.move) else { return }
+        let fileIDs = items.compactMap { dropItem in
+            switch dropItem {
+            case .file(let id):
+                if delegate.canMove(id: id, newParentID: file.id) {
+                    return id
+                }
+                return nil
+            default:
+                return nil
+            }
+        }
+        if fileIDs.isNotEmpty {
+            Task {
+                try? await delegate.move(ids: fileIDs, newParentID: file.id)
+            }
+        }
+    }
+    fileprivate func processFileUploadItems(_ items: [DropItem])  {
+        guard delegate.actions.contains(.upload) else { return }
+        guard delegate.canUpload(to: file.wrappedValue) else { return }
+        let urls = items.compactMap { dropItem in
+            switch dropItem {
+            case .url(let url):
+                return url
+            default:
+                return nil
+            }
+        }
+        if urls.isNotEmpty {
+            delegate.upload(urls, to: file.wrappedValue)
+        }
     }
 }
 

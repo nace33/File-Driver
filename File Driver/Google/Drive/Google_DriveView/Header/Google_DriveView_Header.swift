@@ -10,13 +10,16 @@ import SwiftUI
 
 
 struct Google_DriveView_Header: View {
-    let title : String
+    var title : String = ""
+    var showActionBar : Bool = true
     @Environment(Google_DriveDelegate.self) var delegate
     var body: some View {
         HStack {
             Google_DriveView_PathBar(title)
             Spacer()
-            Google_DriveView_HeaderActions(file: nil, style: .image)
+            if showActionBar {
+                Google_DriveView_ActionBar()
+            }
         }
             //minHeight is set because toolbar will get smaller if Select Button was visible, then disappears as delegate.actions change in a view
             .frame(minHeight:22)

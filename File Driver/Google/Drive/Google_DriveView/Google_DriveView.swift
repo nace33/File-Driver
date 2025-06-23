@@ -126,9 +126,7 @@ struct Google_DriveView<H:View, L:View, B:View, R:View>: View {
             } else {
                theListView()
                     .contextMenu(forSelectionType: GTLRDrive_File.self, menu: { items in
-                        if items.isEmpty {
-                            Google_DriveView_HeaderActionButtons(file:nil, style:.text)
-                        }
+                        Google_DriveView_ActionMenu(files: items)
                     }, primaryAction: { items in
                         doubleClick(items)
                     })
@@ -188,9 +186,7 @@ extension Google_DriveView {
             }
         }
         else {
-            if delegate.actions.contains(.select) {
-                delegate.selectItem = clickedItem
-            }
+            delegate.performActionSelect(clickedItem)
             delegate.doubleClicked = clickedItem
         }
     }

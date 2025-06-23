@@ -51,12 +51,13 @@ struct Google_DriveView_RowLabel : View {
                     .resizable()
                     .scaledToFit()
             }
-                .if(delegate.actions.isNotEmpty) { content in
-                    content
-                        .contextMenu {
-                            Google_DriveView_HeaderActionButtons(file: file.wrappedValue, style: .text)
-                        }
-                }
+//            Moved to Google_DriveView.body so multiple selected items can have context menu
+//                .if(delegate.actions.isNotEmpty) { content in
+//                    content
+//                        .contextMenu {
+//                            Google_DriveView_HeaderActionButtons(file: file.wrappedValue, style: .text)
+//                        }
+//                }
         }
     }
 }

@@ -55,8 +55,7 @@ struct Google_DriveView_PathBar<Action:View> : View {
                     .frame(minWidth:minWidth)
                     .layoutPriority(Double(index))
                     .dropDestination(for: GTLRDrive_File.ID.self) { items, location in
-                        Task { try? await delegate.move(id: items.first, newParentID:element.id) }
-                        return delegate.canMove(id: items.first, newParentID:element.id)
+                        processMoveItems(items, to:element.id)
                     }
 //                    .disabled(index+1 == delegate.stack.count )
                 if index+1 < delegate.stack.count {
@@ -68,6 +67,17 @@ struct Google_DriveView_PathBar<Action:View> : View {
                     .layoutPriority(Double(delegate.stack.count) + 1.0)
             }
         }
+    }
+    
+    func processMoveItems(_ itemIDs:[GTLRDrive_File.ID], to parentID:GTLRDrive_File.ID) -> Bool {
+        let satisfy = itemIDs.allSatisfy { id in
+            delegate.canMove(id: id, newParentID: parentID)
+        }
+        guard satisfy else { return false }
+        Task {
+            try? await delegate.move(ids: itemIDs, newParentID: parentID)
+        }
+        return true
     }
 }
 

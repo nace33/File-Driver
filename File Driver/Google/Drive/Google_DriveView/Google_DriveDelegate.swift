@@ -7,8 +7,7 @@
 
 import SwiftUI
 import GoogleAPIClientForREST_Drive
-import UniformTypeIdentifiers
-
+import BOF_SecretSauce
 
 @Observable
 public
@@ -28,8 +27,9 @@ class Google_DriveDelegate  {
     
     var rootID : String?
     var doubleClicked : GTLRDrive_File?  = nil
-    var selected      : GTLRDrive_File?  = nil
-    private(set)var files  : [GTLRDrive_File] = []
+//    var selected      : GTLRDrive_File?  = nil
+    var selection          : Set<GTLRDrive_File>  = []
+    internal var files  : [GTLRDrive_File] = []
     private(set)var stack  : [GTLRDrive_File] = []
     
     //Filter
@@ -49,10 +49,10 @@ class Google_DriveDelegate  {
     
     //Actions
     var actions          : [Google_DriveDelegate.Action]
-    var renameItem       : GTLRDrive_File?  = nil
+    var renameItem       : RenameItem?  = nil
     var selectItem       : GTLRDrive_File?  = nil
     var shareItem        : GTLRDrive_File?  = nil
-    var deleteItem       : GTLRDrive_File?  = nil
+    var deleteItem       : DeleteItem? = nil
     var uploadToFolder   : GTLRDrive_File?  = nil
     var showUploadSheet  = false
 
@@ -99,10 +99,21 @@ class Google_DriveDelegate  {
             }
         }
     }
-    
 }
-//MARK: - Load Stack
+
+//MARK: - List
 extension Google_DriveDelegate {
+    func removeFromSelection(_ files: [GTLRDrive_File]) {
+        let fileIds     = files.compactMap {$0.id}
+        for fileId in fileIds {
+            if let index = selection.firstIndex(where: {$0.id == fileId}){
+                selection.remove(at: index)
+            }
+        }
+    }
+    internal func sortFiles() {
+        files.sort { $0.title.ciCompare($1.title)}
+    }
     var filteredFiles: [GTLRDrive_File] {
         guard  actions.contains(.filter), !filter.isEmpty else { return files }
         return files.filter { file in
@@ -120,6 +131,7 @@ extension Google_DriveDelegate {
         }
     }
 }
+
 
 //MARK: - Load Stack
 extension Google_DriveDelegate {
@@ -150,28 +162,24 @@ extension Google_DriveDelegate {
             selectItem = nil
             doubleClicked = nil
             stackWillReloadSoon = false
+            selection = []
             if let customLoad {//currently only a customLoad is set in Google_DriveView.task(id:...)
                 load = customLoad //save reference so other functions that call this (i.e. refresh) call the custom load
                 files = try await customLoad()
-                selected = stack.last
             }
             else if let load {//this load call is set above, originally passed in from Google_DriveView.task(id:...)
                 files = try await load()
-                selected = stack.last
             }
             else if let last = stack.last, last.isFolder {
                 files = try await Google_Drive.shared.getContents(of: last.id, labelIDs: labelIDs, onlyFolders: onlyFolders)
                                                      .filter { validatedMimeTypes?.contains($0.mime) ?? true }
-                selected = last
             } else if let rootID {
                 let root = try await Google_Drive.shared.get(fileID: rootID, labelIDs: labelIDs)
                 guard root.isFolder else { throw NSError.quick("Root is not a folder")}
-
-                addToStack(root)            
+                addToStack(root)
             }
             else {
                 files = try await Google_Drive.shared.sharedDrivesAsFolders()
-                selected = nil
             }
             isLoading = false
         } catch {
@@ -197,6 +205,17 @@ extension Google_DriveDelegate {
                 mimeTypes.first! == .folder else { return false }
         return true
     }
+}
+
+
+//MARK: - Actions
+extension Google_DriveDelegate {
+    var  availableActions : [Action] {   availableActions(for: selection)  }
+    func availableActions(for files:Set<GTLRDrive_File>) -> [Action] {
+        actions.filter { action in
+           canPerform(action, on: files)
+        }
+    }
     func canPerform(_ action:Action, on file:GTLRDrive_File?) -> Bool {
         switch action {
         case .refresh:
@@ -219,285 +238,50 @@ extension Google_DriveDelegate {
             false
         }
     }
-}
-
-
-//MARK: - Sort
-extension Google_DriveDelegate {
-    private func sortFiles() {
-        files.sort { $0.title.ciCompare($1.title)}
-    }
-}
-
-
-//MARK: - Select
-extension Google_DriveDelegate {
-    ///True when:
-    /// 1) One of the following is true
-    ///     A) passedIn file != nil (i.e. there is an item selected in the list or the menuItem that passed to this function is set);
-    ///     B) stack.last is a folder
-    /// 2) And, one of the following is true
-    ///     A) mimeTypes is nil
-    ///     B) mimeTypes.contains the mimeType of the item in 1 above
-    ///
-    func canSelect(file:GTLRDrive_File?) -> Bool {
-        guard let item = file ?? stack.last else { return false }
-        guard let mimeTypes else      { return true  }
-        return mimeTypes.contains(item.mime)
-    }
-}
-
-
-//MARK: - Move
-extension Google_DriveDelegate {
-    func canDrag(file:GTLRDrive_File) -> Bool {
-        guard let driveID = file.driveId else { return false }
-        return file.id != driveID
-    }
-    func canMove(id:String?, newParentID:String) -> Bool {
-        guard let id else { return false }
-        guard id != newParentID else { return false }
-        guard let index = files.firstIndex(where: {$0.id == id }) else { return false }
-        guard let currentParentID = files[index].parents?.first else { return false }
-        guard currentParentID != newParentID else { return false }
-        return true
-    }
-    func move(id:String?, newParentID:String) async throws  {
-        guard let id else { return }
-        guard let index = files.firstIndex(where: {$0.id == id }) else { return }
-        guard let currentParentID = files[index].parents?.first else { return }
-        guard canMove(id: id, newParentID: newParentID) else { return }
-        let prior = files[index]
-        do {
-            moveItemIDs.append(newParentID)
-            files.remove(at: index)
-            if selected == files[index] {
-                selected = nil
-            }
-            
-            _ = try await Google_Drive.shared.move(fileID: id, from:currentParentID, to: newParentID)
-        
-            moveItemIDs.removeAll(where: {$0 == newParentID})
-        } catch {
-            moveItemIDs.removeAll(where: {$0 == newParentID})
-            files.append(prior)
-            sortFiles()
-            throw error
+    func canPerform(_ action:Action, on files:Set<GTLRDrive_File>) -> Bool {
+        if files.count == 0 {
+            canPerform(action, on: nil)
         }
-    }
-}
-
-
-//MARK: - New Folder
-import BOF_SecretSauce
-extension Google_DriveDelegate {
-    var canCreateNewFolder : Bool {
-        stack.last != nil
-    }
-    func createNewFolder(_ name:String, parentID:String) async throws  {
-        do {
-            let newFolder = try await Google_Drive.shared.create(folder: name, in:parentID)
-             files.append(newFolder)
-            sortFiles()
-        } catch {
-            throw error
-        }
-    }
-    @ViewBuilder var newFolderView : some View {
-        TextSheet(title: "New Folder", prompt: "Create") { name in
-            do {
-                guard let parentID = self.stack.last?.id else { throw NSError.quick("No Parent ID")}
-                try await self.createNewFolder(name, parentID:parentID)
-                return nil
-            } catch {
-                return error
-            }
-        }
-    }
-}
-
-
-//MARK: - Rename
-extension Google_DriveDelegate {
-    func canRename(file:GTLRDrive_File?) -> Bool {
-        guard let file                  else { return false }
-        guard let dID = file.driveId    else { return false }
-        guard file.id != dID            else { return false }
-        return file != stack.last
-    }
-    func rename(_ name:String, id:String) async throws {
-        do {
-            let renamedFile = try await Google_Drive.shared.rename(id: id, newName: name)
-            if let index = files.firstIndex(where: {$0.id == id}) {
-                files.remove(at: index)
-                files.append(renamedFile)
-                sortFiles()
-            }
-        } catch {
-            throw error
-        }
-    }
-    @ViewBuilder func renameView(_ item:GTLRDrive_File) -> some View {
-        TextSheet(title: "Rename", prompt: "Save", string:item.title) { newName in
-            do { try await self.rename(newName, id:item.id); return nil}
-            catch { return error }
-        }
-    }
-}
-
-
-//MARK: - Share
-extension Google_DriveDelegate {
-    func canShare(file:GTLRDrive_File?) -> Bool {
-        guard file != nil else { return false }
-        return file != stack.last
-    }
-    @ViewBuilder func shareView(_ item:GTLRDrive_File) -> some View {
-        Google_Drive_Permissions(file: item)
-    }
-}
-
-
-//MARK: - Delete
-extension Google_DriveDelegate {
-    func canDelete(file:GTLRDrive_File?) -> Bool {
-        guard let file                  else { return false }
-        guard let dID = file.driveId    else { return false }
-        guard file.id != dID            else { return false }
-        return file != stack.last
-    }
-    func delete(id:String) async throws {
-        guard let index = files.firstIndex(where: {$0.id == id }) else { return }
-        do {
-            if selected == files[index] {
-                selected = nil
-            }
-            guard try await Google_Drive.shared.delete(ids: [id]) else { return }
-            files.remove(at: index)
-        } catch {
-            throw error
-        }
-    }
-    @ViewBuilder func deleteView(_ item:GTLRDrive_File) -> some View {
-        ConfirmationSheet(title: "Move '\(item.title)' to Trash",
-                          message: "Google Drive will permanently delete this \(item.isFolder ? "folder": "file") in 30 days.  Prior to deletion, '\(item.title)', can be restored from Drive's Trash folder.",
-                          prompt: "Move to trash") {
-            do {
-                try await self.delete(id:item.id)
-            } catch { throw error }
-        }
-    }
-}
-
-
-//MARK: - Download
-extension Google_DriveDelegate {
-    func canDownload(file:GTLRDrive_File?) -> Bool {
-        guard let file               else { return false }
-        guard !file.isFolder         else { return false }
-        guard !file.isShortcutFolder else { return false }
-        guard let dID = file.driveId else { return false }
-        guard file.id != dID         else { return false }
-        return file != stack.last
-    }
-    func download(_ file:GTLRDrive_File) async {
-        do {
-            downloadItems.append(.init(file: file))
-            let download = try await Google_Drive.shared.download(file) { progress in
-                if let index = self.downloadItems.firstIndex(where: {$0.id == file.id }) {
-                    self.downloadItems[index].progress = progress
+        else if files.count == 1 {
+            files.allSatisfy{ canPerform(action, on: $0)}
+        } else {
+            files.allSatisfy { file in
+                switch action {
+                case .rename, .move, .delete, .newFolder:
+                    canPerform(action, on: file)
+                default:
+                    false
                 }
             }
-            downloadData = download
-            downloadFilename = file.downloadFilename
-            showDownloadExport = true
-            _ = downloadItems.remove(id:file.id)
-        } catch {
-            _ = downloadItems.remove(id:file.id)
-            downloadData = Data()
-            downloadFilename = nil
-            self.error = error
         }
     }
-    func processExportResult(_ result:Result<URL, Error>) {
-        switch result {
-        case .success(let urls):
-            print("Exported: \(urls)")
-            break
-        case .failure( let error):
-            print("Export Failed: \(error.localizedDescription)")
-            self.error = error
-        }
-        downloadData = Data()
-        downloadFilename = nil
-    }
-    struct DownloadItem : Identifiable {
-        var id       : String { file.id }
-        let file     : GTLRDrive_File
-        var error    : Error?
-        var progress : Float = 0
-    }
-}
-
-
-//MARK: - Upload
-extension Google_DriveDelegate {
-    func canUpload(to folder:GTLRDrive_File?) -> Bool {
-        guard let folder      else { return false }
-        guard folder.isFolder else { return false }
-        return true
-    }
-
-    func upload(_ urls:[URL], to folder:GTLRDrive_File?) {
-        guard let folder else { return }
-        let parentID = folder.id
-        guard  !parentID.isEmpty else { return }
-        
-        
-        for url in urls {
-            Task {
-                _ = url.startAccessingSecurityScopedResource()
-                
-                let uploadItem : UploadItem
-                
-                if folder == stack.last {
-                    //uploading into the main displayed folder
-                    uploadItem = UploadItem(id:url.absoluteString, title:url.lastPathComponent)
-                    let temporaryFile = GTLRDrive_File()
-                    temporaryFile.identifier = url.absoluteString
-                    temporaryFile.name = url.lastPathComponent
-                    temporaryFile.mimeType = url.fileType
-                    self.files.append(temporaryFile)
-                    sortFiles()
-                } else { //uploading to a folder in the main display
-                    uploadItem =   UploadItem(id:folder.id, title:folder.title)
-                }
-            
-                
-                uploadItems.append(uploadItem)
-                let uploadedFile : GTLRDrive_File
-                 uploadedFile =  try await Google_Drive.shared.upload(url:url, to: parentID) { progress in
-                    if let index = self.uploadItems.firstIndex(where: {$0.id == uploadItem.id}) {
-                        self.uploadItems[index].progress = progress
-                    }
-                }
-                
-                if let index = files.firstIndex(where: {$0.id == url.absoluteString}) {
-                    self.files.remove(at: index)
-                    self.files.insert(uploadedFile, at: index)
-                }
-                
-                _ = uploadItems.remove(id: uploadItem.id)
-                url.stopAccessingSecurityScopedResource()
+    func perform(_ action:Action, on files:Set<GTLRDrive_File>)  {
+        switch action {
+        case .newFolder:
+            performActionNewFolder()
+        case .rename:
+            performActionRename(files: files.sorted(by: {$0.title.ciCompare($1.title)}))
+        case .delete:
+            performActionDelete(files:files.sorted(by: {$0.title.ciCompare($1.title)}))
+        case .share:
+            performActionShare(files.first)
+        case .download:
+            performActionDownload(files.first)
+        case .refresh:
+            refresh()
+        case .select:
+            performActionSelect(files.first)
+        case .upload:
+            performActionUpload()
+        default:
+            print("Perform: \(action.title)")
+            for file in files {
+                print("  \(file.title)")
             }
+//        case .upload:
+//            <#code#>
         }
+
     }
-    struct UploadItem : Identifiable {
-        var id       : String
-        var title    : String
-        var progress : Double = 0
-    }
-    static var urlTypes : [UTType] {[
-        .folder, .audio, .video, .image, .pdf, .text, .movie, .emailMessage, .message, .spreadsheet, .presentation, .package, .script, .fileURL, UTType(filenameExtension: "pages")!
-    ]}
 }
+
