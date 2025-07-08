@@ -15,12 +15,25 @@ import GoogleAPIClientForREST_Drive
 extension GTLRDrive_File : @retroactive Identifiable   {
     public var id: String { identifier ?? "No Identifier Found"}
     public var title : String { name ?? "No Name" }
+    public var titleWithoutExtension : String {
+        if let fileExtension { return title.replacingOccurrences(of: ".\(fileExtension)", with: "")}
+        return title
+    }
     var targetID : String { shortcutDetails?.targetId ?? id}
+    
+    var fileSizeString : String {
+        guard let size = size?.intValue else { return "0 Bytes" }
+        return size.fileSizeString
+    }
 }
 
 //MARK: -MimeType
 public extension GTLRDrive_File   {
-    enum MimeType : String, CaseIterable, Identifiable {
+    enum MimeType : String, CaseIterable, Identifiable, Comparable {
+        public static func < (lhs: GTLRDrive_File.MimeType, rhs: GTLRDrive_File.MimeType) -> Bool {
+            lhs.id == rhs.id
+        }
+        
         public var id : String { rawValue }
         //https://developers.google.com/drive/api/guides/mime-types
         case file       = "application/vnd.google-apps.file"
@@ -318,11 +331,20 @@ public extension GTLRDrive_File {
         case webViewLink, webContentLink, exportLinks, thumbnailLink
         static var links : [QueryField] {[ .webViewLink, .webContentLink, .exportLinks, .thumbnailLink ]}
         
+        case appProperties
         static var defaults : String {
-            QueryField.allCases.compactMap(\.rawValue).joined(separator: ",")
+            fieldsString(QueryField.allCases, isFolder: false)
+        }
+        static func fieldsString(_ fields : [QueryField], isFolder:Bool) -> String {
+            let string = fields.compactMap(\.rawValue).joined(separator: ",")
+            return if isFolder {
+                "files(\(string))"
+            } else {
+                string
+            }
         }
     }
-    static let queryFileFields = QueryField.defaults
+    static let queryFileFields   = QueryField.defaults
     static let queryFolderFields = "files(\(queryFileFields))"
 }
 
@@ -365,8 +387,6 @@ public extension GTLRDrive_File {
         }
         return false
     }
-  
-
 }
 
 extension GTLRDrive_Label {
@@ -426,8 +446,4 @@ extension GTLRDrive_LabelField {
             return "Error"
         }
     }
-    
-
-
-
 }

@@ -77,7 +77,7 @@ final class Drive_DataCache<T:Drive_Cache> {
                 }
                 
                 isLoading = true
-                let iconFile = try await Google_Drive.shared.download(id:id)
+                let iconFile = try await Drive.shared.download(id:id)
                 try cacheData(iconFile.data)
                 data = iconFile.data
                 isLoading = false

@@ -78,6 +78,7 @@ final class Sidebar_Item : Identifiable {
 extension Sidebar_Item {
     enum Category : String, CaseIterable {
         case filing, templates, cases, contacts, tasks, research, settings
+        case aCase
         case inbox, calendar, drive, gemini
         case user, group, doc, sheet, driveQuery, folder, reports
         var iconString : String {
@@ -86,7 +87,7 @@ extension Sidebar_Item {
                 "cabinet"
             case .templates:
                 "doc.badge.gearshape"
-            case .cases:
+            case .cases, .aCase:
                 "briefcase"
             case .contacts:
                 "person.2"

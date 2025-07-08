@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum Filing_Error : LocalizedError {
+    
     case filingDriveNotSet
     case urlAlreadyExists
     case transitItemNotFound
@@ -15,22 +16,37 @@ enum Filing_Error : LocalizedError {
     case uploadFailed(String)
     case loadFailed(String)
     case googleDriveFileNotFound
+    case destinationNotSelected
+    case caseNotSelected
+    case filesNotMoved(String)
+    case filesMovedButSpreadsheetNotUpdated(String)
+    case suggestionsNotUpdated(String)
     var localizedDescription: String {
         switch self {
         case .filingDriveNotSet:
-            return "Filing Drive not set"
+            "Filing Drive not set"
         case .urlAlreadyExists:
-            return "URL already exists"
+           "URL already exists"
         case .transitItemNotFound:
-            return "Transit item not found"
+            "Transit item not found"
         case .invalidURL:
-            return "URL is invalid"
+            "URL is invalid"
         case .uploadFailed(let reason):
-            return "Upload failed: \(reason)"
+            "Upload failed: \(reason)"
         case .loadFailed(let reason):
-            return "Load failed: \(reason)"
+            "Load failed: \(reason)"
         case .googleDriveFileNotFound:
-            return "Google Drive file not found"
+            "Google Drive file not found"
+        case .destinationNotSelected:
+            "Filing Folder not selected"
+        case .caseNotSelected:
+            "Case not selected"
+        case .filesMovedButSpreadsheetNotUpdated(let reason):
+            "Files moved but case files were not updated:\n\(reason).\nYou will need to audit the case if re-trying does not succeed."
+        case .filesNotMoved(let reason):
+            "Files not moved:\n\(reason)"
+        case .suggestionsNotUpdated(let reason):
+            "Suggestions not updated:\n\(reason)"
         }
     }
     /// A localized message describing what error occurred.
@@ -44,4 +60,6 @@ enum Filing_Error : LocalizedError {
 
     /// A localized message providing "help" text if the user requests help.
     var helpAnchor: String? { localizedDescription }
+    
+
 }

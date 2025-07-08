@@ -9,8 +9,10 @@ import SwiftUI
 import GoogleAPIClientForREST_Drive
 
 @Observable
+@MainActor
 final class FilingController {
     static let shared: FilingController = { FilingController() }()
+    let suggestions : Suggestions = .init()
     var items  : [FilingItem] = []
 
 }
@@ -32,7 +34,7 @@ extension FilingController {
         do throws(Filing_Error) {
             guard let driveID else { throw .filingDriveNotSet }
             do {
-                items = try await Google_Drive.shared.getContents(driveID: driveID)
+                items = try await Drive.shared.getContents(driveID: driveID)
                                                            .compactMap { .init(file: $0)}
                 sortItems()
             } catch {
@@ -62,7 +64,7 @@ extension FilingController {
             
             do {
 //                boundItem.wrappedValue.status = .uploading //this is set in the init FilingItem(fileURL: url)
-                let uploadedFile =  try await Google_Drive.shared.upload(url:url, to: driveID) { progress in
+                let uploadedFile =  try await Drive.shared.upload(url:url, to: driveID) { progress in
                     if progress == 1 {
                         withAnimation {
                             boundItem.wrappedValue.progress =  1
@@ -71,7 +73,7 @@ extension FilingController {
                         boundItem.wrappedValue.progress =  progress
                     }
                 }
-                boundItem.wrappedValue.file = uploadedFile
+                boundItem.wrappedValue.file   = uploadedFile
                 boundItem.wrappedValue.status = .readyToFile
             } catch {
                 boundItem.wrappedValue.status = .failed

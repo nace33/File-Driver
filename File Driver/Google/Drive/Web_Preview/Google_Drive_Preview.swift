@@ -1,5 +1,5 @@
 //
-//  Google_Drive_Preview.swift
+//  Drive_Preview.swift
 //  Nasser Law Firm
 //
 //  Created by Jimmy Nasser on 4/1/25.
@@ -10,7 +10,7 @@ import BOF_SecretSauce
 import GoogleAPIClientForREST_Drive
 
 
-struct Google_Drive_Preview : View {
+struct Drive_Preview : View {
     var url : URL
     @State private var didLoadPreview:Bool = false
     init(fileID:String) {

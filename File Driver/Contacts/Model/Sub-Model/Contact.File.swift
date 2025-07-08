@@ -13,7 +13,7 @@ public
 extension Contact {
     
     struct File : Identifiable, Hashable{
-        public let id   : String //this is Date.idString type, so it is time it was created
+        public let id   : String 
         var fileID      : String
         var category    : String
         var filename    : String
@@ -33,7 +33,7 @@ extension Contact {
             self.note = note
         }
         static func new(url:URL) -> File {
-            let id = Date.idString
+            let id = UUID().uuidString
             let fileID = ""
             let category = ""
             let filename = url.deletingPathExtension().lastPathComponent

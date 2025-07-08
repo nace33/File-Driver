@@ -9,14 +9,14 @@ import Foundation
 
 enum BOF_Settings : String, CaseIterable {
     //Sidebar
-   case sidebar, filing, inbox, contacts, templates
+   case sidebar, filing, inbox, contacts, templates, cases
     
     enum Key : String {
         //General
         case textSuggestionStyle
         //filing
-        case filingDrive
-        
+        case filingDrive, filingAutoRename, filingAutoRenameComponents, filingAutoRenameEmailComponents, filingSuggestionLimit, filingSuggestionPartialTagMatch, filingShowMultipleFilenames
+ 
         //Inbox
         case inboxImmediateFilingKey
         //Contacts
@@ -27,7 +27,9 @@ enum BOF_Settings : String, CaseIterable {
         
         //cases
         case casesFilingShowSeetingsKey, casesFilingTableSortKey, casesFilingTableColumnKey, casesFilingSortKey, casesFilingFilterClosedKey, caseFilingShowStatusColorsKey
-
+        case caseConsultationDriveID, caseTemplateID, casesSort
+        
+        
         //Research
         case researchDriveID, researchTemplateID
     }

@@ -24,7 +24,7 @@ struct TemplatesList: View {
     @AppStorage(BOF_Settings.Key.templatesShowRetired.rawValue)   var showRetired   : Bool = true
     @AppStorage(BOF_Settings.Key.templatesSortKey.rawValue)       var sortKey       : Bool = true
     @AppStorage(BOF_Settings.Key.templatesListSort.rawValue)           var listSort      : Template.Sort = .category
-    @State private var driveDelegate = Google_DriveDelegate.selecter(mimeTypes: [.folder])
+    @State private var driveDelegate = DriveDelegate.selecter(mimeTypes: [.folder])
 
     var body: some View {
         HSplitView {
@@ -75,9 +75,11 @@ struct TemplatesList: View {
                 ImportTemplate()
             }
             .toolbar {
-                ToolbarItem(placement: .navigation) {
-                   newMenu
+                ToolbarItemGroup(placement: .navigation) {
+                    Button { Task { await controller.loadTemplates()}} label: {Image(systemName: "arrow.clockwise")}
+                    newMenu
                 }
+
             }
             .task { await controller.loadTemplates() }
     }
@@ -152,7 +154,7 @@ extension TemplatesList {
             .padding(.leading)
     }
     @ViewBuilder var setDriveIDView : some View {
-        Google_DriveView("Select a drive to save Contacts in", delegate: $driveDelegate, canLoad: { _ in false})
+        DriveView("Select a drive to save Contacts in", delegate: $driveDelegate, canLoad: { _ in false})
             .onChange(of: driveDelegate.selectItem) { _, newValue in
                 if let newValue, newValue.id == newValue.driveId {
                     self.driveID = newValue.id

@@ -32,7 +32,7 @@ extension Template {
     static func new() -> Template {
         let file = GTLRDrive_File()
         file.name = "New File"
-        file.identifier = Date.idString
+        file.identifier = UUID().uuidString
         return .init(file: file, label: .new())
     }
     //Inits

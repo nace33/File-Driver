@@ -95,7 +95,6 @@ extension ContentView {
             case .filing:
                 FilingView()
                     .navigationTitle(item.category.title)
-        
             case .templates:
                 TemplatesList()
                     .navigationTitle(item.category.title)
@@ -106,7 +105,7 @@ extension ContentView {
                 Settings_View()
                     .navigationTitle(item.category.title)
             case .cases:
-                Case_List()
+                CasesView()
                     .navigationTitle(item.category.title)
             case .contacts:
                 ContactsList()
@@ -115,7 +114,7 @@ extension ContentView {
                 BOF_WebView(URL(string:"https://drive.google.com")!, navDelegate: .init(), uiDelegate: .init())
                     .navigationTitle(item.category.title)
             default:
-                Text("Jimmy Build \(item.category.title)")
+                Text("Jimmy Build \(item.category.title)\n\n\(item.url)")
             }
         } else {
             ContentUnavailableView("No Selection", systemImage: "filemenu.and.selection", description: Text("Select an item from the sidebar"))

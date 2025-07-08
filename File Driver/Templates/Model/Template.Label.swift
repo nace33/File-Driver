@@ -38,34 +38,34 @@ public extension Template {
        
         var labelFieldModifications : [GTLRDrive_LabelFieldModification] {
             var mods = [GTLRDrive_LabelFieldModification]()
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.status.rawValue, value: status.rawValue, valueType: .selection) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.status.rawValue, value: status.rawValue, valueType: .selection) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.category.rawValue, value:category, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.category.rawValue, value:category, valueType: .text) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.subCategory.rawValue, value:subCategory, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.subCategory.rawValue, value:subCategory, valueType: .text) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.timesUsed.rawValue, value: timesUsed, valueType: .integer) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.timesUsed.rawValue, value: timesUsed, valueType: .integer) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.lastUsed.rawValue, value: lastUsed, valueType: .date) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.lastUsed.rawValue, value: lastUsed, valueType: .date) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.lastUsedBy.rawValue, value:lastUsedBy, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.lastUsedBy.rawValue, value:lastUsedBy, valueType: .text) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.note.rawValue, value:note, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.note.rawValue, value:note, valueType: .text) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.fileDriverReference.rawValue, value:reference, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.fileDriverReference.rawValue, value:reference, valueType: .text) {
                 mods.append(mod)
             }
             return mods
           }
         var labelModification       : GTLRDrive_LabelModification {
-            Google_Drive.shared.label(modify: DriveLabel.id.rawValue, fieldModifications: labelFieldModifications)
+            Drive.shared.label(modify: DriveLabel.id.rawValue, fieldModifications: labelFieldModifications)
         }
     }
 }

@@ -32,7 +32,7 @@ extension Contact {
         var status  : Status
         public enum Status : String, CaseIterable { case creating, idle, editing, updating, deleting }
         static func new(status:Status, category:String = "", label:String = "", value:String = "") -> Info {
-           Info(id: Date.idString, category: category, label:label, value: value, status: status)
+           Info(id: UUID().uuidString, category: category, label:label, value: value, status: status)
         }
         var title : String { value.isEmpty ? "No Value" : value }
     

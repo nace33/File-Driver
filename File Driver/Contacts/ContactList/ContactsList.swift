@@ -21,7 +21,7 @@ struct ContactsList : View {
     @AppStorage(BOF_Settings.Key.contactsShowImage.rawValue)      var showImage   : Bool = true
     @AppStorage(BOF_Settings.Key.contactsLastNameFirst.rawValue)  var lastNameIsFirst  : Bool = true
 
-    @State private var driveDelegate = Google_DriveDelegate.selecter(mimeTypes: [.folder])
+    @State private var driveDelegate = DriveDelegate.selecter(mimeTypes: [.folder])
     
     var body: some View {
         HSplitView {
@@ -139,7 +139,7 @@ extension ContactsList {
 //MARK: - View Builders
 extension ContactsList {
     @ViewBuilder var setDriveIDView : some View {
-        Google_DriveView("Select a drive to save Contacts in", delegate: $driveDelegate, canLoad: { _ in false})
+        DriveView("Select a drive to save Contacts in", delegate: $driveDelegate, canLoad: { _ in false})
             .onAppear {
                 driveDelegate.mimeTypes = [.folder]
             }
@@ -151,11 +151,11 @@ extension ContactsList {
             }
     }
     @ViewBuilder var setTemplateIDView : some View {
-        Google_DriveView("Select a Contact Google Sheet Template", delegate: $driveDelegate, load: {
+        DriveView("Select a Contact Google Sheet Template", delegate: $driveDelegate, load: {
             if let last = driveDelegate.stack.last {
-                try await Google_Drive.shared.getContents(of: last.id)
+                try await Drive.shared.getContents(of: last.id)
             } else {
-                try await Google_Drive.shared.getContents(of: driveID)
+                try await Drive.shared.getContents(of: driveID)
             }
         })
             .onAppear {

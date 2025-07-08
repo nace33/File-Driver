@@ -12,7 +12,7 @@ struct PreviewContact_File: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack(alignment:.leading) {
-            Google_Drive_Preview(fileID: file.fileID)
+            Drive_Preview(fileID: file.fileID)
         }
         .frame(width:600, height:600)
         .toolbar {

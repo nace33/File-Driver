@@ -31,6 +31,9 @@ enum Google_Error: LocalizedError {
     case gmailMessageIsNotPDF
     case gmailAttachmentDownloadError
     case gmailMessageNotFetched
+    
+    case userCanceled
+    case unableToCreateSheetFileChip
     var errorDescription: String? {
         switch self {
         case .loginError(let message):
@@ -75,6 +78,10 @@ enum Google_Error: LocalizedError {
             "Failed to fetch Message"
         case .sheetNotFound(let sheetName, let sheets):
             "Sheet \(sheetName) not found in \(sheets.joined(separator: ", "))"
+        case .userCanceled:
+            "User Canceled"
+        case .unableToCreateSheetFileChip:
+            "Unable to create a File Chip from Cell Data"
         }
     }
 }

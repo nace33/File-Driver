@@ -81,7 +81,7 @@ struct Drive_SetDefaultID : View {
         do {
             status = "Validating..."
             isLoading = true
-            validatedDrive = try await Google_Drive.shared.sharedDrive(get: savedDriveID)
+            validatedDrive = try await Drive.shared.sharedDrive(get: savedDriveID)
             isLoading = false
         } catch {
             if error.localizedDescription == Google_Error.driveCallSuceededButReturnTypeDoesNotMatch.localizedDescription {
@@ -97,7 +97,7 @@ struct Drive_SetDefaultID : View {
         do {
             isLoading = true
             status = "Getting Shared Drives..."
-            if let drives = try await Google_Drive.shared.sharedDriveList().drives {
+            if let drives = try await Drive.shared.sharedDriveList().drives {
                 self.drives = drives
             } else {
                 if drives.isEmpty { throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "No Drives Found"])}

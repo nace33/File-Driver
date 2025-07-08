@@ -1,59 +1,152 @@
 //
-//  Case.swift
-//  FD_Filing
+//  CaseSpreadsheet.swift
+//  File Driver
 //
-//  Created by Jimmy Nasser on 4/16/25.
+//  Created by Jimmy Nasser on 6/24/25.
 //
 
 import Foundation
 import GoogleAPIClientForREST_Drive
 
 @Observable
-final class Case : Identifiable {
-    let id          : String     //drive ID
-    let file        : GTLRDrive_File
-    let parentID    : String
-    let driveID     : String
-    var driveLabel  : DriveLabel
-    var title       : String { driveLabel.title }
+final class Case  {
+    var file  : GTLRDrive_File
+    var label : DriveLabel
     
-
-    init(id:String, parentID:String, driveID:String, driveLabel:DriveLabel, file:GTLRDrive_File) {
-        self.id = id
-        self.driveID = driveID
-        self.parentID = parentID
-        self.driveLabel = driveLabel
+    init(file: GTLRDrive_File, label: DriveLabel) {
         self.file = file
+        self.label = label
     }
-    convenience init?(_ file:GTLRDrive_File) {
-        guard let id = file.identifier,
-              let driveID = file.driveId,
-              let parentID = file.parents?.first,
-              let driveLabel = DriveLabel(driveLabel: file.label(id: Case.DriveLabel.Label.id.rawValue)) else { return nil }
-        
-        self.init(id: id, parentID:parentID, driveID: driveID, driveLabel: driveLabel, file: file)
+    convenience init?(_ file: GTLRDrive_File) {
+        guard let label = DriveLabel(file: file) else { return nil }
+        self.init(file: file, label: label)
     }
-        
-    //call load() to populate
-    //represents the rows in each sheet in the Spreadsheet
-    var folders  : [Folder]   = []
-    var contacts : [Contact]  = []
-    var tags     : [Tag]      = []
     
-    //folderID
-    var folderID : String {
-        return if !driveLabel.folderID.isEmpty {
-            driveLabel.folderID
-        } else if let parentID = file.parents?.first, parentID != file.driveId {
-            parentID
-        } else {
-            file.driveId ?? ""
+    //variables that get loaded from the spreadsheet
+    var isLoading                        = false
+    var folders     : [Case.Folder]      = []
+    var tags        : [Case.Tag]         = []
+    var contacts    : [Case.Contact]     = []
+    var contactData : [Case.ContactData] = []
+    var files       : [Case.File]        = []
+    var tasks       : [Case.Task]        = []
+    
+    //Permissions
+    var permissions : [GTLRDrive_Permission] = []
+
+
+}
+
+//MARK: Computed Properties {
+extension Case {
+    ///From File
+    var parentID : String                          { file.parents?.first ?? "" }
+    var driveID  : String                          { file.driveId        ?? "" }
+    
+    ///From Label
+    var title    : String                          { label.title   }
+    var folderID : String                          { label.folderID}
+    var category : DriveLabel.Label.Field.Category { label.category }
+    var status   : DriveLabel.Label.Field.Status   { label.status   }
+    var opened   : Date                            { label.opened   }
+    var closed   : Date?                           { label.closed   }
+}
+
+
+//MARK: Protocols {
+extension Case : Hashable, Identifiable {
+    var id : String { file.id }
+    static func == (lhs: Case, rhs: Case) -> Bool { lhs.id == rhs.id  }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+}
+
+
+//MARK: - LoadSheets
+extension Case {
+    func load(sheets:[Sheet]) async throws {
+        do {
+            isLoading = true
+            let start = CFAbsoluteTimeGetCurrent()
+
+            let spreadsheet = try await Sheets.shared.getSpreadsheet(id, ranges: sheets.compactMap(\.rawValue))
+            for range in sheets {
+                guard let rowData = spreadsheet.rowData(range: range.rawValue, dropHeader: true) else { continue }
+                switch range {
+                case .contacts:
+                    contacts    = rowData.compactMap { Case.Contact(rowData: $0)}
+                case .tags:
+                    tags        = rowData.compactMap { Case.Tag(rowData: $0)}
+                case .folders:
+                    folders     = rowData.compactMap { Case.Folder(rowData: $0)}
+                case .contactData:
+                    contactData = rowData.compactMap { Case.ContactData(rowData: $0)}
+                case .files:
+                    files       = rowData.compactMap { Case.File(rowData: $0)}
+                case .tasks:
+                    tasks       = rowData.compactMap { Case.Task(rowData: $0)}
+                }
+            }
+            isLoading = false
+            let diff = CFAbsoluteTimeGetCurrent() - start
+            print("Loading \(title) Data Took: \(diff) seconds")
+        } catch {
+            print("Error \(#function)")
+            isLoading = false
+            throw error
+        }
+    }
+    func loadPermissions() async throws {
+        do {
+            isLoading = true
+            permissions = try await Drive.shared.permissions(fileID:id)
+            isLoading = false
+        } catch {
+            print("Error \(#function)")
+            isLoading = false
+            throw error
         }
     }
 }
 
-//MARK: Hashable {
-extension Case : Hashable {
-    static func == (lhs: Case, rhs: Case) -> Bool { lhs.id == rhs.id  }
-    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+
+
+//MARK: - Get
+extension Case {
+    func tags(with ids:[String]) -> [Case.Tag] {
+        guard ids.count > 0 else { return tags }
+        return tags.filter { ids.contains($0.id)}
+    }
+    func contacts(with ids:[String]) -> [Case.Contact] {
+        guard ids.count > 0 else { return contacts }
+        return contacts.filter { ids.contains($0.id)}
+    }
+    func contactData(with contactIDs:[String], category:String? = nil) -> [Case.ContactData] {
+        if let category = category?.lowercased() {
+            guard contactIDs.count > 0 else { return contactData.filter { $0.category.lowercased() == category } }
+            return contactData.filter {
+                contactIDs.contains($0.contactID) && $0.category.lowercased() == category
+            }
+        } else {
+            guard contactIDs.count > 0 else { return contactData }
+            return contactData.filter {
+                contactIDs.contains($0.contactID)
+            }
+        }
+    }
 }
+
+
+//MARK: - Properties
+extension Case {
+    var driveFolders : [GTLRDrive_File] {
+        let mimeType = GTLRDrive_File.MimeType.folder.rawValue
+        return folders.compactMap { folder in
+            let driveFolder = GTLRDrive_File()
+            driveFolder.name = folder.name
+            driveFolder.identifier = folder.folderID
+            driveFolder.mimeType = mimeType
+            return driveFolder
+        }
+    }
+ }
+

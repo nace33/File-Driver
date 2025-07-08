@@ -30,7 +30,7 @@ struct AddToCase_Contact: View {
                 List(selection:$selectedCaseID) {
                     Text("Jimmy - This is incomplete.  Need to finialize Case Spreadsheet")
                         .foregroundStyle(.red)
-                    BOFSections(of: filteredCases, groupedBy: \.driveLabel.category.title) { cat in
+                    BOFSections(of: filteredCases, groupedBy: \.label.category.title) { cat in
                         Text(cat.uppercased())
                             .font(.subheadline)
                             .foregroundStyle(.orange)
@@ -94,10 +94,10 @@ extension AddToCase_Contact {
             guard !isInCase(selectedCase.id) else { return }
             isLoading = true
             try await Task.sleep(for: .seconds(2))
-            let aCase : Contact.Case = .init(id:Date.idString,
+            let aCase : Contact.Case = .init(id:UUID().uuidString,
                                              caseID:selectedCase.id,
                                              driveID:selectedCase.driveID,
-                                             category: selectedCase.driveLabel.category.title,
+                                             category: selectedCase.label.category.title,
                                              name:selectedCase.title)
             //Add to Case Spreadsheet
                         
@@ -113,12 +113,14 @@ extension AddToCase_Contact {
     func load() async {
         do {
             isLoading = true
+            /*
             caseList = try await Google_Sheets.shared.getValues(spreadsheetID: contact.id, range: Contact.Sheet.cases.rawValue)
                                               .compactMap { .init(row: $0)}
                                               .sorted(by: { $0.name.ciCompare($1.name)})
-            cases = try await Google_Drive.shared.get(filesWithLabelID:Case.DriveLabel.Label.id.rawValue)
+            cases = try await Drive.shared.get(filesWithLabelID:Case.DriveLabel.Label.id.rawValue)
                                           .compactMap { Case($0)}
                                           .sorted(by: {$0.title.lowercased() < $1.title.lowercased()})
+             */
             isLoading = false
         } catch {
             isLoading = false

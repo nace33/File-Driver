@@ -107,6 +107,8 @@ public extension Contact {
         do {
             self.error = nil
             isLoading = true
+            print("Convert to Sheets")
+            /*
             let results = try await Google_Sheets.shared.getValues(spreadsheetID:id, ranges: sheets.map({$0.rawValue}))
             for result in results {
                 if result.range.contains(Contact.Sheet.info.title) {
@@ -122,7 +124,9 @@ public extension Contact {
                 else {
                     print("Unknown Range \(result.range)")
                 }
+             
             }
+             */
             isLoading = false
         } catch {
             isLoading = false
@@ -161,7 +165,7 @@ public extension Contact {
     func createInfo(category:String) async throws {
         do {
             let label = Contact.Info.Category(rawValue: category.wordsToCamelCase())?.labels.first ?? "Home"
-            let newContactInfo = Contact.Info(id: Date.idString, category: category, label:label, value: "Change Me!", status: .creating)
+            let newContactInfo = Contact.Info(id: UUID().uuidString, category: category, label:label, value: "Change Me!", status: .creating)
             try await create(newContactInfo)
         } catch {
             throw error
@@ -172,7 +176,9 @@ public extension Contact {
             withAnimation {
                 infos.append(newContactInfo)
             }
-            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName:Contact.Sheet.info.rawValue, row: newContactInfo.strings)
+            print("Convert to Sheets")
+
+//            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName:Contact.Sheet.info.rawValue, row: newContactInfo.strings)
             resetOtherEditingInfos()
             if let index = infos.firstIndex(where: {$0.id == newContactInfo.id}) {
                 if infos[index].status == .creating {
@@ -193,15 +199,17 @@ public extension Contact {
             guard let parentID =  self.file.parents?.first else { throw Contact_Error.custom("No contact folder found.")}
             
 //            status = "Getting Folder..."
-            let folder   = try await Google_Drive.shared.get(folder: newFile.wrappedValue.category, parentID: parentID, createIfNotFound: true, caseInsensitive: true)
+            let folder   = try await Drive.shared.get(folder: newFile.wrappedValue.category, parentID: parentID, createIfNotFound: true, caseInsensitive: true)
 //            status = "Copying File..."
-            let copyFile = try await Google_Drive.shared.copy(fileID: newFile.wrappedValue.fileID, rename: newFile.wrappedValue.filename, saveTo: folder.id)
+            let copyFile = try await Drive.shared.copy(fileID: newFile.wrappedValue.fileID, rename: newFile.wrappedValue.filename, saveTo: folder.id)
             
             //Update local Model
             newFile.wrappedValue.fileID   = copyFile.id
 
             //Update Google Sheet
-            _ = try await Google_Sheets.shared.append(spreadsheetID: id, sheetName: Contact.Sheet.files.rawValue, row: newFile.wrappedValue.strings)
+            print("Convert to Sheets")
+
+//            _ = try await Google_Sheets.shared.append(spreadsheetID: id, sheetName: Contact.Sheet.files.rawValue, row: newFile.wrappedValue.strings)
 //            self.isLoading = false
             withAnimation {
                 files.append(newFile.wrappedValue)
@@ -217,10 +225,10 @@ public extension Contact {
             guard !newFile.wrappedValue.filename.isEmpty else { throw NSError.quick("No Filename")}
             
             //Get Save Folder
-            let categoryFolder = try await Google_Drive.shared.get(folder:newFile.wrappedValue.category, parentID: parentFolderID, createIfNotFound: true, caseInsensitive: true)
+            let categoryFolder = try await Drive.shared.get(folder:newFile.wrappedValue.category, parentID: parentFolderID, createIfNotFound: true, caseInsensitive: true)
             
             //Upload
-            let uploadedFile = try await Google_Drive.shared.upload(url: upload.url, filename: newFile.wrappedValue.filename, to: categoryFolder.id)
+            let uploadedFile = try await Drive.shared.upload(url: upload.url, filename: newFile.wrappedValue.filename, to: categoryFolder.id)
           
             //Update local Model
             newFile.wrappedValue.fileID   = uploadedFile.id
@@ -228,7 +236,9 @@ public extension Contact {
             newFile.wrappedValue.mimeType = uploadedFile.mime.rawValue
             
             //Update Google Sheet
-            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName:Contact.Sheet.files.rawValue, row: newFile.wrappedValue.strings)
+            print("Convert to Sheets")
+
+//            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName:Contact.Sheet.files.rawValue, row: newFile.wrappedValue.strings)
             
             withAnimation {
                 files.append(newFile.wrappedValue)
@@ -249,7 +259,9 @@ public extension Contact {
     //Cases
     func add(aCase:Contact.Case) async throws {
         do {
-            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName: Contact.Sheet.cases.rawValue, row: aCase.strings)
+            print("Convert to Sheets")
+
+//            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName: Contact.Sheet.cases.rawValue, row: aCase.strings)
             withAnimation {
                 cases.append(aCase)
             }
@@ -277,7 +289,7 @@ public extension Contact {
         do {
             file.wrappedValue.status = deleteFile ? .deleting : .removing
             if deleteFile {
-                _ = try await Google_Drive.shared.delete(ids: [file.wrappedValue.fileID])
+                _ = try await Drive.shared.delete(ids: [file.wrappedValue.fileID])
             }
             try await delete(rowID: file.wrappedValue.id, sheet:.files, isLastRow: files.count == 1)
             withAnimation {
@@ -290,11 +302,13 @@ public extension Contact {
     }
     func delete(rowID:String, sheet:Contact.Sheet, isLastRow:Bool) async throws {
         do {
-            if isLastRow {
-                _ = try await Google_Sheets.shared.clear(rowID:rowID, sheetName: sheet.rawValue, spreadsheetID: id)
-            } else {
-                _ = try await Google_Sheets.shared.delete(rowID:rowID, sheetName:sheet.rawValue, spreadsheetID: id)
-            }
+            print("Convert to Sheets")
+
+//            if isLastRow {
+//                _ = try await Google_Sheets.shared.clear(rowID:rowID, sheetName: sheet.rawValue, spreadsheetID: id)
+//            } else {
+//                _ = try await Google_Sheets.shared.delete(rowID:rowID, sheetName:sheet.rawValue, spreadsheetID: id)
+//            }
      
         } catch {
             throw error
@@ -318,17 +332,17 @@ public extension Contact {
     func updateFileFolder(contactFile:Contact.File) async throws {
         do {
             guard let parentID = file.parents?.first else { throw Contact_Error.custom("Parent ID not found")}
-            let folder = try await Google_Drive.shared.get(folder: contactFile.category, parentID: parentID, createIfNotFound: true, caseInsensitive: true)
-            let googleFile   = try await Google_Drive.shared.get(fileID: contactFile.fileID)
+            let folder = try await Drive.shared.get(folder: contactFile.category, parentID: parentID, createIfNotFound: true, caseInsensitive: true)
+            let googleFile   = try await Drive.shared.get(fileID: contactFile.fileID)
             guard let fileParentID = googleFile.parents?.first else { throw Contact_Error.custom("No parent ID found for \(contactFile.filename)")}
-            _ = try await Google_Drive.shared.move(fileID:contactFile.fileID, from:fileParentID, to: folder.id)
+            _ = try await Drive.shared.move(fileID:contactFile.fileID, from:fileParentID, to: folder.id)
         } catch {
             throw error
         }
     }
     func updateFilename(contactFile:Contact.File) async throws {
         do {
-            _ = try await Google_Drive.shared.rename(id: contactFile.fileID, newName: contactFile.filename)
+            _ = try await Drive.shared.rename(id: contactFile.fileID, newName: contactFile.filename)
             try await update(strings: contactFile.strings, rowID: contactFile.id, sheet: Contact.Sheet.files)
         } catch {
             throw error
@@ -336,7 +350,9 @@ public extension Contact {
     }
     func update(strings:[String], rowID:String, sheet:Contact.Sheet) async throws {
         do {
-            _ = try await Google_Sheets.shared.update(values:strings, rowID:rowID, sheetName:sheet.rawValue, spreadsheetID:id)
+            print("Convert to Sheets")
+
+//            _ = try await Google_Sheets.shared.update(values:strings, rowID:rowID, sheetName:sheet.rawValue, spreadsheetID:id)
         } catch {
             throw error
         }

@@ -1,5 +1,5 @@
 //
-//  Google_Drive_ShareView.swift
+//  Drive_ShareView.swift
 //  File Driver
 //
 //  Created by Jimmy Nasser on 4/24/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import GoogleAPIClientForREST_Drive
 
-struct Google_Drive_Permissions: View {
+struct Drive_Permissions: View {
     var file :GTLRDrive_File
     fileprivate var itemType : ItemType {
         if file.id == file.driveId { .drive }
@@ -55,12 +55,12 @@ struct Google_Drive_Permissions: View {
 }
 
 //MARK: -Functions
-extension Google_Drive_Permissions {
+extension Drive_Permissions {
     fileprivate func load() async throws {
         do {
             isLoading = true
             role = Role.roles(itemType: itemType).last! //lowest permission level by default
-            permissions = try await Google_Drive.shared.permissions(fileID: file.id)
+            permissions = try await Drive.shared.permissions(fileID: file.id)
             isLoading = false
         } catch {
             isLoading = false
@@ -77,7 +77,7 @@ extension Google_Drive_Permissions {
             permission.role = role.rawValue
             permission.type = "user"
           
-            _ = try await Google_Drive.shared.permission(add: permission, fileID: file.id)
+            _ = try await Drive.shared.permission(add: permission, fileID: file.id)
             
             emailAddress = ""
             permissions.append(permission)
@@ -92,7 +92,7 @@ extension Google_Drive_Permissions {
         guard permissions.count > 1 else { print("Cannot Remove Only User"); return }
         do {
             isLoading = true
-            _ = try await Google_Drive.shared.permission(remove:permission, fileID: file.id)
+            _ = try await Drive.shared.permission(remove:permission, fileID: file.id)
             permissions.removeAll(where: {$0.emailAddress == permission.emailAddress})
             try await load()
             isLoading = false
@@ -106,7 +106,7 @@ extension Google_Drive_Permissions {
         do {
             isLoading = true
             permission.role = newRole.rawValue
-            _ = try await Google_Drive.shared.permission(update:permission, fileID: file.id)
+            _ = try await Drive.shared.permission(update:permission, fileID: file.id)
             try await load()
             isLoading = false
         } catch {
@@ -119,7 +119,7 @@ extension Google_Drive_Permissions {
 
 
 //MARK: -View Builders
-extension Google_Drive_Permissions {
+extension Drive_Permissions {
     @ViewBuilder var header  : some View {
         HStack {
             Text("Share: \(file.title)")
@@ -330,7 +330,7 @@ fileprivate enum Role : String, CaseIterable, Comparable {
     
         return f
     }
-    Google_Drive_Permissions(file:file)
+    Drive_Permissions(file:file)
         .frame(minHeight: 600)
         .environment(Google.shared)
 }

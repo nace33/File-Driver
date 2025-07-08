@@ -30,10 +30,7 @@ extension Google_Labels {
         
         do {
             isLoading = true
-            guard let response = try await Google.execute(query, fetcher: fetcher) else {
-                isLoading = false
-                throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
-            }
+            let response = try await Google.execute(query, fetcher: fetcher)
             isLoading = false
             return response
         } catch {
@@ -50,13 +47,10 @@ extension Google_Labels {
         
         do {
             isLoading = true
-            guard let response = try await Google.execute(query, fetcher: fetcher),
-                  let labels = response.labels else {
-                isLoading = false
-                throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
-            }
+            let response = try await Google.execute(query, fetcher: fetcher)
+
             isLoading = false
-            return labels
+            return response.labels ?? []
         } catch {
             isLoading = false
             throw error

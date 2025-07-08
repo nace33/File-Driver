@@ -7,6 +7,10 @@
 
 import SwiftUI
 import SwiftData
+public
+extension String {
+
+}
 
 @main
 struct File_DriverApp: App {
@@ -14,7 +18,7 @@ struct File_DriverApp: App {
     @State private var contacts = ContactsController.shared
     @State private var templates = TemplatesController.shared
     @State private var filing = FilingController.shared
-    
+
     @State private var swiftData  = BOF_SwiftData.shared
     var body: some Scene {
         WindowGroup(id:"default", for: Sidebar_Item.ID.self) { id in
@@ -32,6 +36,12 @@ struct File_DriverApp: App {
             }
 #endif
         
+        WindowGroup("SwiftData") {
+            BOF_SwiftDataView()
+        }
+            .environment(filing)
+            .modelContainer(swiftData.container)
+
 #if os(macOS)
         Settings {
             Settings_View()

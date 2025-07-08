@@ -13,7 +13,7 @@ class Google_Fetcher<T> {
     let scopes  : [String]
     
     var ticket : GTLRServiceTicket?
-    var continuation : CheckedContinuation<T?, Error>?
+    var continuation : CheckedContinuation<T, Error>?
    
     typealias Progress =  (Double) -> ()
     let progress : Progress?
@@ -41,9 +41,8 @@ class Google_Fetcher<T> {
                 Google.shared.isLoading = false
             }
         }
-        continuation?.resume(returning: nil)
+        continuation?.resume(throwing: Google_Error.userCanceled)
         continuation = nil
-    
     }
 }
 

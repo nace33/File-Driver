@@ -36,7 +36,7 @@ struct TemplatesDetail: View {
         VStackLoader(alignment: .center, spacing: 10, title:"" , isLoading: $isActing, status: $statusMessage, error: $error) {
             switch action {
             case .rename:
-                Drive_Rename(title:"", sectionTitle:statusMessage, files:templates.compactMap(\.file)) { renamedFiles in
+                Drive_Rename(title:"", sectionTitle:statusMessage, files:templates.compactMap(\.file), saveOnServer: true) { renamedFiles in
                     for renamedFile in renamedFiles {
                         if let index = controller.index(of: renamedFile.id) {
                             controller.templates[index].file.name = renamedFile.name
@@ -120,7 +120,7 @@ struct TemplatesDetail: View {
                 return nil
             }
             statusMessage = "Updating Drive Labels"
-            let labelResult = try await Google_Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: labelMods)
+            let labelResult = try await Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: labelMods)
             
             //Update Local Model
             if  labelResult.successes == nil ||  labelResult.successes?.count != labelMods.count{
@@ -172,7 +172,7 @@ struct TemplatesDetail: View {
                 }
                 return nil
             }
-            let moveResult = try await Google_Drive.shared.move(tuples: moveMods)
+            let moveResult = try await Drive.shared.move(tuples: moveMods)
             if  moveResult.successes == nil ||  moveResult.successes?.count != moveMods.count{
                 print("Failure: \(moveResult.failures?.first?.value.foundationError.localizedDescription ?? "No Failure")")
                 throw Template_Error.unableToUpdateCategory
@@ -197,7 +197,7 @@ struct TemplatesDetail: View {
             }
             
             statusMessage = "Updating Drive Labels"
-            let labelResult = try await Google_Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: labelMods)
+            let labelResult = try await Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: labelMods)
             //Update Local Model
             if  labelResult.successes == nil ||  labelResult.successes?.count != labelMods.count{
                 throw Template_Error.unableToUpdateCategory
@@ -246,10 +246,10 @@ struct TemplatesDetail: View {
 //                    _ = try await controller.update(file: form.file, label: form.labelModification)
                     statusMessage = "Updating label for \(form.file.title)..."
                     
-                    _ =  try await Google_Drive.shared.label(modify: NLF_Form.DriveLabel.id.rawValue, modifications: [controller.forms[index].label.labelModification], on: form.file.id)
+                    _ =  try await Drive.shared.label(modify: NLF_Form.DriveLabel.id.rawValue, modifications: [controller.forms[index].label.labelModification], on: form.file.id)
                     
                     statusMessage = "Moving \(form.file.title) to \(destination.title) ..."
-                    let tempFile = try await Google_Drive.shared.move(file: form.file, to: destination)
+                    let tempFile = try await Drive.shared.move(file: form.file, to: destination)
 
                     if let possiblySameIndex = controller.index(of: form) {
                         controller.forms[possiblySameIndex].file.identifier = tempFile.identifier

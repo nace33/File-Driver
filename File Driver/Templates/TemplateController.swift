@@ -34,7 +34,7 @@ extension TemplatesController {
     func loadTemplates() async {
         do {
             isLoading = true
-            templates = try await Google_Drive.shared.get(filesWithLabelID: Template.DriveLabel.id.rawValue)
+            templates = try await Drive.shared.get(filesWithLabelID: Template.DriveLabel.id.rawValue)
                                                      .compactMap { .init(file: $0)}
                                                      .sorted(by: {$0.title.ciCompare($1.title)})
             
@@ -65,10 +65,10 @@ extension TemplatesController {
 extension TemplatesController {
     func getDestinationFolder(label:Template.Label, driveID:String) async throws -> GTLRDrive_File {
         do {
-            let catFolder = try await Google_Drive.shared.get(folder: label.category, parentID:driveID, createIfNotFound: true)
+            let catFolder = try await Drive.shared.get(folder: label.category, parentID:driveID, createIfNotFound: true)
             
             let destinationFolder : GTLRDrive_File = if !label.subCategory.isEmpty {
-                try await Google_Drive.shared.get(folder: label.subCategory, parentID:catFolder.id, createIfNotFound: true)
+                try await Drive.shared.get(folder: label.subCategory, parentID:catFolder.id, createIfNotFound: true)
             } else {
                 catFolder
             }
@@ -86,17 +86,17 @@ extension TemplatesController {
             let newFile : GTLRDrive_File
             if let duplicateFile {
                 progress("Duplicating File")
-                newFile = try await Google_Drive.shared.copy(fileID: duplicateFile, rename: template.file.title, saveTo: destinationFolder.id)
+                newFile = try await Drive.shared.copy(fileID: duplicateFile, rename: template.file.title, saveTo: destinationFolder.id)
             } else {
                 progress("Creating Template")
-                newFile = try await Google_Drive.shared.create(fileType:template.file.mime, name: template.file.title, parentID: destinationFolder.id)
+                newFile = try await Drive.shared.create(fileType:template.file.mime, name: template.file.title, parentID: destinationFolder.id)
             }
 
             progress("Applying Drive Label")
-            _  = try await Google_Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: [template.labelModification], on: newFile.id)
+            _  = try await Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: [template.labelModification], on: newFile.id)
           
             progress("Getting Updated File")
-            let updatedFile = try await Google_Drive.shared.get(fileID: newFile.id, labelIDs: [Template.DriveLabel.id.rawValue])
+            let updatedFile = try await Drive.shared.get(fileID: newFile.id, labelIDs: [Template.DriveLabel.id.rawValue])
             
             //update local data model
             guard let newTemplate = Template(file: updatedFile) else { throw Template_Error.driveLabelMissing(updatedFile.title)}
@@ -121,7 +121,7 @@ extension TemplatesController {
     func rename(template:Binding<Template>, newFilename:String, progress:(String)->Void) async throws {
         do {
             progress("Renaming Template")
-            _ = try await Google_Drive.shared.rename(id: template.wrappedValue.file.id, newName: newFilename)
+            _ = try await Drive.shared.rename(id: template.wrappedValue.file.id, newName: newFilename)
             template.wrappedValue.file.name = newFilename
         } catch {
             throw error
@@ -132,7 +132,7 @@ extension TemplatesController {
             progress("Updating Drive Label")
             let labelModification = template.wrappedValue.labelModification
             let fileID = template.wrappedValue.file.id
-            _  = try await Google_Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: [labelModification], on: fileID)
+            _  = try await Drive.shared.label(modify: Template.DriveLabel.id.rawValue, modifications: [labelModification], on: fileID)
         } catch {
             progress("Error")
             throw error

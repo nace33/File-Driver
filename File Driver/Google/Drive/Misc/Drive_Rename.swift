@@ -9,21 +9,23 @@ import SwiftUI
 import GoogleAPIClientForREST_Drive
 
 struct Drive_Rename: View {
-    init(title:String = "Rename Files", sectionTitle:String = "", files: [GTLRDrive_File], delimiter: String = "#", renamed:@escaping(([GTLRDrive_File]) -> Void)) {
-        
+    init(title:String = "Rename Files", sectionTitle:String = "", files: [GTLRDrive_File], delimiter: String = "#", saveOnServer:Bool, isSheet:Bool = false, renamed:@escaping(([GTLRDrive_File]) -> Void)) {
         _files = State(initialValue: File.convert(files))
         self.delimiter = delimiter
         self.renamed = renamed
         self.title = title
         self.sectionTitle = sectionTitle
+        self.saveOnServer = saveOnServer
         _prefix = State(initialValue: "\(delimiter) ")
         _digits = State(initialValue: files.count.digits)
+        self.isSheet = isSheet
     }
     var title : String
     var sectionTitle : String
+    let saveOnServer : Bool
     var renamed : (([GTLRDrive_File]) -> Void)
     var delimiter : String
-    
+    let isSheet: Bool
     @State private var files : [File]
     
     @State private var prefix   : String
@@ -37,6 +39,8 @@ struct Drive_Rename: View {
     @State private var renameError : Error?
     @State private var statusString = ""
     @State private var failureMessage :String?
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStackLoader(title:title, isLoading: $isRenaming, status: $statusString, error: $renameError) {
             Form {
@@ -52,9 +56,16 @@ struct Drive_Rename: View {
                     }
                 }
             }.formStyle(.grouped)
-        }.task {
-            updateFilenames()
         }
+            .task {
+                updateFilenames()
+            }
+            .toolbar {
+                if isSheet {
+                    ToolbarItem(placement: .cancellationAction) {  Button(isRenaming ? "Close" : "Cancel") { dismiss() }  }
+                    ToolbarItem(placement: .primaryAction) { renameButton   }
+                }
+            }
     }
     @ViewBuilder var renameFieldsSection : some View {
         Section {
@@ -92,16 +103,18 @@ struct Drive_Rename: View {
                 LabeledContent(" ") { Text("You must include a '#' in prefix or suffix").font(.caption).foregroundStyle(.orange)}
             }
         } footer: {
-            HStack {
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Button("Rename") { Task { await renameFiles()}}
-                        .buttonStyle(.borderedProminent)
-                        .disabled(!canRename)
-                    if let failureMessage {
-                        Text(failureMessage)
-                            .font(.caption)
-                            .foregroundStyle(.red)
+            if !isSheet ||  failureMessage != nil {
+                HStack {
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        if !isSheet {
+                            renameButton
+                        }
+                        if let failureMessage {
+                            Text(failureMessage)
+                                .font(.caption)
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
             }
@@ -155,7 +168,12 @@ struct Drive_Rename: View {
             .alternatingRowBackgrounds()
             .frame(minHeight: 400)
     }
-    
+    @ViewBuilder var renameButton : some View {
+        Button("Rename") { Task { await renameFiles()}}
+            .buttonStyle(.borderedProminent)
+            .disabled(!canRename)
+            .disabled(isRenaming)
+    }
     
     
     private var iteratorFound : Bool {
@@ -226,19 +244,25 @@ struct Drive_Rename: View {
          
             let tuples = files.compactMap { $0.tuple }
            
-            let result = try await Google_Drive.shared.update(tuples: tuples)
-            
-            var renamedFiles : [GTLRDrive_File] = []
-            if let successes = result.successes {
-                renamedFiles = successes.compactMap { $0.value as? GTLRDrive_File }
-            }
-    
-            DispatchQueue.main.async {
-                self.renamed(renamedFiles)
-            }
-
-            if let error = result.failures?.first?.value.foundationError {
-                failureMessage = error.localizedDescription
+            if saveOnServer {
+                let result = try await Drive.shared.update(tuples: tuples)
+                
+                var renamedFiles : [GTLRDrive_File] = []
+                if let successes = result.successes {
+                    renamedFiles = successes.compactMap { $0.value as? GTLRDrive_File }
+                }
+                
+                DispatchQueue.main.async {
+                    self.renamed(renamedFiles)
+                }
+                
+                if let error = result.failures?.first?.value.foundationError {
+                    failureMessage = error.localizedDescription
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.renamed(renamedFilesWithIds)
+                }
             }
 
             self.statusString = "Done!"
@@ -246,9 +270,26 @@ struct Drive_Rename: View {
            
    
             self.updateFilenames()
+            if isSheet { dismiss() }
         } catch {
             isRenaming = false
             self.renameError = error
+        }
+    }
+    
+    var renamedFilesWithIds : [GTLRDrive_File] {
+        files.compactMap { file in
+            let newFile = GTLRDrive_File()
+            if let fileExtension = file.originalFile.fileExtension {
+                newFile.name = file.newFilename.replacingOccurrences(of:".\(fileExtension)", with: "")
+            } else {
+                newFile.name = file.newFilename
+            }
+            newFile.fileExtension = file.originalFile.fileExtension
+            newFile.mimeType = file.originalFile.fileExtension
+            newFile.parents = file.originalFile.parents
+            newFile.identifier = file.id
+            return newFile
         }
     }
 }

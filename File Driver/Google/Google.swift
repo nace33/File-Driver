@@ -23,7 +23,7 @@ final class Google {
     var isLoading = false
     
     //Objects
-    var drive  : Google_Drive  { Google_Drive.shared  }
+    var drive  : Drive  { Drive.shared  }
     var labels : Google_Labels { Google_Labels.shared }
 
     //User
@@ -35,14 +35,14 @@ final class Google {
 
 //MARK: Query Execute
 extension Google {
-    static func executeBatch<T>(_ batch:GTLRBatchQuery, fetcher:Google_Fetcher<T>) async throws -> T? {
+    static func executeBatch<T>(_ batch:GTLRBatchQuery, fetcher:Google_Fetcher<T>) async throws -> T {
         guard !(batch.queries?.isEmpty ?? true) else {
-            print("No Batch Queries To Execute - Returning NIL")
+            print("No Batch Queries To Execute")
             throw Google_Error.noBathQueriesProvided
         }
         return try await execute(batch, fetcher:fetcher)
     }
-    static func execute<T>(_ query:GTLRQueryProtocol, fetcher:Google_Fetcher<T>)  async throws -> T? {
+    static func execute<T>(_ query:GTLRQueryProtocol, fetcher:Google_Fetcher<T>)  async throws -> T {
         guard let user = shared.user else {
             throw Google_Error.notLoggedIntoGoogle
         }
@@ -65,6 +65,8 @@ extension Google {
             fetcher.progress?(b/t)
         }
    
+       
+        
         do {
             return try await withCheckedThrowingContinuation { continuation in
                 let serviceTicket = fetcher.service.executeQuery(query) { ticket, object, error in
@@ -74,8 +76,11 @@ extension Google {
                         continuation.resume(throwing: error!)
                         return
                     }
-
-                    continuation.resume(returning: object as? T)
+                    guard let object = object as? T else {
+                        continuation.resume(throwing:Google_Error.driveCallSuceededButReturnTypeDoesNotMatch)
+                        return
+                    }
+                    continuation.resume(returning: object)
                 }
                 fetcher.ticket = serviceTicket
                 fetcher.continuation = continuation
@@ -85,5 +90,6 @@ extension Google {
             throw error
         }
     }
+
 }
 

@@ -56,7 +56,7 @@ extension ContactsController {
     func loadContacts() async {
         do {
             isLoading = true
-            contacts = try await Google_Drive.shared.get(filesWithLabelID:Contact.DriveLabel.id.rawValue)
+            contacts = try await Drive.shared.get(filesWithLabelID:Contact.DriveLabel.id.rawValue)
                                                     .compactMap { .init(file: $0)}
                                                     .sorted(by: {$0.label.nameReversed.ciCompare($1.label.nameReversed)})
         
@@ -99,8 +99,8 @@ extension ContactsController {
 
                 let filename = Date().yyyymmdd + " Contact Icon" + " (\(contact.wrappedValue.label.name))"
 
-                let iconFolder   = try await Google_Drive.shared.get(folder: "Profile Icons", parentID: folderID, createIfNotFound: true)
-                let uploadedFile = try await Google_Drive.shared.upload(data:png, toParentID: iconFolder.id, name: filename, type:UTType.png.identifier)
+                let iconFolder   = try await Drive.shared.get(folder: "Profile Icons", parentID: folderID, createIfNotFound: true)
+                let uploadedFile = try await Drive.shared.upload(data:png, toParentID: iconFolder.id, name: filename, type:UTType.png.identifier)
             
                 
                 //Remove Cache
@@ -119,34 +119,34 @@ extension ContactsController {
             }
       
             //status.wrappedValue = "Updating Drive Label ..."
-            _  = try await Google_Drive.shared.label(modify: Contact.DriveLabel.id.rawValue, modifications: [contact.wrappedValue.label.labelModification], on: contact.id)
+            _  = try await Drive.shared.label(modify: Contact.DriveLabel.id.rawValue, modifications: [contact.wrappedValue.label.labelModification], on: contact.id)
             
             //fetch file with updated label
-            var file = try await Google_Drive.shared.get(fileID: contact.id, labelIDs: [Contact.DriveLabel.id.rawValue])
+            var file = try await Drive.shared.get(fileID: contact.id, labelIDs: [Contact.DriveLabel.id.rawValue])
             
             //rename the file
             if file.title != contact.wrappedValue.label.nameReversed, let letter = contact.wrappedValue.label.nameReversed.first {
                 
                 //Get the parent folder
                 guard let parentFolderID = file.parents?.first else { throw Contact_Error.custom("Contact Folder Not Found!")}
-                let folder = try await Google_Drive.shared.get(fileID:parentFolderID)
+                let folder = try await Drive.shared.get(fileID:parentFolderID)
                 
                 let needToMoveFolder = !folder.title.ciHasPrefix(String(letter))
                 
                 //rename the folder
-                let renamedFolder = try await Google_Drive.shared.rename(id:folder.id, newName: contact.wrappedValue.label.nameReversed)
+                let renamedFolder = try await Drive.shared.rename(id:folder.id, newName: contact.wrappedValue.label.nameReversed)
            
                 if needToMoveFolder {
                     //Get the new letter folder
                     let defaultDrive    = try await getContactsDrive()
                     let letterFolder    = try await getLetterFolder(drive:defaultDrive, letter: String(letter))
-                    _ = try await Google_Drive.shared.move(file:renamedFolder, to:letterFolder)
+                    _ = try await Drive.shared.move(file:renamedFolder, to:letterFolder)
                     //Move the
                 }
                 
                 //rename the file
-                _ = try await Google_Drive.shared.rename(id:file.id, newName: contact.wrappedValue.label.nameReversed)
-                file  = try await Google_Drive.shared.get(fileID:contact.id, labelIDs: [Contact.DriveLabel.id.rawValue])
+                _ = try await Drive.shared.rename(id:file.id, newName: contact.wrappedValue.label.nameReversed)
+                file  = try await Drive.shared.get(fileID:contact.id, labelIDs: [Contact.DriveLabel.id.rawValue])
                 
             }
             
@@ -185,19 +185,19 @@ extension ContactsController {
             let letterFolder    = try await getLetterFolder(drive:defaultDrive, letter: String(letter))
             
 //            status.wrappedValue = "Creating Folder: '\(name)'"
-            let contactFolder   = try await Google_Drive.shared.create(folder:label.nameReversed, in: letterFolder.id, mustBeUnique: true)
+            let contactFolder   = try await Drive.shared.create(folder:label.nameReversed, in: letterFolder.id, mustBeUnique: true)
             
 //            status.wrappedValue = "Copying Contacts Template ..."
-            let copiedFile      = try await Google_Drive.shared.copy(fileID: template.id, rename: label.nameReversed, saveTo: contactFolder.id)
+            let copiedFile      = try await Drive.shared.copy(fileID: template.id, rename: label.nameReversed, saveTo: contactFolder.id)
            
 //            status.wrappedValue = "Applying Drive Label ..."
-            _  = try await Google_Drive.shared.label(modify: Contact.DriveLabel.id.rawValue, modifications: [label.labelModification], on: copiedFile.id)
+            _  = try await Drive.shared.label(modify: Contact.DriveLabel.id.rawValue, modifications: [label.labelModification], on: copiedFile.id)
            
             //fetch file with updated label
-            let file = try await Google_Drive.shared.get(fileID: copiedFile.id, labelIDs: [Contact.DriveLabel.id.rawValue])
+            let file = try await Drive.shared.get(fileID: copiedFile.id, labelIDs: [Contact.DriveLabel.id.rawValue])
             
             //Rename the file
-            let renamedFile = try await Google_Drive.shared.rename(id:file.id, newName:label.nameReversed)
+            let renamedFile = try await Drive.shared.rename(id:file.id, newName:label.nameReversed)
             
             //Do not return renamedFile, it does not have the drive label, instead update 'file' name and return
             file.name = renamedFile.name
@@ -222,7 +222,7 @@ extension ContactsController {
             guard let id = UserDefaults.standard.string(forKey: BOF_Settings.Key.contactsDriveIDKey.rawValue) else {
                 throw Contact_Error.noDrive
             }
-            return try await Google_Drive.shared.sharedDrive(get: id)
+            return try await Drive.shared.sharedDrive(get: id)
         } catch {
             throw error
         }
@@ -231,7 +231,7 @@ extension ContactsController {
         do {
             guard !letter.isEmpty else { throw Contact_Error.invalidMethodParameters(#function) }
             let string = letter.count > 1 ? String(letter.first!) : letter
-            return try await Google_Drive.shared.get(folder: string.uppercased(), parentID: drive.id, createIfNotFound: true, caseInsensitive: true)
+            return try await Drive.shared.get(folder: string.uppercased(), parentID: drive.id, createIfNotFound: true, caseInsensitive: true)
         } catch {
             throw error
         }
@@ -241,14 +241,14 @@ extension ContactsController {
             guard let id = UserDefaults.standard.string(forKey: BOF_Settings.Key.contactTemplateIDKey.rawValue) else {
                 throw Contact_Error.noTemplate
             }
-            return try await Google_Drive.shared.get(fileID: id)
+            return try await Drive.shared.get(fileID: id)
         } catch {
             throw error
         }
     }
     func copy(template:GTLRDrive_File, folder:GTLRDrive_File) async throws -> GTLRDrive_File{
         do {
-            return try await Google_Drive.shared.copy(fileID: template.id, rename: template.title, saveTo: folder.id)
+            return try await Drive.shared.copy(fileID: template.id, rename: template.title, saveTo: folder.id)
         } catch {
             throw error
         }

@@ -39,29 +39,29 @@ public extension Contact {
         var labelFieldModifications : [GTLRDrive_LabelFieldModification] {
             var mods = [GTLRDrive_LabelFieldModification]()
             
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.status.rawValue, value: status.rawValue, valueType: .selection) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.status.rawValue, value: status.rawValue, valueType: .selection) {
                 mods.append(mod)
             }
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.client.rawValue, value: client.rawValue, valueType: .selection) {
-                mods.append(mod)
-            }
-            
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.firstName.rawValue, value:firstName, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.client.rawValue, value: client.rawValue, valueType: .selection) {
                 mods.append(mod)
             }
             
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.lastName.rawValue, value:lastName, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.firstName.rawValue, value:firstName, valueType: .text) {
+                mods.append(mod)
+            }
+            
+            if let mod =  Drive.shared.label(modify: DriveLabel.lastName.rawValue, value:lastName, valueType: .text) {
                 mods.append(mod)
             }
     
             
   
             
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.groupName.rawValue, value:groupName, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.groupName.rawValue, value:groupName, valueType: .text) {
                 mods.append(mod)
             }
             
-            if let mod =  Google_Drive.shared.label(modify: DriveLabel.iconID.rawValue, value:iconID, valueType: .text) {
+            if let mod =  Drive.shared.label(modify: DriveLabel.iconID.rawValue, value:iconID, valueType: .text) {
                 mods.append(mod)
             }
             
@@ -70,7 +70,7 @@ public extension Contact {
             return mods
           }
         var labelModification       : GTLRDrive_LabelModification {
-            Google_Drive.shared.label(modify: DriveLabel.id.rawValue, fieldModifications: labelFieldModifications)
+            Drive.shared.label(modify: DriveLabel.id.rawValue, fieldModifications: labelFieldModifications)
         }
     }
 }

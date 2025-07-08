@@ -61,7 +61,7 @@ extension ContactDetail_Files {
 extension ContactDetail_Files {
     func showFileCategoryInDrive(_ category:String) async {
         do {
-            let folder = try await Google_Drive.shared.get(folder: category, parentID: contact.file.parents?.first ?? "")
+            let folder = try await Drive.shared.get(folder: category, parentID: contact.file.parents?.first ?? "")
             File_DriverApp.createWebViewTab(url: folder.showInDriveURL, title: category)
         }
         catch {

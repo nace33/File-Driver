@@ -42,11 +42,13 @@ extension View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Label(errorString, systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
-                        .padding()
-                    if let errorAction {
-                        Button("Try Again") { errorAction() }
+                    VStack {
+                        Label(errorString, systemImage: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                            .padding()
+                        if let errorAction {
+                            Button("Try Again") { errorAction() }
+                        }
                     }
                     Spacer()
                 }

@@ -26,7 +26,7 @@ struct HappyDog : View {
                 .bold()
                 .font(.title2)
                 .foregroundStyle(color)
-                .shadow(color:.secondary, radius: 5)
+//                .shadow(color:.secondary, radius: 5)
 
             Image(assetName: "HappyDog")
                 .resizable( resizingMode: .stretch)

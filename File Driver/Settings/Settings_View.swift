@@ -33,6 +33,8 @@ struct Settings_View : View {
                 Settings_Contacts()
             case .templates:
                 Settings_Templates()
+            case .cases:
+                Settings_Cases()
             }
         }
             .frame(minWidth:400, minHeight: 400)

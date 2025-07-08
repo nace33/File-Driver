@@ -13,7 +13,7 @@ public
 extension Contact {
   
     struct Case : Identifiable, Hashable {
-        public let id : String //this is Date.idString type, so it is time it was created
+        public let id : String 
         var caseID    : String
         var driveID   : String
         var category  : String
@@ -25,7 +25,7 @@ extension Contact {
 
 public extension Contact.Case {
     static func new() -> Contact.Case {
-        let newRow = Contact.Case.init(id:Date.idString, caseID: "", driveID: "", category: "", name: "")
+        let newRow = Contact.Case.init(id:UUID().uuidString, caseID: "", driveID: "", category: "", name: "")
         return newRow
     }
     init?(row:[String]) {
