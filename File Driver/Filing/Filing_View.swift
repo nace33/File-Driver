@@ -11,9 +11,8 @@ import SwiftData
 
 
 struct FilingView: View {
-    @Environment(FilingController.self) var controller
     @AppStorage(BOF_Settings.Key.filingDrive.rawValue) var driveID : String = ""
-    @State private var driveDelegate = DriveDelegate(actions: [.newFolder, .upload, .move, .rename, .delete, .filter, .preview])
+    @State private var driveDelegate = DriveDelegate(actions: [.newFolder, .upload, .move, .rename, .trash, .filter, .preview])
 
     @State private var isFiling = false
    
@@ -21,14 +20,15 @@ struct FilingView: View {
         if driveID.isEmpty {
             DriveSelector("Select Filing Drive", canLoadFolders: false, fileID: $driveID)
         } else {
-            DriveView(delegate: $driveDelegate)
+            DriveView("Shared Drive", delegate: $driveDelegate)
                 .disabled(isFiling)
                 .inspector(isPresented: .constant(true)) {
-                    let files = driveDelegate.selection.sorted(by: {$0.title.ciCompare($1.title)})
-                    FileToCase(files) { isFiling in
+                    let items = driveDelegate.selection.sorted(by: {$0.title.ciCompare($1.title)})
+                                                       .compactMap({FileToCase_Item($0)})
+                    FileToCase(items) { isFiling in
                         self.isFiling = isFiling
-                    } filed: { filed in
-                        driveDelegate.filesWereRemoved(filed)
+                    } filed: { filedItems in
+                        driveDelegate.filesWereRemoved(filedItems.compactMap({$0.file}))
                         driveDelegate.selectFirstItem()
                     }
                         .inspectorColumnWidth(min: 500, ideal: 500)
@@ -45,7 +45,5 @@ struct FilingView: View {
         }
     }
 }
-
-
 
 

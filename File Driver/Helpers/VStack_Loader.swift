@@ -7,17 +7,24 @@
 
 import SwiftUI
 
+@Observable final public class VLoader_Item  {
+    var isLoading = true
+    var status    = ""
+    var progress : Double = 0.0
+    var error    : Error?
+}
+
+
 public
 extension View {
-    func VStackLoader(alignment:HorizontalAlignment = .leading,
-                      spacing:CGFloat = 0,
-                      title:String,
-                      isLoading:Binding<Bool>,
-                      status:Binding<String>,
-                      error:Binding<Error?>,
-                      errorAction:(() -> Void)? = nil,
-                      @ViewBuilder content: () -> some View) -> some View {
-        VStackLoader(alignment: alignment, spacing: spacing, isLoading: isLoading, status: status, error: error, errorAction: errorAction) {
+    func VStackLoacker(alignment:HorizontalAlignment = .leading,
+                       spacing:CGFloat = 0,
+                       title:String = "",
+                       loader:Binding<VLoader_Item>,
+                       errorAction:(() -> Void)? = nil,
+                       @ViewBuilder content: () -> some View,
+                       @ViewBuilder footer: () -> some View = {EmptyView()}) -> some View {
+        VStackLoader(alignment: alignment, spacing: spacing, isLoading: loader.isLoading, status: loader.status, progress: loader.progress, error: loader.error, errorAction: errorAction) {
             if !title.isEmpty {
                 Text(title).font(.title2)
                     .padding()
@@ -25,6 +32,43 @@ extension View {
             }
         } content: {
             content()
+        } footer: {
+            footer()
+        }
+    }
+
+    func VStackLoacker(alignment:HorizontalAlignment = .leading,
+                       spacing:CGFloat = 0,
+                       loader:Binding<VLoader_Item>,
+                       errorAction:(() -> Void)? = nil,
+                       @ViewBuilder header:  () -> some View,
+                       @ViewBuilder content: () -> some View,
+                       @ViewBuilder footer: () -> some View = {EmptyView()}) -> some View {
+        VStackLoader(alignment: alignment, spacing: spacing, isLoading: loader.isLoading, status: loader.status, progress: loader.progress, error: loader.error, errorAction: errorAction, header: header, content: content, footer:footer)
+    }
+    
+    
+    
+    func VStackLoader(alignment:HorizontalAlignment = .leading,
+                      spacing:CGFloat = 0,
+                      title:String = "",
+                      isLoading:Binding<Bool>,
+                      status:Binding<String>,
+                      progress:Binding<Double>? = nil,
+                      error:Binding<Error?>,
+                      errorAction:(() -> Void)? = nil,
+                      @ViewBuilder content: () -> some View,
+                      @ViewBuilder footer: () -> some View = { EmptyView()}) -> some View {
+        VStackLoader(alignment: alignment, spacing: spacing, isLoading: isLoading, status: status, progress: progress, error: error, errorAction: errorAction) {
+            if !title.isEmpty {
+                Text(title).font(.title2)
+                    .padding()
+                Divider()
+            }
+        } content: {
+            content()
+        } footer: {
+            footer()
         }
     }
     
@@ -32,10 +76,12 @@ extension View {
                       spacing:CGFloat = 0,
                       isLoading:Binding<Bool>,
                       status:Binding<String>,
+                      progress:Binding<Double>? = nil,
                       error:Binding<Error?>,
                       errorAction:(() -> Void)? = nil,
                       @ViewBuilder header:  () -> some View,
-                      @ViewBuilder content: () -> some View) -> some View {
+                      @ViewBuilder content: () -> some View,
+                      @ViewBuilder footer: ()  -> some View = {EmptyView()}) -> some View {
         VStack(alignment:alignment, spacing: spacing) {
             header()
             if let errorString = error.wrappedValue?.localizedDescription {
@@ -58,14 +104,45 @@ extension View {
                 Spacer()
                 HStack {
                     Spacer()
-                    ProgressView(status.wrappedValue)
-                        .padding()
+                    if let progress, progress.wrappedValue > 0 {
+                        ZStack {
+                            ProgressView(status.wrappedValue, value: progress.wrappedValue)
+                                .progressViewStyle(.circular)
+                                .padding()
+                                .tint(progress.wrappedValue == 1 ? .green : .blue)
+                                .lineLimit(1)
+                        }
+                    } else {
+                        ProgressView(status.wrappedValue)
+                            .padding()
+                            .lineLimit(1)
+                    }
                     Spacer()
                 }
                 Spacer()
             }
             else {
                 content()
+            }
+            footer()
+        }
+    }
+}
+
+
+#Preview {
+    let progress = 1.0
+    ZStack {
+        ZStack {
+            ProgressView("Loading", value: progress)
+                .progressViewStyle(.circular)
+                .padding()
+            if progress == 1 {
+                Image(systemName: "checkmark")
+//                    .resizable()
+//                    .frame(width:18, height:18)
+                    .padding(.bottom,20)
+                    .foregroundStyle(.green)
             }
         }
     }

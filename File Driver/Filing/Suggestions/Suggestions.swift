@@ -18,6 +18,8 @@ final class Suggestions {
     static let shared: Suggestions = { Suggestions() }() //Singleton
     var context : ModelContext { BOF_SwiftData.shared.container.mainContext}
     
+    //This should match what is SwiftData
+    //Cached for efficiency sake due to large volume of fetched requests that can occur (i.e. rebuild case spreadsheet)
     fileprivate var _blockedWords: Set<String> = []
     var blockedWords : Set<String> {
         get {
@@ -31,11 +33,76 @@ final class Suggestions {
     }
 }
 
-
-//MARK: Calls
+//MARK: Suggestions
 extension Suggestions {
-    //Add
-    func add(_ caseSpreadsheet:Case, save:Bool) async throws -> FolderSuggestion {
+    func sugguestFolders(for items:[FileToCase_Item], rootLimit:Int? = nil) throws -> [FolderSuggestion] {
+        guard items.count > 0 else { return []}
+        let searchData   = Suggestions.Data.merge(items.map(\.suggestionData))
+        let searchWords  = searchData.words
+        let searchEmails = searchData.contacts.map { $0.email.lowercased() }
+        let allWords     = Set(searchWords + searchEmails).subtracting(blockedWords)
+        
+        let folders = try fetchFolders(containing: allWords)
+        if let rootLimit, rootLimit > 0, folders.count > rootLimit {
+            var roots : [FolderSuggestion] = []
+            return folders.filter { folder in
+                guard let root = folder.root  else { return false }
+                guard roots.count < rootLimit else { return roots.contains(root) }
+                roots.append(root)
+                return true
+            }
+        } else {
+            return folders
+        }
+    }
+    fileprivate func suggestWords(from sheetRows:[any SheetRow]) -> Set<String> {
+        guard sheetRows.count > 0 else { return [] }
+        var words : Set<String> = []
+        
+        for row in sheetRows {
+            if let contactRow = row as? Case.Contact {
+                words.formUnion(contactRow.name.lowerCasedWordsSet)
+            } else if let contactDataRow = row as? Case.ContactData {
+                words.insert(contactDataRow.value.lowercased())
+            } else if let file = row as? Case.File {
+                if let sanitized = sanitize(file.filename) {
+                    words.formUnion(sanitized.lowerCasedWordsSet)
+                }
+            } else if let tag  = row as? Case.Tag {
+                words.insert(tag.name)
+            } else {
+                print("Not setup to process: \(row)")
+            }
+        }
+        return words.subtracting(blockedWords)
+    }
+    fileprivate func suggestWords(for caseSpreadsheet:Case, folderID:String?) -> Set<String> {
+        let files : [Case.File]
+        if let folderID {
+            files = caseSpreadsheet.files.filter { $0.folderIDs.contains(folderID)}
+        } else {
+            files = caseSpreadsheet.files
+        }
+        var sheetRows : [any SheetRow] = []
+        for file in files {
+            sheetRows.append(file)
+            if file.contactIDs.count > 0 {
+                sheetRows.append(contentsOf: caseSpreadsheet.contacts(with: file.contactIDs))
+                sheetRows.append(contentsOf:caseSpreadsheet.contactData(with: file.contactIDs, category: "email"))
+            }
+            
+            if file.tagIDs.count > 0 {
+                sheetRows.append(contentsOf: caseSpreadsheet.tags(with: file.tagIDs))
+            }
+        }
+        return suggestWords(from: sheetRows)
+    }
+}
+
+
+//MARK: Update
+extension Suggestions {
+    func update(_ caseSpreadsheet:Case, save:Bool) async throws -> FolderSuggestion {
         ///this is called when importing an entire case spreadsheet (i.e.an import or rebuild)
         do {
             //Load spreadsheet
@@ -66,7 +133,7 @@ extension Suggestions {
             for folder in folders {
                 //relationships
                 ///This redoes work already done above in order to figure out which words belong to each folder
-                let folderWords = getSearchWords(for:caseSpreadsheet, folderID: folder.id)
+                let folderWords = suggestWords(for:caseSpreadsheet, folderID: folder.id)
                 folder.words    = try createWords(folderWords, sanitize: false)
 //                folder.words    = words.filter { folderWords.contains($0.text)}
                 
@@ -93,12 +160,12 @@ extension Suggestions {
             throw error
         }
     }
-    func add(_ sheetRows:[any SheetRow], to folders:[GTLRDrive_File], root:GTLRDrive_File) throws {
+    func update(_ sheetRows:[any SheetRow], to folders:[GTLRDrive_File], root:GTLRDrive_File) throws {
         ///Called from AddToCase and Suggestions.add(case, save)
-        let suggestedWords = getWords(from: sheetRows)
-        let root    = try createRoot(root)
-        let folders = try createFolders(folders, root: root)
-        let words   = try createWords(suggestedWords, sanitize: false)
+        let suggestedWords = suggestWords(from: sheetRows)
+        let root           = try createRoot(root)
+        let folders        = try createFolders(folders, root: root)
+        let words          = try createWords(suggestedWords, sanitize: false)
         
         let newDate = Date()
         for word in words {
@@ -115,188 +182,12 @@ extension Suggestions {
         
         try context.save()
     }
-    
-    //Delete
-    func deleteAllSuggestions() throws {
-        do {
-            try context.delete(model:WordSuggestion.self)
-            try context.delete(model:FolderSuggestion.self)
-            try context.save()
-        } catch {
-            print(#function + " \(error.localizedDescription)")
-            throw error
-        }
-    }
-    func clearRelationships(_ folder:FolderSuggestion) throws {
-        do {
-            folder.isSyncing = true
-            folder.children?.removeAll()
-            folder.words?.removeAll()
-            try context.save()
-            folder.isSyncing = false
-        } catch {
-            folder.isSyncing = false
-            throw error
-        }
-    }
-    
-    //Get
-    func getFolders(for files:[GTLRDrive_File], rootLimit:Int? = nil) throws -> [FolderSuggestion] {
-        guard files.count > 0 else { return [] }
-
-        do {
-//            let searchStrings = getSearchStrings(for: files)
-//            let searchWords   = getSearchWords(from:searchStrings)
-            let searchData   = getSearchData(for: files)
-            let searchWords  = searchData.words
-            let searchEmails = searchData.contacts.map { $0.email.lowercased() }
-      
-            let allWords    = Set(searchWords + searchEmails).subtracting(blockedWords)
-            
-            let folders = try fetchFolders(containing: allWords)
-            if let rootLimit, rootLimit > 0, folders.count > rootLimit {
-                var roots : [FolderSuggestion] = []
-                return folders.filter { folder in
-                    guard let root = folder.root  else { return false }
-                    guard roots.count < rootLimit else { return roots.contains(root) }
-                    roots.append(root)
-                    return true
-                }
-            } else {
-                return folders
-            }
-        }
-        catch {
-            throw error
-        }
-    }
-}
-
-
-//MARK: Get Search Data
-extension Suggestions {
-    func getSearchData(for files:[GTLRDrive_File]) -> SearchData {
-        var contacts         : Set<PDFGmailThread.Person> = []
-        var searchWords      : Set<String> = []
-        var searchStrings    : Set<String> = []
-        
-        //Extract Words/Contacts from files
-        for file in files {
-            //filename
-            if let filename = sanitize(file.title) {
-                searchStrings.insert(file.title)
-                searchWords.formUnion(filename.lowerCasedWordsSet)
-            }
-            //Description property
-            if let desc = file.descriptionProperty,
-                let sanitized = sanitize(desc)  {
-                searchStrings.insert(desc)
-                searchWords.formUnion(sanitized.lowerCasedWordsSet)
-            }
-            //Gmail App Properties
-            if let thread = file.gmailThread {
-                for contact in thread.mostRecentHeader.people {
-                    if blockedWords.intersection(contact.email.lowerCasedWordsSet).count == 0 {
-                        contacts.insert(contact)
-                    }
-                }
-                if let subject = sanitize(thread.intro.subject) {
-                    searchWords.formUnion(subject.lowerCasedWordsSet)
-                }
-            }
-        }
-        
-        //turn emails and names found in Words into Contacts
-        //Note that this occurs BEFORE caseSpreadsheet is loaded, so only names found in appProperties contacts is performed
-        let emailsInWords = Set(searchWords.filter { $0.isValidEmail })
-        searchWords.subtract(emailsInWords)
-        
-        
-        let emailContacts : [PDFGmailThread.Person] = emailsInWords.compactMap { email in
-            guard !contacts.map(\.email).cicContains(string: email) else { return nil }
-            return .init(key: email, value: email)
-        }
-        contacts.formUnion(emailContacts)
-        
-        //remove names found in words that exist in contacts
-        //typically this would be email host names that are found in filenames
-        let lowerCasedString = contacts.map(\.lowercasedString).joined()
-    
-        let allWords = searchWords.subtracting(blockedWords)
-                                  .filter {  !lowerCasedString.ciContain($0)  }
-        //words already sanitized
-        return SearchData(words: allWords, strings:searchStrings, contacts: contacts)
-    }
-    func getSearchWords(for caseSpreadsheet:Case, folderID:String?) -> Set<String> {
-        let files : [Case.File]
-        if let folderID {
-            files = caseSpreadsheet.files.filter { $0.folderIDs.contains(folderID)}
-        } else {
-            files = caseSpreadsheet.files
-        }
-        var sheetRows : [any SheetRow] = []
-        for file in files {
-            sheetRows.append(file)
-            if file.contactIDs.count > 0 {
-                sheetRows.append(contentsOf: caseSpreadsheet.contacts(with: file.contactIDs))
-                sheetRows.append(contentsOf:caseSpreadsheet.contactData(with: file.contactIDs, category: "email"))
-            }
-            
-            if file.tagIDs.count > 0 {
-                sheetRows.append(contentsOf: caseSpreadsheet.tags(with: file.tagIDs))
-            }
-        }
-        return getWords(from: sheetRows)
-    }
-    func getWords(from sheetRows:[any SheetRow]) -> Set<String> {
-        guard sheetRows.count > 0 else { return [] }
-        var words : Set<String> = []
-        
-        for row in sheetRows {
-            if let contactRow = row as? Case.Contact {
-                words.formUnion(contactRow.name.lowerCasedWordsSet)
-            } else if let contactDataRow = row as? Case.ContactData {
-                words.insert(contactDataRow.value.lowercased())
-            } else if let file = row as? Case.File {
-                if let sanitized = sanitize(file.filename) {
-                    words.formUnion(sanitized.lowerCasedWordsSet)
-                }
-            } else if let tag  = row as? Case.Tag {
-                words.insert(tag.name)
-            } else {
-                print("Not setup to process: \(row)")
-            }
-        }
-        return words.subtracting(blockedWords)
-    }
-}
-
-
-
-//MARK: Sanitize
-fileprivate extension Suggestions {
-    //Sanitization has to occur at string level for dates, etc to be recognized
-    func sanitize(_ text:String) -> String? {
-        let str = text.remove(parts: [.dates, .pathExtension, .wordsBelowCharacterCount(3), .extraWhitespaces],
-                              tags: [.adjective, .adverb, .conjunction, .pronoun, .determiner, .preposition])
-                      .lowercased()
-        return str.count > 0 ? str : nil
-    }
-    func sanitize(_ words:Set<String>) -> Set<String> {
-        var sanitizedWords : Set<String> = []
-        for word in words.subtracting(blockedWords) {
-            if let sanitized = sanitize(word) {
-                sanitizedWords.insert(sanitized)
-            }
-        }
-        return sanitizedWords
-    }
 }
 
 
 //MARK: Create
-fileprivate extension Suggestions {
-    func createRoot(_ rootFolder:GTLRDrive_File) throws -> FolderSuggestion {
+extension Suggestions {
+    fileprivate func createRoot(_ rootFolder:GTLRDrive_File) throws -> FolderSuggestion {
         do {
             if let root = try get(rootFolder) {
                 return root
@@ -310,7 +201,7 @@ fileprivate extension Suggestions {
             throw error
         }
     }
-    func createWords(_ words:Set<String>, sanitize:Bool) throws -> [WordSuggestion] {
+    fileprivate func createWords(_ words:Set<String>, sanitize:Bool) throws -> [WordSuggestion] {
         do {
             //convert to lowercased - only thing that is stored / compared
             let sanitizedWords : Set<String>
@@ -341,7 +232,7 @@ fileprivate extension Suggestions {
             throw error
         }
     }
-    func createFolders(_ driveFolders:[GTLRDrive_File], root:FolderSuggestion) throws -> [FolderSuggestion] {
+    fileprivate func createFolders(_ driveFolders:[GTLRDrive_File], root:FolderSuggestion) throws -> [FolderSuggestion] {
         do {
             //Get existing
             var folders         = try get(driveFolders)
@@ -370,7 +261,54 @@ fileprivate extension Suggestions {
 }
 
 
-//MARK: SwiftData
+//MARK: Delete
+extension Suggestions {
+    func deleteAllSuggestions() throws {
+        do {
+            try context.delete(model:WordSuggestion.self)
+            try context.delete(model:FolderSuggestion.self)
+            try context.save()
+        } catch {
+            print(#function + " \(error.localizedDescription)")
+            throw error
+        }
+    }
+    func clearRelationships(_ folder:FolderSuggestion) throws {
+        do {
+            folder.isSyncing = true
+            folder.children?.removeAll()
+            folder.words?.removeAll()
+            try context.save()
+            folder.isSyncing = false
+        } catch {
+            folder.isSyncing = false
+            throw error
+        }
+    }
+}
+
+//MARK: Sanitize
+fileprivate extension Suggestions {
+    //Sanitization has to occur at string level for dates, etc to be recognized
+    func sanitize(_ text:String) -> String? {
+        let str = text.remove(parts: [.dates, .pathExtension, .wordsBelowCharacterCount(3), .extraWhitespaces],
+                              tags: [.adjective, .adverb, .conjunction, .pronoun, .determiner, .preposition])
+                      .lowercased()
+        return str.count > 0 ? str : nil
+    }
+    func sanitize(_ words:Set<String>) -> Set<String> {
+        var sanitizedWords : Set<String> = []
+        for word in words.subtracting(blockedWords) {
+            if let sanitized = sanitize(word) {
+                sanitizedWords.insert(sanitized)
+            }
+        }
+        return sanitizedWords
+    }
+}
+
+
+//MARK: Fetch
 fileprivate extension Suggestions {
     func fetch<T:PersistentModel>(_ predicate:Predicate<T>?) throws -> [T] {
         do {
@@ -462,6 +400,10 @@ fileprivate extension Suggestions {
 
 //MARK: Block
 extension Suggestions {
+    func resyncBlockedWords() -> Set<String> {
+        _blockedWords.removeAll()
+        return self.blockedWords
+    }
     func block(_ text:String) throws {
         let words = try createWords([text], sanitize: true)
         for word in words {
@@ -472,9 +414,9 @@ extension Suggestions {
     func toggleBlock(_ word:WordSuggestion) {
         word.isBlocked.toggle()
         if word.isBlocked {
-            FilingController.shared.suggestions.blockedWords.insert(word.text)
+            blockedWords.insert(word.text)
         } else {
-            FilingController.shared.suggestions.blockedWords.remove(word.text)
+            blockedWords.remove(word.text)
         }
     }
 }

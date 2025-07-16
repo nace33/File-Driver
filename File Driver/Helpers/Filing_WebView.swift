@@ -15,21 +15,17 @@ struct Filing_WebView: View {
      
     }
     
-    @State private var delegate  = Web_View.Delegate()
+    @State private var webView      : WKWebView?
+    @State private var delegate     = Web_View.Delegate()
+    @State private var fileItem     : FileToCase_URLItem? = nil
 
-    @State private var filingURLItem      : FilingURLItem?
-    @State private var filingDownloadItem : FilingDownloadItem?
-    @State private var webView : WKWebView?
-    
     var body: some View {
-        Web_View(url, delegate: Web_View.Delegate(downloadDirectory: URL.downloadsDirectory, loading: { status, webView in
-                self.webView = webView
-        }, downloadDelegate: { download in
-            self.filingDownloadItem = FilingDownloadItem(download)
-            return self.filingDownloadItem!.delegate
-        }))
-            .sheet(item: $filingURLItem)      {  Inbox_Filing_URLItemView($0)  }
-            .sheet(item: $filingDownloadItem) {  Inbox_Filing_DownloadItemView($0)}
+        Web_View(url, delegate: delegate)
+            .task(id:url)                     {  updateWebView() }
+            .sheet(item: $fileItem)    {
+                FilingSheet(urlItems:[$0], fileItems:[])
+                    .frame(minWidth: 600, minHeight: 400)
+            }
             .toolbar {
                 Button("Create PDF ") { createPDF() }
             }
@@ -39,6 +35,26 @@ struct Filing_WebView: View {
 
     func createPDF() {
         guard let webView, let url = webView.url else {  return   }
-        self.filingURLItem = FilingURLItem(url)
+        self.fileItem = FileToCase_URLItem(url: url, filename:  webView.title ?? "Download", category: .remotePDFURL)
+    }
+    
+    
+    func updateWebView() {
+        self.delegate = Web_View.Delegate(clicked: { url, webView in
+            self.webView = webView
+            return true//allow webview to load: loadClickedURL
+        }, downloadPolicy: { navigation in
+            if Web_View.Delegate.isStandardDownload(navigation) {
+                if let url = navigation.response.url {
+                    self.fileItem = FileToCase_URLItem(url: url, filename:navigation.response.suggestedFilename ?? "Download", category: .remoteURL)
+                }
+                return .cancel
+            }
+            return .allow
+        })
     }
 }
+
+
+
+

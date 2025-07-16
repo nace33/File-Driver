@@ -15,17 +15,18 @@ struct Settings_Filing: View {
     @AppStorage(BOF_Settings.Key.filingAutoRename.rawValue)                var autoRenameFiles    : Bool = true
     @AppStorage(BOF_Settings.Key.filingAutoRenameComponents.rawValue     ) var filenameComponents : [AutoRenamer]  = AutoRenamer.defaultFilename
     @AppStorage(BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue) var emailComponents    : [AutoRenamer]  = AutoRenamer.defaultEmail
-//    @AppStorage(BOF_Settings.Key.renameItemsInListView.rawValue)           var renameListItems    : Bool = true
     
     @AppStorage(BOF_Settings.Key.filingSuggestionLimit.rawValue)           var suggestionLimit      : Int = 5
     @AppStorage(BOF_Settings.Key.filingSuggestionPartialTagMatch.rawValue)        var allowTagPartialMatch   : Bool = false
+    @AppStorage(BOF_Settings.Key.filingAutoRenameBlockedWords.rawValue)           var blockedRenameWords     : [String] = ["Nasser Law Firm Mail - "]
 
     
     
     @Environment(\.modelContext) private var modelContext
     @Query(filter:#Predicate<WordSuggestion>{ $0.isBlocked == true },sort:\WordSuggestion.text) private var blockedWords: [WordSuggestion]
     @State private var showNewBlockWordSheet: Bool = false
-    
+    @State private var showNewBlockedAutoNameSheet: Bool = false
+
     var body: some View {
         Form {
             TextField("DriveID", text: $driveID)
@@ -36,6 +37,27 @@ struct Settings_Filing: View {
                     .disabled(!autoRenameFiles)
                 LabeledContent("Email Format") { components($emailComponents   , showEmail: true )  }
                     .disabled(!autoRenameFiles)
+                LabeledContent {
+                    VStack(alignment:.trailing) {
+                        ForEach(blockedRenameWords, id:\.self) { word in
+                            Text(word)
+                                .textSelection(.disabled)
+                                .contextMenu {
+                                    Button("Delete") {
+                                        blockedRenameWords.removeAll(where: {$0 == word})
+                                    }
+                                }
+                        }
+                    }
+                } label : {
+                    HStack {
+                        Text("Blocked Words")
+                        Button {showNewBlockedAutoNameSheet.toggle() } label: { Image(systemName:"plus")}
+                            .buttonStyle(.plain)
+                            .foregroundStyle(.blue)
+                    }
+                }
+                
             }
             
             Section {
@@ -70,7 +92,16 @@ struct Settings_Filing: View {
         .formStyle(.grouped)
         .sheet(isPresented: $showNewBlockWordSheet) {
             TextSheet(title: "Block Word", prompt: "Add") { text in
-                try? FilingController.shared.suggestions.block(text)
+                try? Suggestions.shared.block(text)
+                return nil
+            }
+        }
+        .sheet(isPresented: $showNewBlockedAutoNameSheet) {
+            TextSheet(title: "Block Word From Auto Renamer", prompt: "Add") { text in
+                if !blockedRenameWords.cicContains(string: text){
+                    blockedRenameWords.append(text)
+                    blockedRenameWords.sort {$0.lowercased() < $1.lowercased()  }
+                }
                 return nil
             }
         }

@@ -11,7 +11,6 @@ import SwiftData
 struct BOF_SwiftDataView: View {
     @State var modelType: ModelType = .suggestions
     enum ModelType : String, CaseIterable { case sidebar, suggestions }
-    @Environment(FilingController.self) var controller
     var body: some View {
         Group {
             switch modelType {
@@ -36,7 +35,6 @@ struct BOF_SwiftDataView: View {
 #Preview {
     @Previewable @State var swiftData = BOF_SwiftData.shared
     BOF_SwiftDataView()
-        .environment(FilingController.shared)
         .modelContainer(swiftData.container)
 }
 

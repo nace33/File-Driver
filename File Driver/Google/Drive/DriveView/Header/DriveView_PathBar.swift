@@ -26,7 +26,10 @@ struct DriveView_PathBar<Action:View> : View {
     }
     let minWidth : CGFloat = 30.0
     
-
+    var rootTitle : String? {
+        guard !title.isEmpty else { return nil }
+        return title
+    }
     
     var body: some View {
         HStack {
@@ -47,7 +50,7 @@ struct DriveView_PathBar<Action:View> : View {
                 }
             }
             ForEach(Array(delegate.stack.enumerated()), id: \.offset) { index, element in
-                Button(element.title) {
+                PathButton(index == 0 ? rootTitle ?? element.title : element.title) {
                     if index+1 < delegate.stack.count  {
                         delegate.removeRangeFromStack(index+1..<delegate.stack.count)
                     } else {
@@ -83,3 +86,22 @@ struct DriveView_PathBar<Action:View> : View {
     }
 }
 
+fileprivate struct PathButton : View {
+    let title  : String
+    let action : () -> Void
+    init(_ title: String, action: @escaping () -> Void) {
+        self.title = title
+        self.action = action
+    }
+    @State private var isInside: Bool = false
+    
+    var body: some View {
+        Button(title) { action() }
+            .onHover { isInside in
+                print("IsInside: \(isInside)")
+                self.isInside = isInside
+            }
+//            .layoutPriority(isInside ? 9 : 0)
+            .fixedSize(horizontal: isInside, vertical: true)
+    }
+}

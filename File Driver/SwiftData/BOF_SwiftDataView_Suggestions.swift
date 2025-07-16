@@ -10,7 +10,6 @@ import SwiftData
 import GoogleAPIClientForREST_Drive
 
 struct BOF_SwiftDataView_Suggestions : View {
-    @Environment(FilingController.self) var controller
 
     @State private var isRebuilding = false
     @State private var error: Error?
@@ -84,6 +83,8 @@ struct BOF_SwiftDataView_Suggestions : View {
             }
             .disabled(isRebuilding)
     }
+    
+    var suggestions : Suggestions { Suggestions.shared}
 }
 
 
@@ -104,7 +105,7 @@ extension BOF_SwiftDataView_Suggestions {
 extension BOF_SwiftDataView_Suggestions {
     func clearDatabase() throws {
         do {
-            try controller.suggestions.deleteAllSuggestions()
+            try suggestions.deleteAllSuggestions()
         } catch {
             self.error = error
             throw error
@@ -124,7 +125,7 @@ extension BOF_SwiftDataView_Suggestions {
             for (index, aCase) in cases.enumerated() {
                 statusString = "Building \(aCase.title)"
 
-                _ = try await controller.suggestions.add(aCase, save:index == cases.count - 1)
+                _ = try await suggestions.update(aCase, save:index == cases.count - 1)
                 progress = Float(index + 1) / Float(cases.count)
             }
             
@@ -142,7 +143,7 @@ extension BOF_SwiftDataView_Suggestions {
             let caseLabel       = Case.DriveLabel(title: "", category: .miscellaneous, status: .active, opened: Date(), closed: nil, folderID: "")
             let caseSpreadsheet = Case(file: caseFile, label: caseLabel)
             folder.isSyncing = true
-            _ = try await controller.suggestions.add(caseSpreadsheet, save:true)
+            _ = try await suggestions.update(caseSpreadsheet, save:true)
             folder.isSyncing = false
         } catch {
             folder.isSyncing = false
@@ -217,9 +218,9 @@ extension BOF_SwiftDataView_Suggestions {
                         }
                         .contextMenu {
                             Button("Re-Sync") { Task { await rebuild(folder)}}
-                            Button("Clear") { try? controller.suggestions.clearRelationships(folder)}
+                            Button("Clear") { try? suggestions.clearRelationships(folder)}
                                 .modifierKeyAlternate(.command) {
-                                    Button("Delete") { controller.suggestions.context.delete(folder) }
+                                    Button("Delete") { suggestions.context.delete(folder) }
                                 }
                         }
                     }
@@ -230,8 +231,8 @@ extension BOF_SwiftDataView_Suggestions {
                         Text(word.text)
                             .foregroundStyle(word.isBlocked ? .red : .primary)
                             .contextMenu {
-                                Button(word.isBlocked ? "Unblock" : "Block") {controller.suggestions.toggleBlock(word)}
-                                Button("Delete") { controller.suggestions.context.delete(word) }
+                                Button(word.isBlocked ? "Unblock" : "Block") { suggestions.toggleBlock(word)}
+                                Button("Delete") { suggestions.context.delete(word) }
                             }
                     }
                 }
@@ -260,7 +261,7 @@ extension BOF_SwiftDataView_Suggestions {
                             }
                                 .contextMenu {
                                     wordMenu(folder)
-                                    Button("Delete") { controller.suggestions.context.delete(folder)}
+                                    Button("Delete") { suggestions.context.delete(folder)}
                                 }
                         }
                             .listRowSeparator(.hidden)
@@ -286,7 +287,7 @@ extension BOF_SwiftDataView_Suggestions {
                                 ForEach(caseFolders) { folder in
                                     Text(folder.name)
                                         .contextMenu {
-                                            Button("Delete") { controller.suggestions.context.delete(folder)}
+                                            Button("Delete") { suggestions.context.delete(folder)}
                                         }
                                 }
                             }

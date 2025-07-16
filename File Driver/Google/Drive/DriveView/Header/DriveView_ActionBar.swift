@@ -39,6 +39,8 @@ struct DriveView_ActionButton: View {
             }
                 .buttonStyle(.borderedProminent)
                 .disabled(!delegate.canPerform(action, on: delegate.selection))
+                .layoutPriority(1)
+                .fixedSize()
         default:
             Button {
                 delegate.perform(action, on: delegate.selection)

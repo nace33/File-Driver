@@ -8,35 +8,15 @@
 import SwiftUI
 
 enum Filing_Error : LocalizedError {
-    
-    case filingDriveNotSet
-    case urlAlreadyExists
-    case transitItemNotFound
-    case invalidURL
-    case uploadFailed(String)
-    case loadFailed(String)
-    case googleDriveFileNotFound
+
     case destinationNotSelected
     case caseNotSelected
     case filesNotMoved(String)
     case filesMovedButSpreadsheetNotUpdated(String)
     case suggestionsNotUpdated(String)
+    case uploadFailed(String, String)
     var localizedDescription: String {
         switch self {
-        case .filingDriveNotSet:
-            "Filing Drive not set"
-        case .urlAlreadyExists:
-           "URL already exists"
-        case .transitItemNotFound:
-            "Transit item not found"
-        case .invalidURL:
-            "URL is invalid"
-        case .uploadFailed(let reason):
-            "Upload failed: \(reason)"
-        case .loadFailed(let reason):
-            "Load failed: \(reason)"
-        case .googleDriveFileNotFound:
-            "Google Drive file not found"
         case .destinationNotSelected:
             "Filing Folder not selected"
         case .caseNotSelected:
@@ -47,6 +27,8 @@ enum Filing_Error : LocalizedError {
             "Files not moved:\n\(reason)"
         case .suggestionsNotUpdated(let reason):
             "Suggestions not updated:\n\(reason)"
+        case .uploadFailed(let filename, let reason):
+            "Upload failed for \(filename):\n\(reason)"
         }
     }
     /// A localized message describing what error occurred.

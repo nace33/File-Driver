@@ -26,23 +26,17 @@ extension DriveDelegate {
         for url in urls {
             Task {
                 _ = url.startAccessingSecurityScopedResource()
-                let gmailThread = url.pdfGmailThread
-                print("Thread: \(gmailThread)")
-
-//                var wordString : String? = nil
-//                if let gmailThread {
-//                    wordString = gmailThread.words(for:[.contacts, .attachments], fullStrings: true).joined(separator: " ")
-//                    if wordString == " " {
-//                        wordString = nil
-//                    }
-//                }
+                let gmailThread = url.emailThread
+                print(gmailThread)
+                let appProperties = gmailThread.driveAppProperties
+                print("\n\nAppProperties: \(appProperties)")
+//                let descriptionString = gmailThread.gtlrDescription(style:.full)
+//                print("descriptionString: \(descriptionString)")
                 
-                //use appProperties instead of word string to maintain some structure
-                let appProperties = gmailThread?.driveAppProperties
-                print("\tappProperties: \(appProperties)")
-
+                
+                
                 let filename : String
-                if let autoFilename = AutoFile_Rename.proposedFilename(for: url, thread:gmailThread) {
+                if let autoFilename = AutoFile_Rename.proposedFilename(for: url, thread:gmailThread, blockWords: String.blockedWords) {
                     filename = autoFilename
                 } else {
                     filename = url.lastPathComponent
@@ -60,6 +54,7 @@ extension DriveDelegate {
                     temporaryFile.mimeType = url.fileType
                     temporaryFile.createdTime   = GTLRDateTime(date:url.dateCreated ?? Date.now)
                     temporaryFile.modifiedTime = GTLRDateTime(date: url.dateModified ?? Date.now)
+                    temporaryFile.appProperties = appProperties
                     self.files.append(temporaryFile)
                     sortFiles()
                 } else { //uploading to a folder in the main display
@@ -69,12 +64,13 @@ extension DriveDelegate {
                 
                 uploadItems.append(uploadItem)
                 do {
-                    let uploadedFile : GTLRDrive_File =  try await Drive.shared.upload(url:url, filename: filename, to: parentID, description: nil /*wordString*/, appProperties:appProperties) { progress in
+                    let uploadedFile : GTLRDrive_File =  try await Drive.shared.upload(url:url, filename: filename, to: parentID, description: nil, appProperties:appProperties) { progress in
                         if let index = self.uploadItems.firstIndex(where: {$0.id == uploadItem.id}) {
                             self.uploadItems[index].progress = progress
                         }
                     }
                     
+                    uploadedFile.appProperties = appProperties
                     if let index = files.firstIndex(where: {$0.id == url.absoluteString}) {
                         self.files.remove(at: index)
                         self.files.insert(uploadedFile, at: index)

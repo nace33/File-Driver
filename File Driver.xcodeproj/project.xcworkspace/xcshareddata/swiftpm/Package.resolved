@@ -25,7 +25,7 @@
       "location" : "https://github.com/nace33/BOF_SecretSauce",
       "state" : {
         "branch" : "main",
-        "revision" : "bbdddd3688fe536475688bc68149f2934747ab60"
+        "revision" : "5dfeda9e806220d2d0da69937737d565aa944a5d"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/google/google-api-objectivec-client-for-rest",
       "state" : {
         "branch" : "main",
-        "revision" : "d4f41bf477288ee35409784150d0ccae478a4275"
+        "revision" : "3981beeb0ece282c6ed8e965cbb5b1bccfbe1543"
       }
     },
     {

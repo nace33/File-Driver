@@ -104,29 +104,24 @@ fileprivate extension FileToCase_Form {
     
     //Filename
     @ViewBuilder var filenameFields : some View {
-        if delegate.filingNames.count == 1 {
-            TextField(text: Bindable(delegate).filingNames[0].text, prompt:  Text("Enter filename here"), axis: .vertical) {
-                Menu {
-                    Button("Reset") { delegate.loadFilingNames()}
-                } label: {
-                    Text("Filename")
+        if delegate.items.count == 1 {
+            ForEach(Bindable(delegate).items) { $item in
+                TextField(text: $item.filename, prompt: Text("Enter filename here"), axis: .vertical) {
+                   Text("Filename")
                 }
-                    .fixedSize()
-                    .menuStyle(.borderlessButton)
-                    .menuIndicator(.hidden)
             }
-//                .focused($focusField, equals: .filenameField)
+
         } else {
             Section {
                 if filenamesExpanded {
-                    ForEach(Bindable(delegate).filingNames) { $filename in
-                        if $filename.wrappedValue == delegate.filingNames.first {
-                            TextField(text: $filename.text, prompt: Text("Enter filename here"), axis: .vertical) {
+                    ForEach(Bindable(delegate).items) { $item in
+                        if $item.wrappedValue == delegate.items.first {
+                            TextField(text: $item.filename, prompt: Text("Enter filename here"), axis: .vertical) {
                                 EmptyView()
                             }
                             //                            .focused($focusField, equals: .filenameField)
                         } else {
-                            TextField(text: $filename.text, prompt: Text("Enter filename here"), axis: .vertical) {
+                            TextField(text: $item.filename, prompt: Text("Enter filename here"), axis: .vertical) {
                                 EmptyView()
                             }
                         }
@@ -134,14 +129,14 @@ fileprivate extension FileToCase_Form {
                 } else {
                     HStack {
                         Spacer()
-                        Text("\(delegate.filingNames.count) files are selected.")
+                        Text("\(delegate.items.count) files are selected.")
                     }
                 }
             } header: {
                 Menu {
                     Button("Rename") { showFileRenameSheet = true }
                     Divider()
-                    Button("Reset") { delegate.loadFilingNames()}
+                    Button("Reset") { delegate.resetFilenames()}
                 } label: {
                     Text("Files")
                 }
@@ -160,10 +155,11 @@ fileprivate extension FileToCase_Form {
                 }
             }
             .sheet(isPresented: $showFileRenameSheet) {
-                Drive_Rename(files: delegate.files, saveOnServer: false, isSheet: true) { renamedFiles in
+                Text("This does not work for local files yet")
+                Drive_Rename(files: delegate.items.compactMap({$0.file}), saveOnServer: false, isSheet: true) { renamedFiles in
                     for renamedFile in renamedFiles {
-                        if let index = delegate.filingNames.firstIndex(where: {$0.id == renamedFile.id}) {
-                            delegate.filingNames[index].text = renamedFile.titleWithoutExtension
+                        if let index = delegate.items.firstIndex(where: {$0.id == renamedFile.id}) {
+                            delegate.items[index].filename = renamedFile.titleWithoutExtension
                         }
                     }
                 }
@@ -217,6 +213,10 @@ fileprivate extension FileToCase_Form {
                         }
                 }
             }
+        }
+        .onAppear {
+            print("Current: \(current)")
+            print("Eligible: \(eligible)")
         }
     }
     

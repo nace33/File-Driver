@@ -11,11 +11,10 @@ import GoogleAPIClientForREST_Drive
 
 @Observable
 final class FileToCase_Delegate {
-    var justFiled : [GTLRDrive_File]? = nil
+    var justFiled : [FileToCase_Item]? = nil
     
-    var files : [GTLRDrive_File] = [] {
+    var items : [FileToCase_Item] = [] {
         didSet {
-            
             try? self.loadSuggestions()
         }
     }
@@ -23,6 +22,7 @@ final class FileToCase_Delegate {
     //Loading
     var isLoading : Bool   = true
     var isFiling  : Bool   = false
+    var progress  : Double = 0.0
     var error     : Error?
     var status    : String = ""
     var filter    : String = ""
@@ -56,13 +56,12 @@ final class FileToCase_Delegate {
             self.text = file.titleWithoutExtension
         }
     }
-    var filingNames       : [FileName]          = []
     private(set) var filingTags        : [Case.Tag]          = []
     private(set) var filingContacts    : [Case.Contact]      = []
     private(set) var filingContactData : [Case.ContactData]  = []
-                 var filingTasks       : [Case.Task]         = []
+    var filingTasks                    : [Case.Task]         = []
     
-    var searchData : Suggestions.SearchData = .init(words: [], strings: [], contacts: [])
+    var suggestionData : Suggestions.Data = .init(words: [], strings: [], contacts: [])
 
 }
 
@@ -87,7 +86,7 @@ extension FileToCase_Delegate {
     var canAddToCase : Bool {
         guard selectedCase != nil,
                 selectedDestination != nil,
-                filingNames.filter({ $0.text.isEmpty}).isEmpty else { return false }
+                items.filter({ $0.filename.isEmpty}).isEmpty else { return false }
         return true
     }
 }
@@ -146,7 +145,6 @@ extension FileToCase_Delegate {
     }
     fileprivate func loadSpreadsheet() async throws {
         do {
-            print(#function)
             status = "Loading \(selectedCase?.title ?? "Spreadsheet")"
             try await selectedCase?.load(sheets: [.contacts, .contactData, .folders, .tags])
             try loadSuggestions()
@@ -161,8 +159,7 @@ extension FileToCase_Delegate {
 //                print(#function)
                 var limit = UserDefaults.standard.integer(forKey:BOF_Settings.Key.filingSuggestionLimit.rawValue)
                 if limit <= 0 { limit = 5 }
-                self.suggestions = try FilingController.shared.suggestions.getFolders(for: self.files, rootLimit: limit)
-                self.loadFilingNames()
+                self.suggestions = try Suggestions.shared.sugguestFolders(for: self.items, rootLimit: limit)
                 self.loadContactsAndTags()
                 self.loadTasks()
             } catch {
@@ -172,8 +169,10 @@ extension FileToCase_Delegate {
     }
     
     //LOAD FILE SPECIFIC
-    func loadFilingNames() {
-        self.filingNames = self.files.compactMap { .init($0)}
+    func resetFilenames() {
+        for item in items {
+            item.resetFilename()
+        }
     }
     @MainActor fileprivate func loadContactsAndTags() {
 //        print(#function)
@@ -181,9 +180,9 @@ extension FileToCase_Delegate {
         guard let selectedCase else { print("No Selected Case");  return }
         
         
-        searchData = FilingController.shared.suggestions.getSearchData(for: files)
-        var searchNames   = searchData.contacts.lowercasedSet(key: \.name)
-        var searchEmails  = searchData.contacts.lowercasedSet(key: \.email)
+        suggestionData    = Suggestions.Data.merge(items.map(\.suggestionData))
+        var searchNames   = suggestionData.contacts.lowercasedSet(key: \.name)
+        var searchEmails  = suggestionData.contacts.lowercasedSet(key: \.email)
         let allEmailData  = Set(selectedCase.contactData.filter { $0.category.lowercased() == "email" })
         //searchData.contacts already extracted names/emails from searchData.words
         //That was done prior to selectedCase being loaded.  Now search for caseNames in selectedCase.contacts
@@ -207,7 +206,7 @@ extension FileToCase_Delegate {
         }
         
         //Add New Contacts
-        for searchContact in searchData.contacts {
+        for searchContact in suggestionData.contacts {
             if searchEmails.contains(searchContact.email) && searchNames.contains(searchContact.name.lowercased()) {
                     let newContact = Case.Contact(name: searchContact.name)
                     foundContact.insert(newContact)
@@ -226,7 +225,7 @@ extension FileToCase_Delegate {
         
         
         //Tags
-        let mergedString = searchData.mergedString
+        let mergedString = suggestionData.mergedString
         if UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingSuggestionPartialTagMatch.rawValue) {
             filingTags = selectedCase.tags.filter({$0.name.hasWordIntersection(mergedString)})
         } else {
@@ -402,7 +401,7 @@ extension FileToCase_Delegate {
 
 //MARK: - Sheet Rows
 fileprivate extension FileToCase_Delegate {
-    var pathFolders   : [GTLRDrive_File] {
+    var pathFolders        : [GTLRDrive_File] {
         guard let selectedCase, let selectedDestination else { return [] }
         
         let stackFolders = stack.filter { folder  in
@@ -412,42 +411,42 @@ fileprivate extension FileToCase_Delegate {
         }
         return stackFolders + [selectedDestination]
     }
-    var newFolderRows : [Case.Folder] {
+    var newFolderRows      : [Case.Folder] {
         guard let selectedCase else { return [] }
         let folderIDs = selectedCase.folders.map(\.folderID)
         return pathFolders.filter { !folderIDs.contains($0.id)}
                           .compactMap({ Case.Folder(file: $0)})
     }
-    var newContactRows : [Case.Contact] {
+    var newContactRows     : [Case.Contact] {
         filingContacts.filter { !contactIsInSpreadsheet($0.id)}
     }
     var newContactDataRows : [Case.ContactData] {
         filingContactData.filter { !contactDataIsInSpreadsheet($0.id)}
     }
-    var newTagRows : [Case.Tag] {
+    var newTagRows         : [Case.Tag] {
         filingTags.filter { !tagIsInSpreadsheet($0.id)}
     }
-    var newFileRows : [Case.File] {
-        return files.compactMap { file in
-            Case.File(fileID: file.id,
-                      name: file.titleWithoutExtension,
-                      mimeType: file.mime.rawValue,
-                      fileSize: file.fileSizeString,
+    var newFileRows        : [Case.File] {
+        items.compactMap { item in
+           Case.File(fileID: item.file.id,
+                      name: item.file.titleWithoutExtension,
+                      mimeType: item.file.mime.rawValue,
+                      fileSize: item.file.fileSizeString,
                       folderIDs: pathFolders.map(\.id),
                       contactIDs: filingContacts.map(\.id),
                       tagIDs: filingTags.map(\.id),
                       idDateString: Date.idString)
         }
     }
-    var newTaskRows : [Case.Task] {
+    var newTaskRows        : [Case.Task] {
         for (index, _) in filingTasks.enumerated() {
-            filingTasks[index].fileIDs = files.compactMap(\.id)
+            filingTasks[index].fileIDs = items.compactMap(\.file.id)
             filingTasks[index].contactIDs = filingContacts.map(\.id)
             filingTasks[index].tagIDs = filingTags.map(\.id)
         }
         return filingTasks
     }
-    var newSheetRows : [any SheetRow] {
+    var newSheetRows       : [any SheetRow] {
         var sheetRows : [any SheetRow] = []
         sheetRows += newFolderRows
         sheetRows += newContactRows
@@ -460,38 +459,109 @@ fileprivate extension FileToCase_Delegate {
 }
 
 
-//MARK: - Add to Case
+//MARK: - Add to Case Workflow
 extension FileToCase_Delegate {
-    func addToCase() async {
-        guard canAddToCase else { return }
+    func fileLater(_ destinationID:String) async -> [FileToCase_Item]? {
         do throws (Filing_Error){
             isLoading = true
             isFiling  = true
-//            try await moveFiles()
-            try await updateSpreadsheet()
-            try await updateSuggestions()
-        
-            successfullyAddedToCase()
+            progress  = 0.0
+            try await uploadLocalItemsTo(destinationID)
+            progress  = 0.0
             isLoading = false
             isFiling  = false
+            return items.filter { $0.file.parents?.first == destinationID }
         } catch {
             isFiling  = false
             isLoading = false
             self.error = error
+            return nil
+        }
+    }
+    func addToCase() async -> [FileToCase_Item]? {
+        guard canAddToCase else { return nil }
+        do throws (Filing_Error){
+            guard let selectedDestination else { throw .destinationNotSelected }
+            isLoading = true
+            isFiling  = true
+            progress  = 0.0
+            try await moveFiles()
+            try await updateSpreadsheet()
+            try await updateSuggestions()
+        
+            successfullyAddedToCase()
+            progress  = 0.0
+            isLoading = false
+            isFiling  = false
+            return items.filter { $0.file.parents?.first == selectedDestination.id }
+        } catch {
+            isFiling  = false
+            isLoading = false
+            self.error = error
+            return nil
         }
     }
     func moveFiles() async throws(Filing_Error) {
         do throws(Filing_Error) {
             guard let selectedDestination else { throw .destinationNotSelected }
-            status = "Moving Files..."
-            let tuples : [(fileID:String, parentID:String, destinationID:String)] = files.compactMap { file in
-                    (fileID:file.id, parentID:file.parents?.first ?? "", destinationID:selectedDestination.id)
+            try await moveFromFilingDriveToDestination()
+            try await uploadLocalItemsTo(selectedDestination.id)
+        } catch {
+            throw error
+        }
+    }
+    func moveFromFilingDriveToDestination() async throws(Filing_Error) {
+        do throws(Filing_Error) {
+            guard let selectedDestination else { throw .destinationNotSelected }
+            let filesToMove = items.compactMap({$0.file})
+            if filesToMove.count > 0 {
+                status = "Moving Files..."
+                let tuples : [(fileID:String, parentID:String, destinationID:String)] = filesToMove.compactMap { file in
+                    if file.parents?.first != selectedDestination.id {
+                        return (fileID:file.id, parentID:file.parents?.first ?? "", destinationID:selectedDestination.id)
+                    }
+                    return nil //file already moved, this could be a retry
                 }
-            do {
-                _ = try await Drive.shared.move(tuples: tuples)
-            } catch  {
-                throw Filing_Error.filesNotMoved(error.localizedDescription)
+                do {
+                    let result = try await Drive.shared.move(tuples: tuples)
+                    for success in result.successes ?? [:] {
+                        if let uploadedFile = success.value as? GTLRDrive_File,
+                           let item = items.first(where: {$0.file.id == uploadedFile.id}) {
+                            item.file.parents = uploadedFile.parents
+                            item.file.name    = uploadedFile.name
+                            print("Updated: \(item.filename)")
+                        }
+                    }
+                } catch  {
+                    throw Filing_Error.filesNotMoved(error.localizedDescription)
+                }
             }
+        } catch {
+            throw error
+        }
+    }
+    func uploadLocalItemsTo(_ destinationID:String) async throws(Filing_Error) {
+        //this can be called when adding to a case
+        //or when user wants to upload a local file to Filing Drive
+        do throws(Filing_Error) {
+//            let filesToUpload = self.items.filter { $0.file == nil && $0.localURL != nil }
+//            if items.count > 0 {
+//                for item in items {
+//                    status = "Uploading \(item.filename)"
+//                    let appProp = item.pdfGmailThread?.driveAppProperties
+//                    do {
+//                        let uploadedFile =  try await Drive.shared.upload(url:item.localURL!, filename:item.filename, to:destinationID, appProperties:appProp) { progress in
+//                            self.progress = progress
+//                        }
+//                        if let index = items.firstIndex(of: item) {
+//                            items[index].file = uploadedFile
+//                        }
+//                    } catch {
+//                        throw .uploadFailed(item.filename, error.localizedDescription)
+//                    }
+//                }
+//                if progress < 1 { progress = 1.0}
+//            }
         } catch {
             throw error
         }
@@ -557,7 +627,7 @@ extension FileToCase_Delegate {
             guard let selectedCase else { throw .caseNotSelected }
             status = "Filed!"
             do {
-                try await FilingController.shared.suggestions.add(newSheetRows, to : [selectedDestination], root: selectedCase.file)
+                try await Suggestions.shared.update(newSheetRows, to : [selectedDestination], root: selectedCase.file)
             } catch {
                 throw Filing_Error.suggestionsNotUpdated(error.localizedDescription)
             }
@@ -567,8 +637,8 @@ extension FileToCase_Delegate {
         }
     }
     func successfullyAddedToCase() {
-        justFiled = files
-        files.removeAll()
+        justFiled = items
+        items.removeAll()
         selectedDestination = nil
         stack.removeAll()
         selectedCase = nil

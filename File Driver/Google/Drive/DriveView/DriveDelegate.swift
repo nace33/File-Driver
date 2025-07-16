@@ -87,8 +87,8 @@ class DriveDelegate  {
     
     
     public enum Action : String, CaseIterable {
-        case select, rename, newFolder, move, share, upload, download, delete, refresh, filter, preview
-        static var toolbarActions : [Action] { [.select, .rename, .newFolder, .share, .upload, .download, .delete, .refresh, .filter]}
+        case select, rename, newFolder, move, share, upload, download, trash, refresh, filter, preview
+        static var toolbarActions : [Action] { [.select, .rename, .newFolder, .share, .upload, .download, .trash, .refresh, .filter]}
         var title       : String { rawValue.camelCaseToWords() }
         var iconName    : String {
             switch self {
@@ -102,7 +102,7 @@ class DriveDelegate  {
                 "folder.badge.plus"
             case .move:
                 "inset.filled.rectangle.and.cursorarrow"
-            case .delete:
+            case .trash:
                 "trash"
             case .share:
                 "person.2.fill"
@@ -285,7 +285,7 @@ extension DriveDelegate {
             canUpload(to: file)
         case .download:
             canDownload(file:file)
-        case .delete:
+        case .trash:
             canDelete(file: file)
         case .move, .filter, .preview:
             false
@@ -300,7 +300,7 @@ extension DriveDelegate {
         } else {
             files.allSatisfy { file in
                 switch action {
-                case .rename, .move, .delete, .newFolder:
+                case .rename, .move, .trash, .newFolder:
                     canPerform(action, on: file)
                 default:
                     false
@@ -314,7 +314,7 @@ extension DriveDelegate {
             performActionNewFolder()
         case .rename:
             performActionRename(files: files.sorted(by: {$0.title.ciCompare($1.title)}))
-        case .delete:
+        case .trash:
             performActionDelete(files:files.sorted(by: {$0.title.ciCompare($1.title)}))
         case .share:
             performActionShare(files.first)

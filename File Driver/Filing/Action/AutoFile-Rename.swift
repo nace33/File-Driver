@@ -99,7 +99,7 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
     }
     
     
-    func resultString(for url:URL, thread:PDFGmailThread?) -> String? {
+    func resultString(for url:URL, thread:EmailThread?) -> String? {
         switch self {
         case .filename:
             url.filename
@@ -108,13 +108,13 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
         case .filedate:
             url.dateCreated.yyyymmdd
         case .emailDate:
-            thread?.mostRecentHeader.date.yyyymmdd ?? ""
+            thread?.mostRecentHeader(in: thread?.fullHeaders ?? [])?.dateInfo?.date.yyyymmdd ?? ""
         case .emailHost:
-            thread?.mostRecentHeader.from?.emailHost ?? ""
+            thread?.mostRecentHeader(in: thread?.fullHeaders ?? [])?.from?.emailHost ?? ""
         case .emailSender:
-            thread?.mostRecentHeader.from?.name ?? ""
+            thread?.mostRecentHeader(in: thread?.fullHeaders ?? [])?.from?.name ?? ""
         case .emailSubject:
-            thread?.intro.subject
+            thread?.subject
         case .space:
             " "
         default :
@@ -122,36 +122,41 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
         }
     }
     
-    static func proposedFilename(for url:URL, thread:PDFGmailThread?) -> String? {
+    static func proposedFilename(for url:URL, thread:EmailThread?, blockWords:[String]) -> String? {
         let componentString = thread == nil ? BOF_Settings.Key.filingAutoRenameComponents.rawValue : BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue
         guard var stringComponents = UserDefaults.standard.value(forKeyPath:componentString) as? String else { return nil}
         stringComponents = stringComponents.replacingOccurrences(of: "[", with: "")
         stringComponents = stringComponents.replacingOccurrences(of: "]", with: "")
         stringComponents = stringComponents.replacingOccurrences(of: "\"", with: "")
+   
         let components = stringComponents.split(separator: ",")
         let renameComponents = components.compactMap { Self(rawValue: $0.trimmingCharacters(in: .whitespaces)) }
 
-        return renameComponents.compactMap { $0.resultString(for: url, thread: thread)}.joined()
+
+        var proposedFilename = renameComponents.compactMap { $0.resultString(for: url, thread: thread)}.joined()
+        
+        for blockWord in blockWords {
+            proposedFilename = proposedFilename.replacingOccurrences(of: blockWord, with: "").trimmingCharacters(in: .whitespaces)
+        }
+        return proposedFilename
     }
-//    static func createGmailThread(url:URL)  throws -> PDFGmailThread?  {
-//        guard url.isPDF else { return nil }
-//        guard let pdf = PDFDocument(url: url) else { throw NSError.quick("Unable to create PDF Document from \(url.absoluteString)")}
-//        return PDFGmail_Thread(pdf: pdf)
-//    }
-    static func generateFilename(for url:URL, thread:PDFGmailThread? = nil) throws -> String? {
+
+    static func generateFilename(for url:URL, thread:EmailThread? = nil, blockWords:[String]) throws -> String? {
         let automaticallyRenameFiles = UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRename.rawValue)
         guard automaticallyRenameFiles else { return nil }
         guard url.isFileURL            else {  return nil }
-        return  proposedFilename(for: url, thread:thread ?? url.pdfGmailThread)
+        return  proposedFilename(for: url, thread:thread ?? url.emailThread, blockWords: blockWords)
     }
-    static func autoRenameLocalFile(url:URL?, thread:PDFGmailThread? = nil)  throws -> URL {
+    static func autoRenameLocalFile(url:URL?, thread:EmailThread? = nil, blockWords:[String])  throws -> URL {
         do {
             guard let url else { throw NSError.quick("No URL was passed to the auto-renamer.")}
             _ = url.startAccessingSecurityScopedResource()
-            guard let proposedFilename = try generateFilename(for: url, thread: thread) else { throw NSError.quick("Proposed filename unable to be generated.") }
+            
+            guard let proposedFilename = try generateFilename(for: url, thread: thread, blockWords:blockWords) else { throw NSError.quick("Proposed filename unable to be generated.") }
             let directory = url.deletingLastPathComponent()
+
+         
             let uniqueURL = FileManager.uniqueURL(for: proposedFilename, ext:url.pathExtension, at:directory)
-            print("Rename to: \(proposedFilename) at: \(uniqueURL.absoluteString)")
             try FileManager.default.moveItem(at: url, to: uniqueURL)
             url.stopAccessingSecurityScopedResource()
             return uniqueURL

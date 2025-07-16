@@ -10,8 +10,12 @@ import SwiftUI
 
 
 struct DriveView_Header: View {
-    var title : String = ""
-    var showActionBar : Bool = true
+    let title : String
+    let showActionBar : Bool
+    init(title: String, showActionBar: Bool = true) {
+        self.title = title
+        self.showActionBar = showActionBar
+    }
     @Environment(DriveDelegate.self) var delegate
     var body: some View {
         HStack {
