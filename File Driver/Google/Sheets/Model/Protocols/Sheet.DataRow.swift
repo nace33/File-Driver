@@ -12,7 +12,7 @@ import GoogleAPIClientForREST_Drive
 
 
 //MARK: - Protocol
-protocol SheetRow : Identifiable {
+protocol SheetRow : Identifiable, Sendable {
     var sheetID : Int                    { get }
     init?(rowData:GTLRSheets_RowData)
     var rowData : GTLRSheets_RowData     { get }

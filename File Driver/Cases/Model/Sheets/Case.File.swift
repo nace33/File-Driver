@@ -10,13 +10,13 @@ import GoogleAPIClientForREST_Sheets
 import BOF_SecretSauce
 //[.fileID, .name, .mimeType, .fileSize, .folderIDs, .contactIDs, .tagIDs, .idDateString, .snippet, .note]
 extension Case {
-    struct File : Identifiable {
+    struct File : Identifiable, Hashable {
         var id            : String { fileID }
         var fileID        : String
         var name          : String
         var mimeType      : String
         var fileSize      : String
-        var folderIDs     : [String]
+        var folderID      : String
         var contactIDs    : [String]
         var tagIDs        : [String]
         var idDateString  : String
@@ -46,9 +46,9 @@ extension Case.File : SheetRow {
         guard let name       = values[1].formattedValue else { return nil }
         guard let mimeType   = values[2].formattedValue else { return nil }
         guard let fileSize   = values[3].formattedValue else { return nil }
-        guard let folderIDs  = values[4].formattedValue else { return nil }
-        guard let contactIDs = values[5].formattedValue else { return nil }
-        guard let tagIDs     = values[6].formattedValue else { return nil }
+        guard let folderID   = values[4].formattedValue else { return nil }
+        let contactIDs       = values[5].formattedValue  ?? ""
+        let tagIDs           = values[6].formattedValue  ?? ""
         guard let idDate     = values[7].formattedValue else { return nil }
 
         let snippet          = values.count >= 9  ? values[8].formattedValue ?? "" : ""
@@ -58,7 +58,7 @@ extension Case.File : SheetRow {
         self.name           = name
         self.mimeType       = mimeType
         self.fileSize       = fileSize
-        self.folderIDs      = folderIDs.commify
+        self.folderID       = folderID
         self.contactIDs     = contactIDs.commify
         self.tagIDs         = tagIDs.commify
         self.idDateString   = idDate
@@ -71,7 +71,7 @@ extension Case.File : SheetRow {
         Self.stringData(name),
         Self.stringData(mimeType),
         Self.stringData(fileSize),
-        Self.stringData(folderIDs.commify),
+        Self.stringData(folderID),
         Self.stringData(contactIDs.commify),
         Self.stringData(tagIDs.commify),
         Self.stringData(idDateString),

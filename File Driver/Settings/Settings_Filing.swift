@@ -9,6 +9,15 @@ import SwiftUI
 import SwiftData
 import BOF_SecretSauce
 
+struct Tester : View {
+    let blocked :FilerBlockText
+    var body: some View {
+        Picker("Style", selection:Bindable(blocked).category) {
+            Text("Exact").tag(FilerBlockText.Category.exact)
+            Text("Contains").tag(FilerBlockText.Category.contains)
+        }.fixedSize()
+    }
+}
 struct Settings_Filing: View {
     typealias AutoRenamer = AutoFile_Rename
     @AppStorage(BOF_Settings.Key.filingDrive.rawValue)                     var driveID            : String = ""
@@ -17,93 +26,120 @@ struct Settings_Filing: View {
     @AppStorage(BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue) var emailComponents    : [AutoRenamer]  = AutoRenamer.defaultEmail
     
     @AppStorage(BOF_Settings.Key.filingSuggestionLimit.rawValue)           var suggestionLimit      : Int = 5
-    @AppStorage(BOF_Settings.Key.filingSuggestionPartialTagMatch.rawValue)        var allowTagPartialMatch   : Bool = false
-    @AppStorage(BOF_Settings.Key.filingAutoRenameBlockedWords.rawValue)           var blockedRenameWords     : [String] = ["Nasser Law Firm Mail - "]
 
-    
-    
+    @AppStorage(BOF_Settings.Key.filingAllowSuggestions.rawValue)          var allowSuggestions    : Bool = true
+    @AppStorage(BOF_Settings.Key.filingFormContactMatch.rawValue)          var allowContactMatch   : Bool = true
+    @AppStorage(BOF_Settings.Key.filingFormTagMatch.rawValue)              var allowTagMatch       : Bool = true
+
     @Environment(\.modelContext) private var modelContext
-    @Query(filter:#Predicate<WordSuggestion>{ $0.isBlocked == true },sort:\WordSuggestion.text) private var blockedWords: [WordSuggestion]
-    @State private var showNewBlockWordSheet: Bool = false
+    @Query(sort:\FilerBlockText.text) private var blockedRenameWords: [FilerBlockText]
+    
+    
+    @State private var showDriveSelector: Bool = false
     @State private var showNewBlockedAutoNameSheet: Bool = false
+    @Environment(\.openWindow) var openWindow
 
     var body: some View {
         Form {
-            TextField("DriveID", text: $driveID)
-            
-            Section("Importing") {
-                Toggle("Automatically Rename Files", isOn:$autoRenameFiles)
-                LabeledContent("Name Format")  { components($filenameComponents, showEmail: false)  }
-                    .disabled(!autoRenameFiles)
-                LabeledContent("Email Format") { components($emailComponents   , showEmail: true )  }
-                    .disabled(!autoRenameFiles)
-                LabeledContent {
-                    VStack(alignment:.trailing) {
-                        ForEach(blockedRenameWords, id:\.self) { word in
-                            Text(word)
-                                .textSelection(.disabled)
-                                .contextMenu {
-                                    Button("Delete") {
-                                        blockedRenameWords.removeAll(where: {$0 == word})
-                                    }
-                                }
+            Section("Default location to save documents to be filed later") {
+                TextField("DriveID", text: $driveID)
+                LabeledContent("") {
+                    Spacer()
+                    Button("Select") { showDriveSelector = true }
+                        .sheet(isPresented: $showDriveSelector) {
+                            DriveSelector("Select Filing Drive", showCancelButton: true, canLoadFolders: false, fileID: $driveID)
+                                .frame(minHeight: 400)
                         }
-                    }
-                } label : {
-                    HStack {
-                        Text("Blocked Words")
-                        Button {showNewBlockedAutoNameSheet.toggle() } label: { Image(systemName:"plus")}
-                            .buttonStyle(.plain)
-                            .foregroundStyle(.blue)
-                    }
                 }
-                
             }
-            
-            Section {
-                TextField("Suggestions Shown", value: $suggestionLimit, format: .number)
-                Toggle("Allow Tag Partial Match", isOn: $allowTagPartialMatch)
-
-                LabeledContent("Block Words") {
-                    if blockedWords.isEmpty {
-                        Text("No words are blocked.").foregroundStyle(.secondary)
-                    } else {
-                        VStack(alignment:.trailing) {
-                            ForEach(blockedWords, id:\.self) {b in
-                                Text(b.text)
-                                    .textSelection(.disabled)
-                                    .contextMenu {
-                                        Button("Remove") { modelContext.delete(b)}
-                                    }
-                            }
+            blockTextSection
+            filingFormSection
+            importSection
+        }
+            .formStyle(.grouped)
+            .sheet(isPresented: $showNewBlockedAutoNameSheet) {
+                TextSheet(title: "Block Text", prompt: "Add") { text in
+                    let alreadyBlocked = blockedRenameWords.compactMap({$0.text.lowercased()})
+                    if !alreadyBlocked.contains(text.lowercased() ){
+                        let newBlocked = FilerBlockText(text: text, category: .exact)
+                        modelContext.insert(newBlocked)
+                    }
+                    return nil
+                }
+            }
+    }
+    @ViewBuilder var blockTextSection : some View {
+        Section {
+            VStack(alignment:.trailing) {
+                ForEach(blockedRenameWords, id:\.self) { blocked in
+                    LabeledContent{
+                        Picker("Style", selection:Bindable(blocked).category) {
+                            Text("Exact").tag(FilerBlockText.Category.exact)
+                            Text("Contains").tag(FilerBlockText.Category.contains)
+                        }.fixedSize()
+                            .labelsHidden()
+                    } label: {
+                        Text(blocked.text)
+                    }
+                    .contextMenu {
+                        Button("Delete") {
+                            modelContext.delete(blocked)
                         }
                     }
                 }
-            } header: {
-                HStack {
-                    Text("Suggestions")
-                    Button {showNewBlockWordSheet.toggle() } label: { Image(systemName:"plus")}
+            }
+        } header: {
+            HStack {
+                Text("Block Text from filenames and suggestions")
+                Button {showNewBlockedAutoNameSheet.toggle() } label: { Image(systemName:"plus")}
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.blue)
+                Spacer()
+                if blockedRenameWords.count > 0 {
+                    Text("Style").foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+    @ViewBuilder var importSection : some View {
+        Section("File Imports") {
+            Toggle("Automatically Rename Files", isOn:$autoRenameFiles)
+            LabeledContent("Name Format")  { components($filenameComponents, showEmail: false)  }
+                .disabled(!autoRenameFiles)
+            LabeledContent("Email Format") { components($emailComponents   , showEmail: true )  }
+                .disabled(!autoRenameFiles)
+    
+        }
+    }
+    @ViewBuilder var filingFormSection: some View {
+        Section("Filing Form") {
+            LabeledContent("Case Suggestions") {
+                VStack(alignment:.trailing) {
+                    Toggle("Case Suggestions", isOn: $allowSuggestions)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                    HStack {
+                        Text("Show:")
+                            .foregroundStyle(.secondary)
+                        TextField("Show:", value: $suggestionLimit, format: .number)
+                            .fixedSize()
+                            .disabled(!allowSuggestions)
+                            .labelsHidden()
+
+                    }
+                    
+                    Button("Open Database") {
+                        openWindow(id: "SwiftData", value:BOF_SwiftDataView.ModelType.suggestions)
+                    }
                         .buttonStyle(.plain)
                         .foregroundStyle(.blue)
                 }
             }
-          
-        }
-        .formStyle(.grouped)
-        .sheet(isPresented: $showNewBlockWordSheet) {
-            TextSheet(title: "Block Word", prompt: "Add") { text in
-                try? Suggestions.shared.block(text)
-                return nil
-            }
-        }
-        .sheet(isPresented: $showNewBlockedAutoNameSheet) {
-            TextSheet(title: "Block Word From Auto Renamer", prompt: "Add") { text in
-                if !blockedRenameWords.cicContains(string: text){
-                    blockedRenameWords.append(text)
-                    blockedRenameWords.sort {$0.lowercased() < $1.lowercased()  }
-                }
-                return nil
-            }
+         
+
+            
+            Toggle("Add Contacts found in filing documents", isOn: $allowContactMatch)
+            Toggle("Add Tags found in filing documents", isOn: $allowTagMatch)
         }
     }
 }

@@ -8,10 +8,25 @@
 import SwiftUI
 
 @Observable final public class VLoader_Item  {
-    var isLoading = true
+    fileprivate(set) var isLoading : Bool
     var status    = ""
     var progress : Double = 0.0
-    var error    : Error?
+    fileprivate(set) var error    : Error?
+    private(set) var increment = 0 {
+        didSet {
+            isLoading = increment != 0
+            if !isLoading { progress = 0 }
+        }
+    }
+    init(isLoading:Bool = true) {
+        self.isLoading = isLoading
+    }
+    func start() { increment += 1}
+    func stop(_ error:Error? = nil)  {
+        increment -= 1
+        if let error { self.error = error }
+    }
+    func clearError() {self.error = nil }
 }
 
 

@@ -133,10 +133,7 @@ extension CasesView {
     func loadCases() async {
         do {
             isLoading = true
-            let caseLabelID = Case_OLD.DriveLabel.Label.id.rawValue
-            cases = try await Drive.shared.get(filesWithLabelID:caseLabelID)
-                                    .compactMap { Case($0)}
-                                    .sorted(by: {$0.title.lowercased() < $1.title.lowercased()})
+            cases = try await Case.allCases()
             isLoading = false
         } catch {
             isLoading = false

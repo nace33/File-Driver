@@ -17,14 +17,14 @@ struct Filing_WebView: View {
     
     @State private var webView      : WKWebView?
     @State private var delegate     = Web_View.Delegate()
-    @State private var fileItem     : FileToCase_URLItem? = nil
+    @State private var fileItem     : Filer_Item? = nil
 
     var body: some View {
         Web_View(url, delegate: delegate)
             .task(id:url)                     {  updateWebView() }
-            .sheet(item: $fileItem)    {
-                FilingSheet(urlItems:[$0], fileItems:[])
-                    .frame(minWidth: 600, minHeight: 400)
+            .sheet(item: $fileItem)    { item in
+                FilingSheet(items:[item])
+                    .frame(minWidth: 800, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
             }
             .toolbar {
                 Button("Create PDF ") { createPDF() }
@@ -35,7 +35,7 @@ struct Filing_WebView: View {
 
     func createPDF() {
         guard let webView, let url = webView.url else {  return   }
-        self.fileItem = FileToCase_URLItem(url: url, filename:  webView.title ?? "Download", category: .remotePDFURL)
+        self.fileItem = Filer_Item(url: url, filename:  webView.title ?? "Email", category: .remotePDFURL)
     }
     
     
@@ -46,7 +46,7 @@ struct Filing_WebView: View {
         }, downloadPolicy: { navigation in
             if Web_View.Delegate.isStandardDownload(navigation) {
                 if let url = navigation.response.url {
-                    self.fileItem = FileToCase_URLItem(url: url, filename:navigation.response.suggestedFilename ?? "Download", category: .remoteURL)
+                    self.fileItem = Filer_Item(url: url, filename:navigation.response.suggestedFilename ?? "Attachment", category: .remoteURL)
                 }
                 return .cancel
             }

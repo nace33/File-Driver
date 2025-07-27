@@ -464,6 +464,28 @@ extension Drive {
             throw error
         }
     }
+    func move(files:[GTLRDrive_File], to destinationID:String) async throws -> GTLRBatchResult {
+        let batch = GTLRBatchQuery()
+        for file in files {
+            let newFile = GTLRDrive_File()
+            newFile.name = file.name
+            let query = GTLRDriveQuery_FilesUpdate.query(withObject:newFile, fileId:file.id, uploadParameters: nil)
+            query.removeParents = file.parents?.first
+            query.addParents = destinationID
+            
+            query.fields = GTLRDrive_File.queryFileFields
+            query.supportsAllDrives = true
+            
+            batch.addQuery(query)
+        }
+        let fetcher = Google_Fetcher<GTLRBatchResult>(service: service, scopes: scopes)
+        do {
+        
+            return try await Google.executeBatch(batch, fetcher: fetcher)
+        } catch {
+            throw error
+        }
+    }
     func move(tuples:[(fileID:String, parentID:String, destinationID:String)]) async throws -> GTLRBatchResult {
         let batch = GTLRBatchQuery()
         for tuple in tuples {

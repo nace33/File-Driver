@@ -9,15 +9,18 @@ import SwiftUI
 import SwiftData
 
 struct BOF_SwiftDataView: View {
-    @State var modelType: ModelType = .suggestions
-    enum ModelType : String, CaseIterable { case sidebar, suggestions }
+    init(modelType: ModelType) {
+        self.modelType = modelType
+    }
+    @State var modelType: ModelType
+    enum ModelType : String, CaseIterable, Codable { case sidebar, suggestions }
     var body: some View {
         Group {
             switch modelType {
             case .sidebar:
                 BOF_SwiftDataView_Sidebar()
             case .suggestions:
-                BOF_SwiftDataView_Suggestions()
+                SD_FilerView()
             }
         }
             .toolbar {
@@ -34,7 +37,7 @@ struct BOF_SwiftDataView: View {
 
 #Preview {
     @Previewable @State var swiftData = BOF_SwiftData.shared
-    BOF_SwiftDataView()
+    BOF_SwiftDataView(modelType: .sidebar)
         .modelContainer(swiftData.container)
 }
 

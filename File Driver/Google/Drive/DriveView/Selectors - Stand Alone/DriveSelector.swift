@@ -11,30 +11,35 @@ import GoogleAPIClientForREST_Drive
 struct DriveSelector: View {
     let title : String
     let canLoadFolders : Bool
+    let showCancelButton : Bool
     @Binding var file   : GTLRDrive_File
     @Binding var fileID : String
     typealias fileSelection = (GTLRDrive_File)-> Void
     var selected : fileSelection?
     @State private var driveDelegate : DriveDelegate
-
-    init(_ title: String, canLoadFolders:Bool, fileID: Binding<String>, mimeTypes:[GTLRDrive_File.MimeType] = [.folder]) {
+    @Environment(\.dismiss) var dismiss
+    
+    init(_ title: String, showCancelButton:Bool = false, canLoadFolders:Bool, fileID: Binding<String>, mimeTypes:[GTLRDrive_File.MimeType] = [.folder]) {
         self.title = title
+        self.showCancelButton = showCancelButton
         _fileID = fileID
         driveDelegate = DriveDelegate.selecter(mimeTypes: mimeTypes)
         self.selected = nil
         self.canLoadFolders = canLoadFolders
         _file = .constant(GTLRDrive_File())
     }
-    init(_ title: String, canLoadFolders:Bool, mimeTypes:[GTLRDrive_File.MimeType] = [.folder], selected:@escaping fileSelection) {
+    init(_ title: String, showCancelButton:Bool = false, canLoadFolders:Bool, mimeTypes:[GTLRDrive_File.MimeType] = [.folder], selected:@escaping fileSelection) {
         self.title = title
+        self.showCancelButton = showCancelButton
         _fileID = .constant("")
         driveDelegate = DriveDelegate.selecter(mimeTypes: mimeTypes)
         self.selected = selected
         self.canLoadFolders = canLoadFolders
         _file = .constant(GTLRDrive_File())
     }
-    init(_ title: String, canLoadFolders:Bool, file:Binding<GTLRDrive_File>, mimeTypes:[GTLRDrive_File.MimeType] = [.folder]) {
+    init(_ title: String, showCancelButton:Bool = false, canLoadFolders:Bool, file:Binding<GTLRDrive_File>, mimeTypes:[GTLRDrive_File.MimeType] = [.folder]) {
         self.title = title
+        self.showCancelButton = showCancelButton
         _fileID = .constant("")
         driveDelegate = DriveDelegate.selecter(mimeTypes: mimeTypes)
         self.selected = nil
@@ -53,6 +58,16 @@ struct DriveSelector: View {
                     selected?(newValue)
                     self.file = newValue
                     self.fileID = newValue.id
+                    if showCancelButton {
+                        dismiss()
+                    }
+                }
+            }
+            .toolbar {
+                if showCancelButton {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss()}
+                    }
                 }
             }
     }

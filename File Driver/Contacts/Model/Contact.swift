@@ -108,6 +108,7 @@ public extension Contact {
             self.error = nil
             isLoading = true
             print("Convert to Sheets")
+            try await Task.sleep(for: .seconds(2))
             /*
             let results = try await Google_Sheets.shared.getValues(spreadsheetID:id, ranges: sheets.map({$0.rawValue}))
             for result in results {
@@ -177,6 +178,7 @@ public extension Contact {
                 infos.append(newContactInfo)
             }
             print("Convert to Sheets")
+            try await Task.sleep(for: .seconds(2))
 
 //            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName:Contact.Sheet.info.rawValue, row: newContactInfo.strings)
             resetOtherEditingInfos()
@@ -260,6 +262,7 @@ public extension Contact {
     func add(aCase:Contact.Case) async throws {
         do {
             print("Convert to Sheets")
+            try await Task.sleep(for: .seconds(2))
 
 //            _ = try await Google_Sheets.shared.append(spreadsheetID:id, sheetName: Contact.Sheet.cases.rawValue, row: aCase.strings)
             withAnimation {
@@ -303,6 +306,7 @@ public extension Contact {
     func delete(rowID:String, sheet:Contact.Sheet, isLastRow:Bool) async throws {
         do {
             print("Convert to Sheets")
+            try await Task.sleep(for: .seconds(2))
 
 //            if isLastRow {
 //                _ = try await Google_Sheets.shared.clear(rowID:rowID, sheetName: sheet.rawValue, spreadsheetID: id)
@@ -351,6 +355,7 @@ public extension Contact {
     func update(strings:[String], rowID:String, sheet:Contact.Sheet) async throws {
         do {
             print("Convert to Sheets")
+            try await Task.sleep(for: .seconds(2))
 
 //            _ = try await Google_Sheets.shared.update(values:strings, rowID:rowID, sheetName:sheet.rawValue, spreadsheetID:id)
         } catch {

@@ -10,6 +10,7 @@ import BOF_SecretSauce
 import PDFKit
 
 //MARK: Enum
+@MainActor
 enum AutoFile_Rename : String, CaseIterable, Codable {
     case filename, dateAdded, filedate, emailDate, emailHost, emailSender, emailSubject, space, openParenthesis, closeParenthesis, underscore, dash, period, openSquare, closeSquare, hashTag, at, money, asterisk
     static var allFilename     : [Self] { [.filename, .dateAdded] }
@@ -122,7 +123,7 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
         }
     }
     
-    static func proposedFilename(for url:URL, thread:EmailThread?, blockWords:[String]) -> String? {
+    static func proposedFilename(for url:URL, thread:EmailThread?) -> String? {
         let componentString = thread == nil ? BOF_Settings.Key.filingAutoRenameComponents.rawValue : BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue
         guard var stringComponents = UserDefaults.standard.value(forKeyPath:componentString) as? String else { return nil}
         stringComponents = stringComponents.replacingOccurrences(of: "[", with: "")
@@ -135,24 +136,25 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
 
         var proposedFilename = renameComponents.compactMap { $0.resultString(for: url, thread: thread)}.joined()
         
-        for blockWord in blockWords {
-            proposedFilename = proposedFilename.replacingOccurrences(of: blockWord, with: "").trimmingCharacters(in: .whitespaces)
-        }
+        proposedFilename = FilerBlockText.removeBlockedWords(from: proposedFilename)
+    
         return proposedFilename
     }
 
-    static func generateFilename(for url:URL, thread:EmailThread? = nil, blockWords:[String]) throws -> String? {
+    static func generateFilename(for url:URL, thread:EmailThread? = nil) throws -> String? {
         let automaticallyRenameFiles = UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRename.rawValue)
         guard automaticallyRenameFiles else { return nil }
         guard url.isFileURL            else {  return nil }
-        return  proposedFilename(for: url, thread:thread ?? url.emailThread, blockWords: blockWords)
+        return  proposedFilename(for: url, thread:thread ?? url.emailThread)
     }
-    static func autoRenameLocalFile(url:URL?, thread:EmailThread? = nil, blockWords:[String])  throws -> URL {
+    
+    static func autoRenameLocalFile(url:URL?, thread:EmailThread? = nil)  throws -> URL {
+        
         do {
             guard let url else { throw NSError.quick("No URL was passed to the auto-renamer.")}
             _ = url.startAccessingSecurityScopedResource()
             
-            guard let proposedFilename = try generateFilename(for: url, thread: thread, blockWords:blockWords) else { throw NSError.quick("Proposed filename unable to be generated.") }
+            guard let proposedFilename = try generateFilename(for: url, thread: thread) else { throw NSError.quick("Proposed filename unable to be generated.") }
             let directory = url.deletingLastPathComponent()
 
          
@@ -167,4 +169,11 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
         }
     }
 }
-
+//
+//extension String {
+//    static var blockedRenameWords : Set<String> {
+//        return  withCheckedContinuation { continuation in
+//            BOF_SwiftData.shared.getBlockedRenameWords()
+//        }
+//    }
+//}

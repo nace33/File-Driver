@@ -2,20 +2,19 @@
 //  FilingView.swift
 //  File Driver
 //
-//  Created by Jimmy on 6/19/25.
+//  Created by Jimmy Nasser on 7/23/25.
 //
 
 import SwiftUI
-import SwiftData
-
-
 
 struct FilingView: View {
+
     @AppStorage(BOF_Settings.Key.filingDrive.rawValue) var driveID : String = ""
     @State private var driveDelegate = DriveDelegate(actions: [.newFolder, .upload, .move, .rename, .trash, .filter, .preview])
 
     @State private var isFiling = false
-   
+    @State private var filerDelegate = Filer_Delegate(mode: .cases, actions:Filer_Delegate.Action.inlineActions)
+    
     var body: some View {
         if driveID.isEmpty {
             DriveSelector("Select Filing Drive", canLoadFolders: false, fileID: $driveID)
@@ -23,14 +22,16 @@ struct FilingView: View {
             DriveView("Shared Drive", delegate: $driveDelegate)
                 .disabled(isFiling)
                 .inspector(isPresented: .constant(true)) {
-                    let items = driveDelegate.selection.sorted(by: {$0.title.ciCompare($1.title)})
-                                                       .compactMap({FileToCase_Item($0)})
-                    FileToCase(items) { isFiling in
-                        self.isFiling = isFiling
-                    } filed: { filedItems in
-                        driveDelegate.filesWereRemoved(filedItems.compactMap({$0.file}))
-                        driveDelegate.selectFirstItem()
-                    }
+                    
+                    Filer_View(items: [], delegate: filerDelegate)
+                        .onChange(of: driveDelegate.selection, { _, _ in
+                            Task {
+                                let items = driveDelegate.selection
+                                                         .sorted(by: {$0.title.ciCompare($1.title)})
+                                                         .compactMap({Filer_Item(file:$0)})
+                                filerDelegate.items = items
+                            }
+                        })
                         .inspectorColumnWidth(min: 500, ideal: 500)
                 }
                 .onAppear() {
@@ -47,3 +48,7 @@ struct FilingView: View {
 }
 
 
+//
+//#Preview {
+//    FilingView()
+//}

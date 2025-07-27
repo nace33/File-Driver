@@ -34,8 +34,8 @@ struct File_DriverApp: App {
             }
 #endif
         
-        WindowGroup("SwiftData") {
-            BOF_SwiftDataView()
+        WindowGroup(id:"SwiftData", for:BOF_SwiftDataView.ModelType.self) { type in 
+            BOF_SwiftDataView(modelType: type.wrappedValue ?? .sidebar)
         }
             .modelContainer(swiftData.container)
 

@@ -67,11 +67,12 @@ struct DriveView_ActionMenu: View {
 
     @ViewBuilder func emailThread(_ thread:EmailThread) -> some View {
 //        Text(thread.mostRecentHeader?.dateInfo?.date ?? Date(), style:.date)
-        let subject = thread.subject.removeBlockedWords
+        let subject = thread.subject.removedBlockedWords
         Text(subject.isEmpty ? "No Subject" : subject)
         Divider()
      
         if thread.headers.count == 1 {
+            Text(thread.headers[0].dateInfo?.string ?? "No Date Found")
             emailHeader(thread.headers[0])
         } else {
             ForEach(thread.headers) { header in
@@ -108,3 +109,8 @@ struct DriveView_ActionMenu: View {
     }
 }
 
+fileprivate extension String {
+    var removedBlockedWords : String {
+        ""
+    }
+}

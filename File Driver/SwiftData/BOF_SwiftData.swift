@@ -14,7 +14,8 @@ struct BOF_SwiftData {
     var container: ModelContainer = {
         let schema = Schema([
             Sidebar_Item.self,
-            WordSuggestion.self
+            FilerBlockText.self,
+            FilerFolder.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         
@@ -46,15 +47,11 @@ extension BOF_SwiftData {
             print("Error; \(error)")
         }
     }
-    func getBlockedWords() -> Set<String>{
-        var fetchDescriptor = FetchDescriptor<WordSuggestion>()
-        fetchDescriptor.predicate = #Predicate { $0.isBlocked == true }
-        do {
-            let results = try container.mainContext.fetch( fetchDescriptor)
-            return Set(results.map(\.text))
-        } catch {
-            print("Error: \(error.localizedDescription)")
-            return []
-        }
+
+
+    
+   func fetch<T:PersistentModel>(_ descriptor: FetchDescriptor<T>) -> [T]? {
+        try? container.mainContext.fetch(descriptor)
     }
+
 }

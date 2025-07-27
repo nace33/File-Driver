@@ -21,6 +21,7 @@ final class Case  {
         guard let label = DriveLabel(file: file) else { return nil }
         self.init(file: file, label: label)
     }
+
     
     //variables that get loaded from the spreadsheet
     var isLoading                        = false
@@ -34,7 +35,14 @@ final class Case  {
     //Permissions
     var permissions : [GTLRDrive_Permission] = []
 
-
+    //Used for suggestions
+    var filingSheetRows : [any SheetRow] {
+       folders +
+       contacts +
+       contactData.filter ({ $0.category == "email"}) +
+       tags +
+       files
+    }
 }
 
 //MARK: Computed Properties {
@@ -50,6 +58,33 @@ extension Case {
     var status   : DriveLabel.Label.Field.Status   { label.status   }
     var opened   : Date                            { label.opened   }
     var closed   : Date?                           { label.closed   }
+    
+    var parentFolder : GTLRDrive_File {
+        let folder = GTLRDrive_File()
+        folder.identifier = folderID
+        folder.name = title
+        folder.mimeType = GTLRDrive_File.MimeType.sheet.rawValue
+        return folder
+    }
+    
+    static func allCases() async throws -> [Case] {
+        do {
+            return try await Drive.shared.get(filesWithLabelID:Case.DriveLabel.Label.id.rawValue)
+                                         .sorted(by: {$0.title.lowercased() < $1.title.lowercased()})
+                                         .compactMap { Case($0)}
+        } catch {
+            throw error
+        }
+    }
+    static func getCase(id:String) async throws -> Case {
+        do {
+            let file = try await Drive.shared.get(fileID: id, labelIDs: [Case.DriveLabel.Label.id.rawValue])
+            guard let foundCase = Case(file) else { throw NSError.quick("Case not found for \(id)")}
+            return foundCase
+        } catch {
+            throw error
+        }
+    }
 }
 
 
@@ -150,3 +185,22 @@ extension Case {
     }
  }
 
+//MARK: - Sheet Rows
+extension Case {
+    func isInSpreadsheet(_ id:String, sheet:Case.Sheet) -> Bool {
+        switch sheet {
+        case .contacts:
+            contacts.first(where: {$0.id == id }) != nil
+        case .contactData:
+            contactData.first(where: {$0.id == id }) != nil
+        case .tags:
+            tags.first(where: {$0.id == id }) != nil
+        case .folders:
+            folders.first(where: {$0.id == id }) != nil
+        case .files:
+            files.first(where: {$0.id == id }) != nil
+        case .tasks:
+            tasks.first(where: {$0.id == id }) != nil
+        }
+    }
+}

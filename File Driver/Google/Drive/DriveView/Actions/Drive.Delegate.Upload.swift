@@ -36,7 +36,7 @@ extension DriveDelegate {
                 
                 
                 let filename : String
-                if let autoFilename = AutoFile_Rename.proposedFilename(for: url, thread:gmailThread, blockWords: String.blockedWords) {
+                if let autoFilename = await AutoFile_Rename.proposedFilename(for: url, thread:gmailThread) {
                     filename = autoFilename
                 } else {
                     filename = url.lastPathComponent

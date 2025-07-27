@@ -113,14 +113,7 @@ extension AddToCase_Contact {
     func load() async {
         do {
             isLoading = true
-            /*
-            caseList = try await Google_Sheets.shared.getValues(spreadsheetID: contact.id, range: Contact.Sheet.cases.rawValue)
-                                              .compactMap { .init(row: $0)}
-                                              .sorted(by: { $0.name.ciCompare($1.name)})
-            cases = try await Drive.shared.get(filesWithLabelID:Case.DriveLabel.Label.id.rawValue)
-                                          .compactMap { Case($0)}
-                                          .sorted(by: {$0.title.lowercased() < $1.title.lowercased()})
-             */
+            cases = try await Case.allCases()
             isLoading = false
         } catch {
             isLoading = false
