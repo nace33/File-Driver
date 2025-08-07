@@ -9,17 +9,39 @@ import SwiftUI
 import BOF_SecretSauce
 
 struct FilingSheet: View {
+    let showPreview : Bool
+    let modes : [Filer_Delegate.Mode]
     let items : [Filer_Item]
-
+    let state : (Filer_Delegate.FilingState) -> Void
+    init(showPreview:Bool = true, delegate:Filer_Delegate, items: [Filer_Item], state:((Filer_Delegate.FilingState) -> Void)? = nil ) {
+        self.showPreview = showPreview
+        _filerDelegate = State(initialValue: delegate)
+        self.modes = delegate.modes
+        self.items = items
+        self.state = state ?? { _ in }
+    }
+    init(showPreview:Bool = true,
+         modes: [Filer_Delegate.Mode] = [.cases, .folders],
+         items: [Filer_Item],
+         actions:[Filer_Delegate.Action] = Filer_Delegate.Action.sheetActions,
+         state:((Filer_Delegate.FilingState) -> Void)? = nil ) {
+        
+        self.showPreview = showPreview
+        self.modes = modes
+        self.items = items
+        _filerDelegate = State(initialValue: Filer_Delegate(modes: modes, actions:actions))
+        self.state = state ?? { _ in }
+    }
     
-    @State private var filerDelegate = Filer_Delegate(mode: .cases, actions:Filer_Delegate.Action.sheetActions)
+    @State private var filerDelegate : Filer_Delegate
     @State private var selectedItem : Filer_Item?
-    @State private var showPreview = false
     
     var body: some View {
         HSplitView {
-            FilePreview(selectedItem)
-                .frame(minWidth:350, maxHeight: .infinity)
+            if showPreview {
+                FilePreview(selectedItem)
+                    .frame(minWidth:350, maxHeight: .infinity)
+            }
             
             Filer_View(items:items, delegate: filerDelegate)
                 .frame(minWidth: 350, maxHeight: .infinity)
@@ -27,6 +49,11 @@ struct FilingSheet: View {
             .task(id:items) {
                 selectedItem = items.first
             }
+            .onChange(of: filerDelegate.filingState, { oldValue, newValue in
+                self.state(newValue)
+            })
+            .presentationSizing(.fitted) // Allows resizing, sizes to content initially
+            .frame(idealWidth: showPreview ? 800 : 500, minHeight:400, idealHeight: showPreview ? 600 : 400) //
     }
   
 
@@ -48,13 +75,16 @@ struct FilingSheet: View {
             }
             QL_View(fileURL:localURL, style: .normal)
         } else {
-            Text("Generating Preview").foregroundStyle(.secondary)
+            Text(filerDelegate.loader.isLoading ? "Generating Preview" : "No Preview Available")
+                .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity)
-//            ContentUnavailableView("Generating Preview", systemImage:"document.badge.clock")
         }
     }
 }
 
+
+
+
 #Preview {
-    FilingSheet(items:[])
+    FilingSheet(modes:[.cases], items:[])
 }

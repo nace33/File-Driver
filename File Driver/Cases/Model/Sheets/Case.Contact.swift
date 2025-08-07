@@ -19,6 +19,7 @@ extension Case {
         let isClient   : Bool
         let note       : String?
     }
+
 }
 
 

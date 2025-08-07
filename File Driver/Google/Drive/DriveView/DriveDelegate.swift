@@ -89,7 +89,7 @@ class DriveDelegate  {
     public enum Action : String, CaseIterable {
         case select, rename, newFolder, move, share, upload, download, trash, refresh, filter, preview
         static var toolbarActions : [Action] { [.select, .rename, .newFolder, .share, .upload, .download, .trash, .refresh, .filter]}
-        var title       : String { rawValue.camelCaseToWords() }
+        var title       : String { rawValue.camelCaseToWords }
         var iconName    : String {
             switch self {
             case .filter :

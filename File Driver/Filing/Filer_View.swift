@@ -15,12 +15,11 @@ struct Filer_View: View {
         self.items = items
         _delegate = State(initialValue: delegate)
     }
-    @Environment(\.dismiss) var dismiss
     
     var body: some View {
 
         VStackLoacker(alignment:.leading, spacing: 0, loader: $delegate.loader) {
-            delegate.loader.clearError()
+            delegate.clearError()
         } header: {
             Filer_Header()
             Divider()
@@ -29,11 +28,12 @@ struct Filer_View: View {
                 messageView("Nothing items to file.")
             }
             else if delegate.items.allSatisfy({$0.status == .filed}) {
-                messageView("All items are filed.")
+                messageView("Success!")
             }
             else if delegate.canShowForm {
                 Filer_Form()
-            } else if delegate.mode == .cases && delegate.selectedCase == nil {
+                    .onAppear() { delegate.setFilingState(.formPresented) }
+            } else if delegate.selectedMode == .cases && delegate.selectedCase == nil {
                 Filer_CaseList()
             } else {
                 Filer_FolderList()
@@ -44,9 +44,11 @@ struct Filer_View: View {
         }
             .environment(delegate)
             .background(.background)
+            .task {
+                await delegate.load()
+            }
             .task(id:items) {
                 delegate.items = items
-                await delegate.load() 
             }
     }
     

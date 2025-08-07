@@ -47,6 +47,7 @@ import BOF_SecretSauce
         let newCase = FilerCase(aCase)
       
         //Get or Create Folders
+        ///This will not rebuild the path for each folder because the parent ID is not saved in the Google SHeet (because it can change in google drive and create a sync issue).
         newCase.folders = FilerFolder.get(caseFolders: aCase.folders, update: false)
         
         //Create Search Strings

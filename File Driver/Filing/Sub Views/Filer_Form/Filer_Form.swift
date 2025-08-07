@@ -16,6 +16,7 @@ struct Filer_Form: View {
             Filer_Filenames()
             Filer_Contacts()
             Filer_Tags()
+            Filer_Trackers()
             Filer_Tasks()
         }
             .formStyle(.grouped)

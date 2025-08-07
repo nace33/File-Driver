@@ -20,12 +20,14 @@ struct Filer_Tags: View {
             LabeledContent {
                 TextField("Tags", text:$tagText, prompt: Text("Add Tags"))
                     .labelsHidden()
+#if os(macOS)
                     .textInputSuggestions {
                         if tagText.count > 0 {
                             let matches = delegate.selectedCase?.tags.filter({$0.name.ciHasPrefix(tagText) && !current.ciContain($0.name)  }) ?? []
                             ForEach(matches) {  Text($0.name) .textInputCompletion($0.name) }
                         }
                     }
+#endif
                     .onSubmit {
                         _ = addNewTag(tagText)
                         tagText = ""

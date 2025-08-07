@@ -15,6 +15,7 @@ extension Case {
         case tags
         case folders, files
         case tasks
+        case trackers
         
         var title : String {
             switch self {
@@ -30,6 +31,8 @@ extension Case {
                 "Files"
             case .tasks:
                 "Tasks"
+            case .trackers:
+                "Trackers"
             }
         }
         var intValue : Int {
@@ -46,7 +49,13 @@ extension Case {
                 4
             case .tasks:
                 5
+            case .trackers:
+                6
             }
+        }
+        static func sheet(_ intValue:Int) -> Sheet? {
+            guard (0..<Self.allCases.count).contains(intValue) else { return nil }
+            return Self.allCases.first(where: {$0.intValue == intValue})!
         }
         var valueRange : String {
             title + "!A2:\(intValue.letter.capitalized)"
@@ -93,6 +102,8 @@ extension Case {
                 return []
             case .tasks:
                 return []
+            case .trackers:
+                return []
             }
         }
         var headerRow : Sheets.Header {
@@ -120,6 +131,7 @@ extension Case {
         case folderIDs, fileID, mimeType, contactIDs, tagIDs, snippet, idDateString, fileSize
         case dueDate, priority, status, text, assignedTo, fileIDs
         case parentID, isFlagged
+        case threadID, createdBy, isHidden
         static func columns(for sheet:Sheet) -> [Column] {
             switch sheet {
             case .contacts:
@@ -134,7 +146,8 @@ extension Case {
                 [.fileID, .name, .mimeType, .fileSize, .folderIDs, .contactIDs, .tagIDs, .idDateString, .snippet, .note]
             case .tasks:
                 [.id, .parentID, .fileIDs, .contactIDs, .tagIDs, .assignedTo, .priority, .status, .isFlagged, .text, .dueDate, .note]
-                    
+            case .trackers:
+                [.id, .idDateString, .threadID, .contactIDs, .tagIDs, .fileIDs, .text, .category, .status, .createdBy, .isHidden]
             }
         }
     }

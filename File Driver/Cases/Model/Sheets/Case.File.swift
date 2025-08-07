@@ -51,8 +51,8 @@ extension Case.File : SheetRow {
         let tagIDs           = values[6].formattedValue  ?? ""
         guard let idDate     = values[7].formattedValue else { return nil }
 
-        let snippet          = values.count >= 9  ? values[8].formattedValue ?? "" : ""
-        let note             = values.count >= 10 ? values[9].formattedValue ?? "" : ""
+        let snippet         = values.count >= 9  ? values[8].formattedValue ?? "" : ""
+        let note            = values.count >= 10 ? values[9].formattedValue ?? "" : ""
         
         self.fileID         = fileID
         self.name           = name

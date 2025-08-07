@@ -18,15 +18,8 @@ struct Filer_Header : View {
     
     var body : some View {
         HStack {
-     
-            Picker("Save To", selection: Bindable(delegate).mode) {
-                ForEach(Filer_Delegate.Mode.allCases, id:\.self) { mode in
-                    Text(mode.rawValue.capitalized)
-                }
-            }
-                .fixedSize()
-                .labelsHidden()
-            
+            modeSelector
+          
             ForEach(delegate.stack, id:\.self) { stackFolder in
                 Button(stackFolder.title) {
                     delegate.popTo(stackFolder)
@@ -62,7 +55,7 @@ struct Filer_Header : View {
 
     //Actions
     func addButtonClicked() {
-        switch delegate.mode {
+        switch delegate.selectedMode {
         case .cases:
             if delegate.selectedCase == nil {
                 showNewCaseSheet = true
@@ -70,6 +63,8 @@ struct Filer_Header : View {
                 showNewFolderSheet = true
             }
         case .folders:
+            showNewFolderSheet = true
+        case .aCase(_):
             showNewFolderSheet = true
         }
     }
@@ -80,9 +75,30 @@ struct Filer_Header : View {
         Task { await delegate.load() }
     }
     
+    //Navigation
+    @ViewBuilder var modeSelector    : some View {
+        if delegate.modes.count == 1 {
+            switch delegate.selectedMode {
+            case .cases, .folders:
+                Button(delegate.selectedMode.title) { Task { await delegate.load() }}
+                    .fixedSize()
+            case .aCase(_):
+                EmptyView()
+            }
+        } else {
+            Picker("Save To", selection: Bindable(delegate).selectedMode) {
+                ForEach(delegate.modes, id:\.self) { mode in
+                    Text(mode.title)
+                }
+            }
+                .fixedSize()
+                .labelsHidden()
+        }
+    }
+    
     //Sheets
     @ViewBuilder var addNewButton    : some View {
-        switch delegate.mode {
+        switch delegate.selectedMode {
         case .cases:
             if delegate.selectedCase == nil, delegate.actions.contains(.newCase) {
                 Button { addButtonClicked() } label: { Image(systemName: "plus")  }
@@ -101,10 +117,16 @@ struct Filer_Header : View {
             } else {
                 EmptyView()
             }
+        case .aCase(_):
+            if delegate.selectedCase != nil, delegate.actions.contains(.newFolder) {
+               Button { addButtonClicked() } label: { Image(systemName: "plus")  }
+           } else {
+               EmptyView()
+           }
         }
     }
     @ViewBuilder var filterTextField : some View {
-        switch delegate.mode {
+        switch delegate.selectedMode {
         case .cases:
             if delegate.selectedCase == nil && delegate.actions.contains(.filterCases) {
                 TextField("Filter", text:Bindable(delegate).filterString)
@@ -121,6 +143,12 @@ struct Filer_Header : View {
             } else {
                 EmptyView()
             }
+        case .aCase(_):
+            if delegate.selectedCase != nil && delegate.actions.contains(.filterFolders) {
+               TextField("Filter", text:Bindable(delegate).filterString)
+           } else {
+               EmptyView()
+           }
         }
     }
     @ViewBuilder var newCaseView     : some View {

@@ -21,12 +21,14 @@ struct Filer_Contacts: View {
             LabeledContent {
                 TextField("Contacts", text:$contactText, prompt: Text("Add Contacts"))
                     .labelsHidden()
+#if os(macOS)
                     .textInputSuggestions {
                         if contactText.count > 0 {
                             let matches = delegate.selectedCase?.contacts.filter({$0.name.ciHasPrefix(contactText) && !current.ciContain($0.name)  }) ?? []
                             ForEach(matches) {  Text($0.name) .textInputCompletion($0.name) }
                         }
                     }
+#endif
                     .onSubmit {
                         _ = addNewFilingContact(contactText)
                         contactText = ""

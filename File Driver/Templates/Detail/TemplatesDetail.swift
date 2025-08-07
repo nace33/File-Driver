@@ -80,11 +80,11 @@ struct TemplatesDetail: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Picker(selection: $action) {
-                        ForEach(Action.allCases, id:\.self) { Text($0.rawValue.camelCaseToWords())}
+                        ForEach(Action.allCases, id:\.self) { Text($0.rawValue.camelCaseToWords)}
                     } label: {
                         Text("Multi-Form Actions").font(.title2)
                     } currentValueLabel: {
-                        Text(action.rawValue.camelCaseToWords())
+                        Text(action.rawValue.camelCaseToWords)
                     }
                         .pickerStyle(.segmented)
                 }

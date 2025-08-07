@@ -12,7 +12,7 @@ import BOF_SecretSauce
 extension DriveDelegate {
     enum SortBy : String, CaseIterable, Codable {
         case ascending, descending, lastModified, fileType
-        var title : String { rawValue.camelCaseToWords() }
+        var title : String { rawValue.camelCaseToWords }
     }
 
 }

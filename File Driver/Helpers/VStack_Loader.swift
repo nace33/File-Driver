@@ -124,7 +124,7 @@ extension View {
                             ProgressView(status.wrappedValue, value: progress.wrappedValue)
                                 .progressViewStyle(.circular)
                                 .padding()
-                                .tint(progress.wrappedValue == 1 ? .green : .blue)
+//                                .tint(progress.wrappedValue == 1 ? .green : .blue)
                                 .lineLimit(1)
                         }
                     } else {

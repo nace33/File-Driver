@@ -42,7 +42,7 @@ extension Contact {
             case note, date, phone, email, address,  fax, employment, website, social, relationships, number
             static var main : [Category] {[ .phone, .email, .address, .note]}
             static var misc : [Category] {[ .date, .number, .employment, .fax, .website, .social, .relationships]}
-            var title    : String { rawValue.camelCaseToWords().capitalized}
+            var title    : String { rawValue.camelCaseToWords.capitalized}
             var intValue : Int {
                 switch self {
                 case .note:

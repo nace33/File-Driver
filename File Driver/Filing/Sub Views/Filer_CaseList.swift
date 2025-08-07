@@ -34,10 +34,17 @@ struct Filer_CaseList: View {
                     casesView
                         .listRowSeparator(.hidden)
                         .onChange(of: delegate.caseListScrollID) { _, newID in  proxy.scrollTo(newID)  }
+#if os(macOS)
                         .alternatingRowBackgrounds()
+                    #endif
                 }
             }
-                .contextMenu(forSelectionType: Case.self, menu: {_ in}, primaryAction: { items in
+            .contextMenu(forSelectionType: Case.self, menu: { items in
+                if let item = items.first {
+                    Button("Select Case") {
+                        delegate.select(item)
+                    }
+                } }, primaryAction: { items in
                     if let item = items.first {
                         delegate.select(item)
                     }
@@ -70,13 +77,18 @@ fileprivate extension Filer_CaseList {
     ///Suggestions
     @ViewBuilder var suggestionsView  : some View {
         Section("Suggestions") {
-            ForEach($suggestions) { $suggestion in
+            ForEach($suggestions, id:\.self) { $suggestion in
                 HStack {
                     Text(suggestion.filerCase.name)
+                        .contextMenu {
+                            Button("Select Case") {
+                                delegate.select(suggestion, presentFilingForm: false)
+                            }
+                        }
                     Spacer()
                     suggestionMenu(for:$suggestion)
                     Button("Select") {
-                        delegate.select(suggestion)
+                        delegate.select(suggestion, presentFilingForm: true)
                     }
                         .buttonStyle(.plain)
                         .foregroundStyle(.blue)
@@ -93,18 +105,31 @@ fileprivate extension Filer_CaseList {
                     Text("Times Used:\t\(folder.timesUsed)")
                     Text("Sort Value:\t\(suggestion.wrappedValue.intValue(for:folder))")
                     Divider()
+                    
                     let strings = suggestion.wrappedValue.strings(for:folder)
+                   
                     ForEach(FilerSearchString.Category.allCases.sorted(by: {$0.rawValue > $1.rawValue}), id:\.self) { category in
                         let catStrings = strings.filter { $0.intValue == category.rawValue }
                                                 .sorted(by:{ $0.text < $1.text })
                         if catStrings.count > 0 {
-                            Menu(category.title) {
+                            if strings.count > 8 {
+                                Menu(category.title) {
+                                    ForEach(catStrings, id:\.text) { catString in
+                                        Text(catString.text)
+                                    }
+                                }
+                            } else {
                                 ForEach(catStrings, id:\.text) { catString in
                                     Text(catString.text)
                                 }
                             }
+ 
                         }
                     }
+//                    Button("Select") {
+//                        suggestion.wrappedValue.selectedFolder = folder
+//                        delegate.select(suggestion.wrappedValue, presentFilingForm: true)
+//                    }
                 } primaryAction: {
                     suggestion.wrappedValue.selectedFolder = folder
                 }
@@ -189,7 +214,7 @@ fileprivate extension Filer_CaseList {
     }
 }
 
-struct FilerSuggestion : Identifiable {
+struct FilerSuggestion : Identifiable, Hashable {
     var id           : String
     let filerCase    : FilerCase
     var selectedFolder : FilerFolder

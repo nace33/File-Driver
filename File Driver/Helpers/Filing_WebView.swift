@@ -24,7 +24,6 @@ struct Filing_WebView: View {
             .task(id:url)                     {  updateWebView() }
             .sheet(item: $fileItem)    { item in
                 FilingSheet(items:[item])
-                    .frame(minWidth: 800, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
             }
             .toolbar {
                 Button("Create PDF ") { createPDF() }

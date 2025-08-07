@@ -12,7 +12,7 @@ import SwiftData
 final class Sidebar_Item : Identifiable {
     var id              : String = ""
     var title           : String = ""
-    var url             : URL    = URL(string:"Hello World")!
+    var url             : URL    = URL(string:"about:blank")!
     var categoryString  : String = Sidebar_Item.Category.group.rawValue
     var iconData        : Data?  = nil
     var order           : Int    = 0
@@ -121,17 +121,17 @@ extension Sidebar_Item {
                 "barchart.fill"
             }
         }
-        var title : String { rawValue.camelCaseToWords()}
+        var title : String { rawValue.camelCaseToWords}
         var defaultURL : URL {
             switch self {
             case .filing:
-                URL(string:"default://\(rawValue)")!
+                URL(string:"filedriver://\(rawValue)")!
             case .cases:
-                URL(string:"default://\(rawValue)")!
+                URL(string:"filedriver://\(rawValue)")!
             case .tasks:
-                URL(string:"default://\(rawValue)")!
+                URL(string:"filedriver://\(rawValue)")!
             case .settings:
-                URL(string:"default://\(rawValue)")!
+                URL(string:"filedriver://\(rawValue)")!
             case .inbox:
                 URL(string:"https://mail.google.com")!
             case .calendar:
@@ -141,7 +141,7 @@ extension Sidebar_Item {
             case .gemini:
                 URL(string:"https://gemini.google.com")!
             default:
-                URL(string:"user://someAmazing\(rawValue)URL")!
+                URL(string:"filedriver://\(rawValue)")!
             }
         }
         static var defaults       : [Category] { nlfDefaults + googleDefaults}

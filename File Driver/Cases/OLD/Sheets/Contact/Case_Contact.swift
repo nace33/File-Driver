@@ -56,7 +56,7 @@ extension Case_OLD.Contact {
         case credential
         case other
         static var info : [Category] {[.email, .phone, .address, .fax, .social, .website ]}
-        var title : String { rawValue.camelCaseToWords()}
+        var title : String { rawValue.camelCaseToWords}
         
     }
     enum Role : String, CaseIterable {
@@ -68,15 +68,15 @@ extension Case_OLD.Contact {
         case staff
         case other
         
-        var title : String { rawValue.camelCaseToWords() }
+        var title : String { rawValue.camelCaseToWords }
     }
     enum NumberType : String, CaseIterable {
         case driversLicense, socialSecurity, policyNumber, claimNumber, accountNumber, employeeNumber, amount, other
-        var title : String { rawValue.camelCaseToWords() }
+        var title : String { rawValue.camelCaseToWords }
     }
     enum DateType : String, CaseIterable {
         case dateOfBirth, dateOfDeath, dateOfInjury, dateBegan, dateEnded, date
-        var title : String { rawValue.camelCaseToWords() }
+        var title : String { rawValue.camelCaseToWords }
     }
     enum InfoLabel : String, CaseIterable {
         case home, work, mobile

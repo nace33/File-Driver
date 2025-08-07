@@ -31,7 +31,8 @@ final class Case  {
     var contactData : [Case.ContactData] = []
     var files       : [Case.File]        = []
     var tasks       : [Case.Task]        = []
-    
+    var trackers    : [Case.Tracker]     = []
+
     //Permissions
     var permissions : [GTLRDrive_Permission] = []
 
@@ -119,6 +120,8 @@ extension Case {
                     files       = rowData.compactMap { Case.File(rowData: $0)}
                 case .tasks:
                     tasks       = rowData.compactMap { Case.Task(rowData: $0)}
+                case .trackers:
+                    trackers    = rowData.compactMap { Case.Tracker(rowData:$0)}
                 }
             }
             isLoading = false
@@ -130,6 +133,7 @@ extension Case {
             throw error
         }
     }
+
     func loadPermissions() async throws {
         do {
             isLoading = true
@@ -148,11 +152,11 @@ extension Case {
 //MARK: - Get
 extension Case {
     func tags(with ids:[String]) -> [Case.Tag] {
-        guard ids.count > 0 else { return tags }
+        guard ids.count > 0 else { return [] }
         return tags.filter { ids.contains($0.id)}
     }
     func contacts(with ids:[String]) -> [Case.Contact] {
-        guard ids.count > 0 else { return contacts }
+        guard ids.count > 0 else { return [] }
         return contacts.filter { ids.contains($0.id)}
     }
     func contactData(with contactIDs:[String], category:String? = nil) -> [Case.ContactData] {
@@ -201,6 +205,16 @@ extension Case {
             files.first(where: {$0.id == id }) != nil
         case .tasks:
             tasks.first(where: {$0.id == id }) != nil
+        case .trackers:
+            trackers.first(where: {$0.id == id }) != nil
         }
+    }
+}
+
+//MARK: - UI Enums
+extension Case {
+    enum ViewIndex : String, CaseIterable, Codable {
+        case trackers
+        var title : String { rawValue.capitalized}
     }
 }

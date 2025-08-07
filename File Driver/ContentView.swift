@@ -25,6 +25,8 @@ struct ContentView: View {
     @Environment(\.undoManager) private var undoManager
     @Environment(Google.self)  var google
     @SceneStorage(BOF_Nav.storageKey) var navigation = BOF_Nav()
+    
+    
     var initialSidebarItemID : Sidebar_Item.ID?
     init(sidebarItemID:Sidebar_Item.ID? = nil) {  initialSidebarItemID = sidebarItemID   }
     var title : String {

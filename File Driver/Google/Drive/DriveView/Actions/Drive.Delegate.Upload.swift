@@ -29,7 +29,7 @@ extension DriveDelegate {
                 let gmailThread = url.emailThread
                 print(gmailThread)
                 let appProperties = gmailThread.driveAppProperties
-                print("\n\nAppProperties: \(appProperties)")
+//                print("\n\nAppProperties: \(appProperties)")
 //                let descriptionString = gmailThread.gtlrDescription(style:.full)
 //                print("descriptionString: \(descriptionString)")
                 

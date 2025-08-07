@@ -11,35 +11,21 @@ import GoogleAPIClientForREST_Drive
 
 
 struct Drive_Preview : View {
-    var url : URL
-    @State private var didLoadPreview:Bool = false
+//    let url : URL
+    let file : GTLRDrive_File
     init(fileID:String) {
 //        print("ID: \(fileID)")
-        self.url = URL(string: "https://drive.google.com/file/d/\(fileID)/preview")!
+//        self.url = URL(string: "https://drive.google.com/file/d/\(fileID)/preview")!
+        self.file = GTLRDrive_File()
+        file.mimeType = "application/pdf"
+        file.identifier = fileID
 //        print("URL: \(url)\n\n")
     }
     init(file:GTLRDrive_File) {
-//        if let webViewLink = file.webViewLink {
-//            self.url = URL(string:webViewLink)!
-//        } else {
-            self.url = file.previewURL
-//        }
-    
+        self.file = file
     }
 
     var body: some View {
-        ZStack {
-            if !didLoadPreview { ProgressView("Loading Preview...") }
-            BOF_WebView(url, navDelegate: BOF_WebView.NavDelegate(loadStatus: { status, _ in
-                switch status {
-                case .finished: didLoadPreview = true
-                default: break
-                }
-            }), uiDelegate:.init())
-         
-                .task(id:url.absoluteString) { didLoadPreview = false}
-                .opacity(didLoadPreview ? 1 : 0)
-        }
-
+        DriveFileView([file])
     }
 }

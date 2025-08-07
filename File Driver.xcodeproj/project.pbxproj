@@ -13,6 +13,25 @@
 		E32730D92DE9220100B6EDBD /* VStack_Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32730D82DE9220100B6EDBD /* VStack_Loader.swift */; };
 		E32D80CA2E15F9D4002318C0 /* GTLRDrive_Permission-Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32D80C92E15F9D4002318C0 /* GTLRDrive_Permission-Ext.swift */; };
 		E32D80CE2E161560002318C0 /* Drive_Permissions_Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E32D80CD2E161560002318C0 /* Drive_Permissions_Menu.swift */; };
+		E330A6AB2E3BDA61004DF5A2 /* Case.Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6AA2E3BDA61004DF5A2 /* Case.Tracker.swift */; };
+		E330A6B22E3E4B64004DF5A2 /* CaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6B12E3E4B64004DF5A2 /* CaseView.swift */; };
+		E330A6BA2E40FF67004DF5A2 /* Case.TrackerRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6B92E40FF67004DF5A2 /* Case.TrackerRoot.swift */; };
+		E330A6BC2E41020C004DF5A2 /* Case.TrackersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6BB2E41020C004DF5A2 /* Case.TrackersView.swift */; };
+		E330A6BE2E4195F8004DF5A2 /* FormTokensPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6BD2E4195F8004DF5A2 /* FormTokensPicker.swift */; };
+		E330A6C02E41A186004DF5A2 /* AppendTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6BF2E41A186004DF5A2 /* AppendTracker.swift */; };
+		E330A6C22E421263004DF5A2 /* FileUploadTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6C12E421263004DF5A2 /* FileUploadTracker.swift */; };
+		E330A6C82E425387004DF5A2 /* NewTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6C72E425387004DF5A2 /* NewTracker.swift */; };
+		E330A6CB2E425E07004DF5A2 /* FormCustomPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6CA2E425E07004DF5A2 /* FormCustomPicker.swift */; };
+		E330A6CE2E42794B004DF5A2 /* EditTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6CD2E42794B004DF5A2 /* EditTracker.swift */; };
+		E330A6D02E42B849004DF5A2 /* TrackerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6CF2E42B849004DF5A2 /* TrackerDelegate.swift */; };
+		E330A6D32E42D79A004DF5A2 /* Case.TrackersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6D22E42D79A004DF5A2 /* Case.TrackersTable.swift */; };
+		E330A6D52E42D84D004DF5A2 /* TrackerRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6D42E42D84D004DF5A2 /* TrackerRoot.swift */; };
+		E330A6D72E42D89D004DF5A2 /* Case.TrackersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6D62E42D89D004DF5A2 /* Case.TrackersList.swift */; };
+		E330A6D92E42DFB0004DF5A2 /* Case.TrackerInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6D82E42DFB0004DF5A2 /* Case.TrackerInspector.swift */; };
+		E330A6DB2E43ACD7004DF5A2 /* Case.TrackersRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6DA2E43ACD7004DF5A2 /* Case.TrackersRows.swift */; };
+		E330A6DD2E44CE86004DF5A2 /* Filer_Trackers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6DC2E44CE86004DF5A2 /* Filer_Trackers.swift */; };
+		E330A6DF2E44EF97004DF5A2 /* Case.TrackersFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */; };
+		E330A6E12E44F781004DF5A2 /* SelectTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6E02E44F781004DF5A2 /* SelectTracker.swift */; };
 		E34BAB1C2DFB66ED0077AACA /* Drive_Imager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */; };
 		E34BAB1F2DFB9E920077AACA /* AddToCase_Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */; };
 		E34BAB242DFB9F9D0077AACA /* Contact.Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */; };
@@ -159,6 +178,11 @@
 		E3ABC1E92E32897C00FDF061 /* SD_FilerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3ABC1E82E32897C00FDF061 /* SD_FilerView.swift */; };
 		E3B910DB2DE6878600F86A15 /* GoogleDrive_IconDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B910DA2DE6878600F86A15 /* GoogleDrive_IconDownload.swift */; };
 		E3B910DD2DE6931000F86A15 /* GoogleDriveIcons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B910DC2DE6931000F86A15 /* GoogleDriveIcons.xcassets */; };
+		E3D10CDA2E39075300E3FD04 /* SD_Filer_Cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D10CD92E39075300E3FD04 /* SD_Filer_Cases.swift */; };
+		E3D10CDC2E39076D00E3FD04 /* SD_Filer_SearchStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D10CDB2E39076D00E3FD04 /* SD_Filer_SearchStrings.swift */; };
+		E3D10CE02E390B1000E3FD04 /* SD_Filer_SearchStringRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D10CDF2E390B1000E3FD04 /* SD_Filer_SearchStringRow.swift */; };
+		E3D10CE22E390B9400E3FD04 /* SD_Filer_FolderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D10CE12E390B9400E3FD04 /* SD_Filer_FolderRow.swift */; };
+		E3D10CE42E3B9EAD00E3FD04 /* FileDriver_URLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D10CE32E3B9EAD00E3FD04 /* FileDriver_URLScheme.swift */; };
 		E3E8B6D22E01202200F976DA /* DriveView_PathBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D12E01202200F976DA /* DriveView_PathBar.swift */; };
 		E3E8B6D52E01204A00F976DA /* DriveDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D42E01204A00F976DA /* DriveDelegate.swift */; };
 		E3E8B6D72E01213C00F976DA /* DriveView_Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8B6D62E01213C00F976DA /* DriveView_Row.swift */; };
@@ -197,6 +221,25 @@
 		E32730D82DE9220100B6EDBD /* VStack_Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VStack_Loader.swift; sourceTree = "<group>"; };
 		E32D80C92E15F9D4002318C0 /* GTLRDrive_Permission-Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GTLRDrive_Permission-Ext.swift"; sourceTree = "<group>"; };
 		E32D80CD2E161560002318C0 /* Drive_Permissions_Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Permissions_Menu.swift; sourceTree = "<group>"; };
+		E330A6AA2E3BDA61004DF5A2 /* Case.Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.Tracker.swift; sourceTree = "<group>"; };
+		E330A6B12E3E4B64004DF5A2 /* CaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseView.swift; sourceTree = "<group>"; };
+		E330A6B92E40FF67004DF5A2 /* Case.TrackerRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackerRoot.swift; sourceTree = "<group>"; };
+		E330A6BB2E41020C004DF5A2 /* Case.TrackersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackersView.swift; sourceTree = "<group>"; };
+		E330A6BD2E4195F8004DF5A2 /* FormTokensPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTokensPicker.swift; sourceTree = "<group>"; };
+		E330A6BF2E41A186004DF5A2 /* AppendTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppendTracker.swift; sourceTree = "<group>"; };
+		E330A6C12E421263004DF5A2 /* FileUploadTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadTracker.swift; sourceTree = "<group>"; };
+		E330A6C72E425387004DF5A2 /* NewTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTracker.swift; sourceTree = "<group>"; };
+		E330A6CA2E425E07004DF5A2 /* FormCustomPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCustomPicker.swift; sourceTree = "<group>"; };
+		E330A6CD2E42794B004DF5A2 /* EditTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTracker.swift; sourceTree = "<group>"; };
+		E330A6CF2E42B849004DF5A2 /* TrackerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDelegate.swift; sourceTree = "<group>"; };
+		E330A6D22E42D79A004DF5A2 /* Case.TrackersTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackersTable.swift; sourceTree = "<group>"; };
+		E330A6D42E42D84D004DF5A2 /* TrackerRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRoot.swift; sourceTree = "<group>"; };
+		E330A6D62E42D89D004DF5A2 /* Case.TrackersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackersList.swift; sourceTree = "<group>"; };
+		E330A6D82E42DFB0004DF5A2 /* Case.TrackerInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackerInspector.swift; sourceTree = "<group>"; };
+		E330A6DA2E43ACD7004DF5A2 /* Case.TrackersRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackersRows.swift; sourceTree = "<group>"; };
+		E330A6DC2E44CE86004DF5A2 /* Filer_Trackers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filer_Trackers.swift; sourceTree = "<group>"; };
+		E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackersFilter.swift; sourceTree = "<group>"; };
+		E330A6E02E44F781004DF5A2 /* SelectTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTracker.swift; sourceTree = "<group>"; };
 		E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Imager.swift; sourceTree = "<group>"; };
 		E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCase_Contact.swift; sourceTree = "<group>"; };
 		E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.Case.swift; sourceTree = "<group>"; };
@@ -340,6 +383,11 @@
 		E3ABC1E82E32897C00FDF061 /* SD_FilerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SD_FilerView.swift; sourceTree = "<group>"; };
 		E3B910DA2DE6878600F86A15 /* GoogleDrive_IconDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDrive_IconDownload.swift; sourceTree = "<group>"; };
 		E3B910DC2DE6931000F86A15 /* GoogleDriveIcons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = GoogleDriveIcons.xcassets; sourceTree = "<group>"; };
+		E3D10CD92E39075300E3FD04 /* SD_Filer_Cases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SD_Filer_Cases.swift; sourceTree = "<group>"; };
+		E3D10CDB2E39076D00E3FD04 /* SD_Filer_SearchStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SD_Filer_SearchStrings.swift; sourceTree = "<group>"; };
+		E3D10CDF2E390B1000E3FD04 /* SD_Filer_SearchStringRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SD_Filer_SearchStringRow.swift; sourceTree = "<group>"; };
+		E3D10CE12E390B9400E3FD04 /* SD_Filer_FolderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SD_Filer_FolderRow.swift; sourceTree = "<group>"; };
+		E3D10CE32E3B9EAD00E3FD04 /* FileDriver_URLScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDriver_URLScheme.swift; sourceTree = "<group>"; };
 		E3E8B6D12E01202200F976DA /* DriveView_PathBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveView_PathBar.swift; sourceTree = "<group>"; };
 		E3E8B6D42E01204A00F976DA /* DriveDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveDelegate.swift; sourceTree = "<group>"; };
 		E3E8B6D62E01213C00F976DA /* DriveView_Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveView_Row.swift; sourceTree = "<group>"; };
@@ -408,6 +456,8 @@
 		E32D80CF2E16CA70002318C0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E330A6B12E3E4B64004DF5A2 /* CaseView.swift */,
+				E330A6AE2E3E466B004DF5A2 /* Trackers */,
 				E32D80D02E16CA77002318C0 /* Tasks */,
 			);
 			path = Views;
@@ -418,6 +468,52 @@
 			children = (
 			);
 			path = Tasks;
+			sourceTree = "<group>";
+		};
+		E330A6AE2E3E466B004DF5A2 /* Trackers */ = {
+			isa = PBXGroup;
+			children = (
+				E330A6BB2E41020C004DF5A2 /* Case.TrackersView.swift */,
+				E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */,
+				E330A6D22E42D79A004DF5A2 /* Case.TrackersTable.swift */,
+				E330A6D62E42D89D004DF5A2 /* Case.TrackersList.swift */,
+				E330A6D82E42DFB0004DF5A2 /* Case.TrackerInspector.swift */,
+				E330A6DA2E43ACD7004DF5A2 /* Case.TrackersRows.swift */,
+				E330A6D12E42B84D004DF5A2 /* Model */,
+				E330A6C92E425390004DF5A2 /* Actions */,
+			);
+			path = Trackers;
+			sourceTree = "<group>";
+		};
+		E330A6C92E425390004DF5A2 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				E330A6C72E425387004DF5A2 /* NewTracker.swift */,
+				E330A6CD2E42794B004DF5A2 /* EditTracker.swift */,
+				E330A6BF2E41A186004DF5A2 /* AppendTracker.swift */,
+				E330A6C12E421263004DF5A2 /* FileUploadTracker.swift */,
+				E330A6E02E44F781004DF5A2 /* SelectTracker.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		E330A6CC2E425F31004DF5A2 /* Forms */ = {
+			isa = PBXGroup;
+			children = (
+				E330A6BD2E4195F8004DF5A2 /* FormTokensPicker.swift */,
+				E330A6CA2E425E07004DF5A2 /* FormCustomPicker.swift */,
+				E3EE94C72DFA6CE300B60565 /* EditForm.swift */,
+			);
+			path = Forms;
+			sourceTree = "<group>";
+		};
+		E330A6D12E42B84D004DF5A2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E330A6CF2E42B849004DF5A2 /* TrackerDelegate.swift */,
+				E330A6D42E42D84D004DF5A2 /* TrackerRoot.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		E34BAB1D2DFB78730077AACA /* Misc */ = {
@@ -623,6 +719,8 @@
 				E35940522E0B3FC200507A77 /* Case.Folder.swift */,
 				E359405D2E0B4DFF00507A77 /* Case.File.swift */,
 				E359407B2E0E36A800507A77 /* Case.Task.swift */,
+				E330A6AA2E3BDA61004DF5A2 /* Case.Tracker.swift */,
+				E330A6B92E40FF67004DF5A2 /* Case.TrackerRoot.swift */,
 			);
 			path = Sheets;
 			sourceTree = "<group>";
@@ -675,7 +773,7 @@
 			children = (
 				E369CA482DA048BE00FE91DB /* BOF_SwiftData.swift */,
 				E35940882E1056FC00507A77 /* BOF_SwiftDataView.swift */,
-				E3ABC1E82E32897C00FDF061 /* SD_FilerView.swift */,
+				E3D10CD82E39072300E3FD04 /* Filing */,
 			);
 			path = SwiftData;
 			sourceTree = "<group>";
@@ -705,7 +803,9 @@
 				E3B910DC2DE6931000F86A15 /* GoogleDriveIcons.xcassets */,
 				E369CA2C2DA0464300FE91DB /* Info.plist */,
 				E369CA2B2DA0464300FE91DB /* File_DriverApp.swift */,
+				E3D10CE32E3B9EAD00E3FD04 /* FileDriver_URLScheme.swift */,
 				E369CA5C2DA048DB00FE91DB /* ContentView.swift */,
+				E380F8252DA0534A00540A3B /* BOF_NavModel.swift */,
 				E35940872E1056EA00507A77 /* SwiftData */,
 				E369CA452DA0489D00FE91DB /* Sidebar */,
 				E3ABC1C42E2E6D8500FDF061 /* Filing */,
@@ -771,7 +871,6 @@
 				E34BAB8F2E0074810077AACA /* HappyDog.swift */,
 				E37E51D02DEF97EC00EF860C /* Filter.swift */,
 				E37E51B02DEEC30200EF860C /* Filing_WebView.swift */,
-				E380F8252DA0534A00540A3B /* BOF_NavModel.swift */,
 				E32730D82DE9220100B6EDBD /* VStack_Loader.swift */,
 			);
 			path = Helpers;
@@ -909,7 +1008,7 @@
 		E3848A202E1CDC94005B27CB /* View Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				E3EE94C72DFA6CE300B60565 /* EditForm.swift */,
+				E330A6CC2E425F31004DF5A2 /* Forms */,
 				E34BAB5C2DFDAF820077AACA /* TextField_Suggestions.swift */,
 				E34BABA22E00FC9A0077AACA /* Loader.swift */,
 			);
@@ -973,6 +1072,7 @@
 				E3ABC1E32E317D2500FDF061 /* Filer_Contacts.swift */,
 				E3ABC1DF2E317B5C00FDF061 /* Filer_Tags.swift */,
 				E3ABC1DD2E317AA600FDF061 /* Filer_Tasks.swift */,
+				E330A6DC2E44CE86004DF5A2 /* Filer_Trackers.swift */,
 			);
 			path = Filer_Form;
 			sourceTree = "<group>";
@@ -997,6 +1097,18 @@
 				E34BAB502DFDA90D0077AACA /* Model */,
 			);
 			path = Templates;
+			sourceTree = "<group>";
+		};
+		E3D10CD82E39072300E3FD04 /* Filing */ = {
+			isa = PBXGroup;
+			children = (
+				E3ABC1E82E32897C00FDF061 /* SD_FilerView.swift */,
+				E3D10CD92E39075300E3FD04 /* SD_Filer_Cases.swift */,
+				E3D10CDB2E39076D00E3FD04 /* SD_Filer_SearchStrings.swift */,
+				E3D10CDF2E390B1000E3FD04 /* SD_Filer_SearchStringRow.swift */,
+				E3D10CE12E390B9400E3FD04 /* SD_Filer_FolderRow.swift */,
+			);
+			path = Filing;
 			sourceTree = "<group>";
 		};
 		E3E8B6D32E01203B00F976DA /* DriveView */ = {
@@ -1190,6 +1302,7 @@
 				E359402D2E099AED00507A77 /* Drive.Delegate.Rename.swift in Sources */,
 				E3FB152B2DEB5BA900DDCF58 /* Inbox_View.swift in Sources */,
 				E3F5A1912DB00762004100C3 /* Case_Error.swift in Sources */,
+				E330A6DF2E44EF97004DF5A2 /* Case.TrackersFilter.swift in Sources */,
 				E376F6062DDE1874007CBBD7 /* Settings_Contacts.swift in Sources */,
 				E321D83E2DB96758006CC081 /* Case_List.swift in Sources */,
 				E34BAB3C2DFBF4FB0077AACA /* EditContact_File.swift in Sources */,
@@ -1198,27 +1311,33 @@
 				E37992682E0345EB001B0E02 /* DriveView_ListBody.swift in Sources */,
 				E38CB0492DF8C3B30074D514 /* Contact_Error.swift in Sources */,
 				E34BAB2F2DFBCC760077AACA /* ContactDetail_Header.swift in Sources */,
+				E330A6BC2E41020C004DF5A2 /* Case.TrackersView.swift in Sources */,
 				E32D80CA2E15F9D4002318C0 /* GTLRDrive_Permission-Ext.swift in Sources */,
 				E359407C2E0E36A800507A77 /* Case.Task.swift in Sources */,
 				E35940312E099B2C00507A77 /* Drive.Delegate.Download.swift in Sources */,
 				E3ABC1D32E2E817100FDF061 /* Filer_Footer.swift in Sources */,
 				E32D80CE2E161560002318C0 /* Drive_Permissions_Menu.swift in Sources */,
 				E34BAB902E0074810077AACA /* HappyDog.swift in Sources */,
+				E330A6D02E42B849004DF5A2 /* TrackerDelegate.swift in Sources */,
 				E37992632E02EC71001B0E02 /* CaseSelector.swift in Sources */,
 				E34BABA32E00FC9A0077AACA /* Loader.swift in Sources */,
 				E34BAB702DFE16770077AACA /* AddToCase_Template.swift in Sources */,
 				E369CA492DA048BE00FE91DB /* BOF_SwiftData.swift in Sources */,
 				BF2D66DC2E04EE3500377BDE /* DriveSelector.swift in Sources */,
+				E330A6AB2E3BDA61004DF5A2 /* Case.Tracker.swift in Sources */,
 				E3E8B6D92E01216400F976DA /* DriveView_List.swift in Sources */,
 				E3E8B6D22E01202200F976DA /* DriveView_PathBar.swift in Sources */,
 				E369CA302DA0464300FE91DB /* File_DriverApp.swift in Sources */,
 				E3ABC1DB2E312EE400FDF061 /* SD_FilerBlockText.swift in Sources */,
+				E330A6D52E42D84D004DF5A2 /* TrackerRoot.swift in Sources */,
 				E359404B2E0B139200507A77 /* Settings_Cases.swift in Sources */,
 				E35963E42E34064C00DC31D0 /* SD_FilerCase.swift in Sources */,
+				E330A6CE2E42794B004DF5A2 /* EditTracker.swift in Sources */,
 				E35940372E099B7A00507A77 /* Drive.Delegate.Delete.swift in Sources */,
 				E34BAB242DFB9F9D0077AACA /* Contact.Case.swift in Sources */,
 				E359403E2E0AEBDE00507A77 /* Case.swift in Sources */,
 				E369CA4C2DA048C400FE91DB /* Settings.swift in Sources */,
+				E330A6B22E3E4B64004DF5A2 /* CaseView.swift in Sources */,
 				E37E51D12DEF97EC00EF860C /* Filter.swift in Sources */,
 				E3F5A1942DB015DD004100C3 /* FolderNew.swift in Sources */,
 				E34BAB3A2DFBE3DE0077AACA /* NewContact_File-Drive.swift in Sources */,
@@ -1226,6 +1345,7 @@
 				E369CA562DA048CE00FE91DB /* Sidebar_Settings.swift in Sources */,
 				E359407F2E0E519D00507A77 /* AutoFile-Rename.swift in Sources */,
 				E3ABC1E22E317BCE00FDF061 /* Filer_Filenames.swift in Sources */,
+				E3D10CE42E3B9EAD00E3FD04 /* FileDriver_URLScheme.swift in Sources */,
 				E3F5A19C2DB03850004100C3 /* Case_Label.swift in Sources */,
 				E34BAB772E0050B30077AACA /* Research.swift in Sources */,
 				E3F5A1AE2DB0819D004100C3 /* Case_Contact_Row.swift in Sources */,
@@ -1241,15 +1361,19 @@
 				E3ABC1CE2E2E787C00FDF061 /* Filer_Form.swift in Sources */,
 				E359405E2E0B4DFF00507A77 /* Case.File.swift in Sources */,
 				E35940892E1056FC00507A77 /* BOF_SwiftDataView.swift in Sources */,
+				E330A6C02E41A186004DF5A2 /* AppendTracker.swift in Sources */,
+				E330A6BA2E40FF67004DF5A2 /* Case.TrackerRoot.swift in Sources */,
 				E38CB0542DF8E8370074D514 /* Contact.Info.swift in Sources */,
 				E34BAB582DFDA9740077AACA /* Template.Category.swift in Sources */,
 				E380F8112DA04E5500540A3B /* GTLRDrive_File_Ext.swift in Sources */,
 				E34BAB1C2DFB66ED0077AACA /* Drive_Imager.swift in Sources */,
 				E3EE94D52DFAFA2200B60565 /* PreviewContact_File.swift in Sources */,
 				E35940602E0C2E9500507A77 /* Sheets.swift in Sources */,
+				E330A6BE2E4195F8004DF5A2 /* FormTokensPicker.swift in Sources */,
 				E380F8122DA04E5500540A3B /* Google_Drive_Preview.swift in Sources */,
 				E359402B2E099ABA00507A77 /* Drive.Delegate.Move.swift in Sources */,
 				E380F8132DA04E5500540A3B /* Google_SignInView.swift in Sources */,
+				E3D10CDC2E39076D00E3FD04 /* SD_Filer_SearchStrings.swift in Sources */,
 				E380F8142DA04E5500540A3B /* Google_Label.swift in Sources */,
 				E380F8152DA04E5500540A3B /* Google_Scopes.swift in Sources */,
 				E38CB03F2DF8B2CA0074D514 /* Contact.DriveLabel.swift in Sources */,
@@ -1288,27 +1412,34 @@
 				E3ABC1D72E31082700FDF061 /* FilingView.swift in Sources */,
 				E34BAB522DFDA9120077AACA /* Template.swift in Sources */,
 				E3F5A19A2DB02266004100C3 /* FolderEdit.swift in Sources */,
+				E3D10CE22E390B9400E3FD04 /* SD_Filer_FolderRow.swift in Sources */,
 				E3ABC1E02E317B5C00FDF061 /* Filer_Tags.swift in Sources */,
+				E330A6C82E425387004DF5A2 /* NewTracker.swift in Sources */,
 				E38489CF2E1BF91A005B27CB /* Drive.Delegate.SortBy.swift in Sources */,
 				E3ABC1E92E32897C00FDF061 /* SD_FilerView.swift in Sources */,
 				E3EE94C82DFA6CE300B60565 /* EditForm.swift in Sources */,
 				E35940552E0B407F00507A77 /* Case.Spreadsheet.swift in Sources */,
 				E380F81B2DA04E5500540A3B /* Google.swift in Sources */,
+				E330A6DB2E43ACD7004DF5A2 /* Case.TrackersRows.swift in Sources */,
 				E3F5A18F2DAFF4F7004100C3 /* Google_Sheets.swift in Sources */,
 				E3E8B6D72E01213C00F976DA /* DriveView_Row.swift in Sources */,
 				E380F81C2DA04E5500540A3B /* Google_Labels.swift in Sources */,
 				E3E8B6DD2E019F0100F976DA /* DriveView.swift in Sources */,
 				E35940652E0C4A9800507A77 /* GTLRSheets_Sheet-EXT.swift in Sources */,
 				E3F5A1962DB015FA004100C3 /* FolderMenu.swift in Sources */,
+				E3D10CE02E390B1000E3FD04 /* SD_Filer_SearchStringRow.swift in Sources */,
 				E3EC429F2DF9F72100E28ABE /* Contact.File.swift in Sources */,
 				E380F81D2DA04E5500540A3B /* Drive.swift in Sources */,
+				E3D10CDA2E39075300E3FD04 /* SD_Filer_Cases.swift in Sources */,
 				E34BAB4E2DFDA7690077AACA /* TemplateController.swift in Sources */,
 				E380F81E2DA04E5500540A3B /* GTLRDrive_Drive_Ext.swift in Sources */,
+				E330A6C22E421263004DF5A2 /* FileUploadTracker.swift in Sources */,
 				E380F81F2DA04E5500540A3B /* Google_Fetcher.swift in Sources */,
 				E34BAB4C2DFDA6640077AACA /* TemplatesList.swift in Sources */,
 				E34BAB382DFBE0050077AACA /* ContactDetail_Files.swift in Sources */,
 				E37992662E02FBA7001B0E02 /* DriveView_Header.swift in Sources */,
 				E359404F2E0B32DE00507A77 /* SidebarItemToggleButton.swift in Sources */,
+				E330A6D92E42DFB0004DF5A2 /* Case.TrackerInspector.swift in Sources */,
 				E3F5A1982DB01E80004100C3 /* FolderSuggestions.swift in Sources */,
 				E3ABC1C62E2E6D9500FDF061 /* Filer_Delegate.swift in Sources */,
 				E359405A2E0B42FA00507A77 /* Case.Contact.swift in Sources */,
@@ -1316,9 +1447,12 @@
 				E34BAB442DFC560E0077AACA /* ContactDetail_Cases.swift in Sources */,
 				E34BAB542DFDA9380077AACA /* Template.Label.swift in Sources */,
 				E34BAB482DFC71A10077AACA /* ContactList_Row.swift in Sources */,
+				E330A6E12E44F781004DF5A2 /* SelectTracker.swift in Sources */,
 				E35940452E0AF2C400507A77 /* NewCase.swift in Sources */,
+				E330A6DD2E44CE86004DF5A2 /* Filer_Trackers.swift in Sources */,
 				E359405C2E0B446C00507A77 /* Contact.Data.swift in Sources */,
 				E35940492E0AF80A00507A77 /* Case.SortBy.swift in Sources */,
+				E330A6CB2E425E07004DF5A2 /* FormCustomPicker.swift in Sources */,
 				E34BAB5F2DFDBA480077AACA /* Template_Error.swift in Sources */,
 				E380F8212DA04E5500540A3B /* Google_SignIn.swift in Sources */,
 				E369CA572DA048CE00FE91DB /* Sidebar_ItemNew.swift in Sources */,
@@ -1350,6 +1484,8 @@
 				E3EE94CA2DFA716400B60565 /* EditContact.swift in Sources */,
 				E3ABC1CC2E2E786400FDF061 /* Filer_FolderList.swift in Sources */,
 				E369CA4D2DA048C400FE91DB /* Settings_View.swift in Sources */,
+				E330A6D72E42D89D004DF5A2 /* Case.TrackersList.swift in Sources */,
+				E330A6D32E42D79A004DF5A2 /* Case.TrackersTable.swift in Sources */,
 				E34BAB7A2E0050C10077AACA /* Research.Label.swift in Sources */,
 				E34BAB642DFDC3D60077AACA /* Template.Sort.swift in Sources */,
 				E3ABC1DE2E317AA600FDF061 /* Filer_Tasks.swift in Sources */,

@@ -14,15 +14,14 @@ extension Case {
         var folderID : String
         var name     : String
         var note    : String?
-        
     }
 }
 
 extension Case.Folder {
-    init?(file:GTLRDrive_File, note:String? = nil) {
-        guard file.isFolder else { return nil }
-        self.folderID = file.id
-        self.name     = file.name ?? "Untitled Folder"
+    init?(googleDriveFile:GTLRDrive_File, note:String? = nil) {
+        guard googleDriveFile.isFolder else { return nil }
+        self.folderID = googleDriveFile.id
+        self.name     = googleDriveFile.name ?? "Untitled Folder"
         self.note     = note
     }
 }

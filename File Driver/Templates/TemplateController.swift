@@ -144,15 +144,15 @@ extension TemplatesController {
 
 //MARK: - Categories
 extension TemplatesController {
-    var hardCodedCategories : [String] { Template.Category.allCases.compactMap { $0.rawValue.camelCaseToWords() } }
+    var hardCodedCategories : [String] { Template.Category.allCases.compactMap { $0.rawValue.camelCaseToWords } }
     var allCategories : [String] {
-        (categories.compactMap({$0.camelCaseToWords()}) + hardCodedCategories)
+        (categories.compactMap({$0.camelCaseToWords}) + hardCodedCategories)
             .unique() //removes hardCoded that were already loaded
             .sorted { $0.ciCompare($1) }
     }
-    var hardCodedSubCategories : [String] { Template.SubCategory.allCases.compactMap { $0.rawValue.camelCaseToWords() } }
+    var hardCodedSubCategories : [String] { Template.SubCategory.allCases.compactMap { $0.rawValue.camelCaseToWords } }
     var allSubCategories : [String] {
-        (subCategories.compactMap({$0.camelCaseToWords()}) + hardCodedSubCategories)
+        (subCategories.compactMap({$0.camelCaseToWords}) + hardCodedSubCategories)
             .unique() //removes hardCoded that were already loaded
             .sorted { $0.ciCompare($1) }
     }
@@ -161,12 +161,12 @@ extension TemplatesController {
    
         
         var subs = templates.filter { $0.label.category == category }
-                        .compactMap {$0.label.subCategory.camelCaseToWords() }
+                        .compactMap {$0.label.subCategory.camelCaseToWords }
                         .unique()
        
         //if category is a hardcoded category, provide hardcoded subcategory suggestions
         if let cat = Template.Category(string: category) {
-            let defSubs = Template.SubCategory.subCategories(for: cat).compactMap { $0.rawValue.camelCaseToWords() }
+            let defSubs = Template.SubCategory.subCategories(for: cat).compactMap { $0.rawValue.camelCaseToWords }
             subs += defSubs
         }
         return subs

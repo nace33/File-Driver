@@ -10,49 +10,48 @@ import BOF_SecretSauce
 
 
 struct CasesView: View {
-    @State private var isLoading = false
     @State private var cases : [Case] = []
-    @State private var error: Error?
-    @State private var selectedCaseID : Case.ID?
+//    @State private var selectedCaseID : Case.ID?
     @State private var scrollToCaseID : Case.ID?
     @State private var showNewCaseSheet = false
     @State private var editCase   : Case?
     @State private var filter = Filter()
     @AppStorage(BOF_Settings.Key.casesSort.rawValue) var sortBy : Case.SortBy = .category
 
-
+    @State private var loader = VLoader_Item()
+    @Environment(BOF_Nav.self) var navModel
+    
+   
     var body: some View {
-        HSplitView {
-            if let error {
-                errorView(error)
-            }
-            else if isLoading {
-                loadingView
-            }
-            else if cases.isEmpty {
+        VStackLoacker(loader: $loader) {
+            Task { await loadCases() }
+        } content: {
+            if cases.isEmpty {
                 noCasesView
-            }
-            else {
-                theListView
-                    .alternatingRowBackgrounds()
-                    .frame(minWidth:400, idealWidth: 400, maxWidth: 400)
-                    .contextMenu(forSelectionType: Case.ID.self,
-                                             menu: { listMenu($0 )         },
-                                    primaryAction: { _ in print("Double Click") })
-                
-                Group {
-                    if let index = index(for: selectedCaseID) {
-                        VStack {
-                            Text("Case Detail Here \(index)")
-                            Text("Option to audit case files")
-                            Text("Audit means iterating each file found in CaseFile.folder and comparing it to the Case.File sheet.")
+            } else {
+                NavigationStack(path:Bindable(navModel).path) {
+                    theListView
+                        .padding(.top)
+                        .contextMenu(forSelectionType: Case.ID.self,
+                                                 menu: { listMenu($0 )         },
+                                     primaryAction: { ids in
+                            if let id = ids.first {
+                                print("\(id)")
+                                navModel.path.append(id)
+                            }
+                        })
+                        .navigationDestination(for: Case.ID.self) { caseID in
+                            if let index = index(for:caseID) {
+                                CaseView(aCase: $cases[index])
+                                    .navigationTitle(cases[index].title)
+                                #if os(macOS)
+                                    .navigationSubtitle(cases[index].category.title)
+                                #endif
+                            } else {
+                                Text("Could not locate case with id: \(caseID)")
+                            }
                         }
-                    } else {
-                        ContentUnavailableView("No Selection", systemImage: "filemenu.and.selection", description: Text("Select a case from the list on the left."))
-                    }
                 }
-                    .layoutPriority(1)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
             .task { await loadCases() }
@@ -60,8 +59,8 @@ struct CasesView: View {
             .sheet(isPresented: $showNewCaseSheet) {
                 NewCase { newCase in
                     cases.append(newCase)
-                    selectedCaseID = newCase.id
-                    scrollToCaseID = newCase.id
+                    navModel.caseID  = newCase.id
+                    scrollToCaseID   = newCase.id
                 }
             }
             .sheet(item: $editCase) { aCase in
@@ -79,11 +78,11 @@ struct CasesView: View {
                     Button { Task { await loadCases() }} label: {Image(systemName: "arrow.clockwise")}
                     Button("New") {  showNewCaseSheet = true }
                     Button("Edit") {
-                        if let selectedCaseID, let index = index(for: selectedCaseID) {
+                        if let selectedCaseID = navModel.caseID, let index = index(for: selectedCaseID) {
                             editCase = cases[index]
                         }
                     }
-                        .disabled(selectedCaseID == nil)
+                        .disabled(navModel.caseID == nil)
                 }
             }
     }
@@ -132,12 +131,12 @@ extension CasesView {
     }
     func loadCases() async {
         do {
-            isLoading = true
+            loader.status = "Loading Cases"
+            loader.start()
             cases = try await Case.allCases()
-            isLoading = false
+            loader.stop()
         } catch {
-            isLoading = false
-            self.error = error
+            loader.stop(error)
         }
     }
     func loadFilter() {
@@ -150,16 +149,6 @@ extension CasesView {
 
 //MARK: - View Builders
 extension CasesView {
-    @ViewBuilder func errorView(_ error:Error) -> some View {
-        VStack {
-            Spacer()
-            HStack {
-                Text(error.localizedDescription)
-                Button("Reload Cases") { Task { await loadCases() }}
-            }
-            Spacer()
-        }
-    }
     @ViewBuilder var noCasesView : some View {
         VStack {
             Spacer()
@@ -195,7 +184,7 @@ extension CasesView {
         VStack(spacing:0) {
             let filteredCases = filteredCases
             ScrollViewReader { proxy in
-                List(selection: $selectedCaseID) {
+                List(selection: Bindable(navModel).caseID) {
                     if filteredCases.isEmpty {  emptyFilteredCasesView }
                     
                     BOFSections(of: filteredCases, groupedBy:sortKey, isAlphabetic: isAlphabetic) { headerText in

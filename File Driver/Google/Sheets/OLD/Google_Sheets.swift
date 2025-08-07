@@ -7,7 +7,7 @@
 
 import Foundation
 import GoogleAPIClientForREST_Sheets
-/*
+
 @Observable
 final class Google_Sheets {
     static let shared: Google_Sheets = { Google_Sheets() }() //Singleton
@@ -76,7 +76,7 @@ extension Google_Sheets {
         let query = GTLRSheetsQuery_SpreadsheetsGet.query(withSpreadsheetId: id)
 
         do {
-            _ = try await Google.execute(query, fetcher: fetcher)
+           return try await Google.execute(query, fetcher: fetcher)
         } catch {
             throw error
         }
@@ -118,8 +118,8 @@ extension Google_Sheets {
         var result = [(id:String, index:Int)]()
         
         do {
-            if let valueRange = try await Google.execute(query, fetcher: fetcher),
-               let values = valueRange.values,
+            let valueRange = try await Google.execute(query, fetcher: fetcher)
+            if let values = valueRange.values,
                 let ids = values.map({$0.first}) as? [String] {
                 ids.enumerated().forEach { item in
                     if rowIDs.contains(item.element) {
@@ -157,8 +157,8 @@ extension Google_Sheets {
         let fetcher = Google_Fetcher<GTLRSheets_BatchGetValuesResponse>(service:service, scopes:scopes)
 
         do {
-            if let result = try await Google.execute(query, fetcher: fetcher),
-               let valueRanges = result.valueRanges {
+            let result = try await Google.execute(query, fetcher: fetcher)
+            if let valueRanges = result.valueRanges {
                 var allResults = [(range:String, values:[[String]])]()
                 for valueRange in valueRanges {
                     if let range = valueRange.range,
@@ -173,6 +173,7 @@ extension Google_Sheets {
                 return  allResults
             }
             throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+
         } catch {
             throw error
         }
@@ -222,10 +223,9 @@ extension Google_Sheets {
         let fetcher = Google_Fetcher<GTLRSheets_AppendValuesResponse>(service:service, scopes:scopes)
         
         do {
-            if (try await Google.execute(query, fetcher: fetcher)) != nil {
-                return true
-            }
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
+
         } catch {
             throw error
         }
@@ -275,10 +275,8 @@ extension Google_Sheets {
             let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: update, spreadsheetId: spreadsheetID)
             let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
 
-            if (try await Google.execute(query, fetcher: fetcher)) != nil {
-                return true
-            }
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -306,10 +304,9 @@ extension Google_Sheets {
             query.valueInputOption = kGTLRSheetsValueInputOptionRaw
             let fetcher = Google_Fetcher<GTLRSheets_UpdateValuesResponse>(service:service, scopes:scopes)
 
-            if let _ = try await Google.execute(query, fetcher: fetcher) {
-                return true
-            }
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -329,11 +326,8 @@ extension Google_Sheets {
             
             let query = GTLRSheetsQuery_SpreadsheetsValuesBatchUpdate.query(withObject: request, spreadsheetId:spreadsheetID)
             let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateValuesResponse>(service:service, scopes:scopes)
-            if let _ = try await Google.execute(query, fetcher: fetcher) {
-                return true
-            }
-
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -354,11 +348,8 @@ extension Google_Sheets {
             
             let query = GTLRSheetsQuery_SpreadsheetsValuesBatchUpdate.query(withObject: request, spreadsheetId:spreadsheetID)
             let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateValuesResponse>(service:service, scopes:scopes)
-            if let _ = try await Google.execute(query, fetcher: fetcher) {
-                return true
-            }
-
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -403,10 +394,8 @@ extension Google_Sheets {
         let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
         do {
 
-            if let _ = try await Google.execute(query, fetcher: fetcher) {
-                return true
-            }
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -461,9 +450,7 @@ extension Google_Sheets {
         let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
         do {
 
-            guard try await Google.execute(query, fetcher: fetcher) != nil else {
-                throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
-            }
+            _ = try await Google.execute(query, fetcher: fetcher)
             return true
         } catch {
             throw error
@@ -518,10 +505,8 @@ extension Google_Sheets {
         let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
 
         do {
-            if let _ = try await Google.execute(query, fetcher: fetcher) {
-                return true
-            }
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -541,10 +526,8 @@ extension Google_Sheets {
             
             let fetcher = Google_Fetcher<GTLRSheets_ClearValuesResponse>(service:service, scopes:scopes)
             
-            if let _ = try await Google.execute(query, fetcher: fetcher) {
-                return true
-            }
-            throw Google_Error.driveCallSuceededButReturnTypeDoesNotMatch
+            _ = try await Google.execute(query, fetcher: fetcher)
+            return true
         } catch {
             throw error
         }
@@ -554,6 +537,3 @@ extension Google_Sheets {
     }
 }
 
-
-
-*/

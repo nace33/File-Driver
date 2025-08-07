@@ -13,7 +13,7 @@ struct FilingView: View {
     @State private var driveDelegate = DriveDelegate(actions: [.newFolder, .upload, .move, .rename, .trash, .filter, .preview])
 
     @State private var isFiling = false
-    @State private var filerDelegate = Filer_Delegate(mode: .cases, actions:Filer_Delegate.Action.inlineActions)
+    @State private var filerDelegate = Filer_Delegate( actions:Filer_Delegate.Action.inlineActions)
     
     var body: some View {
         if driveID.isEmpty {
@@ -32,17 +32,39 @@ struct FilingView: View {
                                 filerDelegate.items = items
                             }
                         })
+                        .onChange(of: filerDelegate.filingState, { _, _ in
+//                            print(filerDelegate.filingState.title)
+                            switch filerDelegate.filingState {
+                            case .isFiling:
+                                isFiling = true
+                            case .filed(let items, let allFiled):
+                                isFiling = false
+                                processFiled(items, allFiled)
+                            default:
+                                isFiling = false
+                            }
+                        })
                         .inspectorColumnWidth(min: 500, ideal: 500)
                 }
                 .onAppear() {
                     driveDelegate.rootID = driveID
                 }
+
                 .toolbar {
                     ToolbarItemGroup(placement: .navigation) {
                         Button { driveDelegate.refresh()} label: {Image(systemName: "arrow.clockwise")}
                         Button("New") {  driveDelegate.showUploadSheet = true }
                     }
                 }
+        }
+    }
+    func processFiled(_ items:[Filer_Item], _ allFiled:Bool) {
+        driveDelegate.removeFiles(items.compactMap(\.file?.id))
+        if allFiled {
+            filerDelegate.reset(reload:false)
+            if let firstFile = driveDelegate.files.first {
+                driveDelegate.selection = [firstFile]
+            }
         }
     }
 }

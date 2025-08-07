@@ -88,10 +88,10 @@ struct EditForm<T: Equatable, V:View, S:View> : View {
             }
         }
             .formStyle(.grouped)
-            .onSubmit {
-                guard canSendUpdate else { return }
-                Task { await internalUpdate() }
-            }
+//            .onSubmit {
+//                guard canSendUpdate else { return }
+//                Task { await internalUpdate() }
+//            }
             .toolbar {
                 if style == .sheet {
                     ToolbarItem(placement: .cancellationAction) {

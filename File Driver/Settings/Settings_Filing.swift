@@ -21,7 +21,8 @@ struct Tester : View {
 struct Settings_Filing: View {
     typealias AutoRenamer = AutoFile_Rename
     @AppStorage(BOF_Settings.Key.filingDrive.rawValue)                     var driveID            : String = ""
-    @AppStorage(BOF_Settings.Key.filingAutoRename.rawValue)                var autoRenameFiles    : Bool = true
+    @AppStorage(BOF_Settings.Key.filingAutoRenameFiles.rawValue)           var autoRenameFiles    : Bool = true
+    @AppStorage(BOF_Settings.Key.filingAutoRenameEmails.rawValue)          var autoRenameEmails    : Bool = true
     @AppStorage(BOF_Settings.Key.filingAutoRenameComponents.rawValue     ) var filenameComponents : [AutoRenamer]  = AutoRenamer.defaultFilename
     @AppStorage(BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue) var emailComponents    : [AutoRenamer]  = AutoRenamer.defaultEmail
     
@@ -106,8 +107,10 @@ struct Settings_Filing: View {
             Toggle("Automatically Rename Files", isOn:$autoRenameFiles)
             LabeledContent("Name Format")  { components($filenameComponents, showEmail: false)  }
                 .disabled(!autoRenameFiles)
+            
+            Toggle("Automatically Rename Email", isOn:$autoRenameEmails)
             LabeledContent("Email Format") { components($emailComponents   , showEmail: true )  }
-                .disabled(!autoRenameFiles)
+                .disabled(!autoRenameEmails)
     
         }
     }
@@ -129,7 +132,7 @@ struct Settings_Filing: View {
                     }
                     
                     Button("Open Database") {
-                        openWindow(id: "SwiftData", value:BOF_SwiftDataView.ModelType.suggestions)
+                        openWindow(id: "SwiftData", value:BOF_SwiftDataView.ModelType.filing)
                     }
                         .buttonStyle(.plain)
                         .foregroundStyle(.blue)

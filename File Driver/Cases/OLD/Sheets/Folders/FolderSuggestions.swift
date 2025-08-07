@@ -15,7 +15,7 @@ extension Case_OLD.Folder {
         case medical, employement, education, departmentOfLabor, socialSecurity, medicare
    
         
-        var title : String { rawValue.camelCaseToWords() }
+        var title : String { rawValue.camelCaseToWords }
         
         var authorizationSuggestions : [Suggestion] {[ .medical, .employement, .education, .departmentOfLabor, .socialSecurity, .medicare ]}
     }

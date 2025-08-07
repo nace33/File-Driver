@@ -14,6 +14,16 @@
 				<string>com.googleusercontent.apps.547223001403-9cpb7e52dnj5ubl64mov4to55qn30rge</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.bucketoffiles.File-Driver</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>filedriver</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>547223001403-9cpb7e52dnj5ubl64mov4to55qn30rge.apps.googleusercontent.com</string>

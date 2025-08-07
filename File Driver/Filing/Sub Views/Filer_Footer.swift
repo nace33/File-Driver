@@ -18,7 +18,7 @@ struct Filer_Footer : View {
     
     var body : some View {
         HStack {
-            if !delegate.items.isEmpty, delegate.actions.contains(.saveTo) {
+            if !delegate.items.isEmpty, delegate.actions.contains(.saveTo), !delegate.isInSingleCaseMode {
                 saveToMenu
                     .fixedSize()
                     .disabled(delegate.loader.isLoading)
@@ -37,13 +37,14 @@ struct Filer_Footer : View {
             }
             
             if delegate.canShowForm {
-                Button("Add To \(delegate.mode == .cases ? "Case" : "Folder")")        { addToButtonPressed()     }
-                    .frame(width: 100)
+                let title = (delegate.selectedMode == .cases || delegate.isInSingleCaseMode) ? "Add To Case" : "Add To Folder"
+                Button(title){ addToButtonPressed()     }
+                    .frame(width: 110)
                     .buttonStyle(.borderedProminent)
                     .disabled(!delegate.canFileItems || delegate.loader.isLoading)
             } else {
                 Button(selectTitle) { selectButtonClicked() } 
-                    .frame(width: 100)
+                    .frame(width: 110)
                     .buttonStyle(.borderedProminent)
                     .disabled(!delegate.canSelectItem || delegate.loader.isLoading)
 
@@ -69,7 +70,7 @@ struct Filer_Footer : View {
     //Actions
     ///Select
     var selectTitle : String {
-        switch delegate.mode {
+        switch delegate.selectedMode {
         case .cases:
             if delegate.selectedCase == nil {
                 "Select Case"
@@ -82,10 +83,12 @@ struct Filer_Footer : View {
             } else {
                 "Select Folder"
             }
+        case .aCase(_):
+            "Select Folder"
         }
     }
     func selectButtonClicked() {
-        switch delegate.mode {
+        switch delegate.selectedMode {
         case .cases:
             if delegate.selectedCase == nil {
                 if let selCase = delegate.caseListSelection {
@@ -98,6 +101,12 @@ struct Filer_Footer : View {
 //                }
             }
         case .folders:
+            if let selFolder = delegate.folderListSelection {
+//                withAnimation {
+                    delegate.select(selFolder)
+//                }
+           }
+        case .aCase(_):
             if let selFolder = delegate.folderListSelection {
 //                withAnimation {
                     delegate.select(selFolder)
@@ -128,9 +137,7 @@ struct Filer_Footer : View {
     
     ///Reset
     func resetButtonPressed() {
-        delegate.resetCaseVariables()
-        delegate.resetFolderVariables()
-        Task { await delegate.load() }
+        delegate.reset(reload: true)
     }
     
     //Add To
@@ -138,13 +145,15 @@ struct Filer_Footer : View {
         guard delegate.canFileItems else { return }
         Task {
             do {
-                switch delegate.mode {
+                switch delegate.selectedMode {
                 case .cases:
                     try await delegate.saveToSelectedCase()
                 case .folders:
                     if let selFolder = delegate.selectedFolder {
                         try await delegate.saveTo(selFolder.id)
                     }
+                case .aCase(_):
+                    try await delegate.saveToSelectedCase()
                 }
                 addToRecentFolders()
                 if delegate.actions.contains(.cancel) {
@@ -160,62 +169,86 @@ struct Filer_Footer : View {
     //View Builder
     @ViewBuilder var saveToMenu : some View {
         Menu("Quick Save") {
+            //Filing Drive
             if driveID.isEmpty {
                 Button("Set Filing Drive") { showGetDriveSheet = true }
             } else {
                 Button("Filing") { saveToButtonPressed(driveID)}
+#if os(macOS)
                     .modifierKeyAlternate(.command) {
                         Button("Set Filing Drive") { showGetDriveSheet = true }
                     }
+                #endif
             }
-            let recentFolders = savedFolders.filter { $0.isFavorite == false }
-            if recentFolders.count > 0 {
-                Menu("Recents") {
-                    ForEach(recentFolders.sorted(by: {$0.date < $1.date})) { recent in
-                        Button(recent.displayTitle) { saveToButtonPressed(recent.id)  }
-                    }
-                    if recentFolders.count > 0 {
-                        Divider()
-                        Button("Clear Recent Folders") { savedFolders.removeAll(where: {$0.isFavorite == false }) }
-                    }
+            //Recent Folders
+            recentFoldersMenu
+            
+            //Favorites
+            favoriteFoldersMenu
+        }
+    }
+    @ViewBuilder var recentFoldersMenu : some View {
+        let recentFolders = savedFolders.filter { $0.isFavorite == false }
+        if recentFolders.count > 0 {
+            Menu("Recents") {
+                ForEach(recentFolders.sorted(by: {$0.date < $1.date})) { recent in
+                    Button(recent.displayTitle) { saveToButtonPressed(recent.id)  }
+                }
+                if recentFolders.count > 0 {
+                    Divider()
+                    Button("Clear Recent Folders") { savedFolders.removeAll(where: {$0.isFavorite == false }) }
                 }
             }
-            let favoriteFolders = savedFolders.filter({ $0.isFavorite })
-            if favoriteFolders.count > 0 || (delegate.mode == .folders && delegate.folderListSelection != nil && delegate.folderListSelection?.id != driveID) {
-                Menu("Favorites") {
-                    ForEach(favoriteFolders.sorted(by: {$0.date < $1.date})) { favorite in
-                        Button(favorite.displayTitle) { saveToButtonPressed(favorite.id)  }
-                            .modifierKeyAlternate(.command) {
-                                Button("Remove \(favorite.displayTitle)") {
-                                    if let index = savedFolders.firstIndex(where: {$0.id == favorite.id && $0.isFavorite}) {
-                                        savedFolders.remove(at: index)
+        }
+    }
+    @ViewBuilder var favoriteFoldersMenu : some View {
+        let favoriteFolders = savedFolders.filter({ $0.isFavorite })
+        if favoriteFolders.count > 0 || (delegate.selectedMode == .folders && delegate.folderListSelection != nil && delegate.folderListSelection?.id != driveID) {
+            Menu("Favorites") {
+                ForEach(favoriteFolders.sorted(by: {$0.date < $1.date})) { favorite in
+                    Button(favorite.displayTitle) { saveToButtonPressed(favorite.id)  }
+#if os(macOS)
+                        .modifierKeyAlternate(.command) {
+                            if delegate.modes.contains(.folders) {
+                                Button("Open \(favorite.displayTitle)") {
+                                    if delegate.selectedMode != .folders {
+                                        delegate.selectedMode = .folders
                                     }
+                                    delegate.load(favorite.asGoogleFolder)
                                 }
                             }
-                    }
-                    if delegate.mode == .folders,
-                        let selectedFolder = delegate.folderListSelection,
-                        selectedFolder.id != driveID,
-                        recentFolders.first(where:({$0.isFavorite && $0.id == selectedFolder.id})) == nil {
-                        
-                        if favoriteFolders.count > 0 {
-                            Divider()
                         }
-                        Button("Add \(selectedFolder.title)") { addToFavoriteFolders()}
-                    }
+                        .modifierKeyAlternate(.option) {
+                            Button("Remove \(favorite.displayTitle)") {
+                                if let index = savedFolders.firstIndex(where: {$0.id == favorite.id && $0.isFavorite}) {
+                                    savedFolders.remove(at: index)
+                                }
+                            }
+                        }
+                    #endif
+                }
+                
+                if delegate.selectedMode == .folders,
+                    let selectedFolder = delegate.folderListSelection,
+                    selectedFolder.id != driveID
+                    /*recentFolders.first(where:({$0.isFavorite && $0.id == selectedFolder.id})) == nil*/ {
+                    
                     if favoriteFolders.count > 0 {
                         Divider()
-                        Button("Clear Favorite Folders") { savedFolders.removeAll(where: {$0.isFavorite })}
                     }
+                    Button("Add \(selectedFolder.title)") { addToFavoriteFolders()}
+                }
+                if favoriteFolders.count > 0 {
+                    Divider()
+                    Button("Clear Favorite Folders") { savedFolders.removeAll(where: {$0.isFavorite })}
                 }
             }
         }
     }
     
-    
     //Favorites
     func addToRecentFolders()   {
-        if delegate.mode == .folders,
+        if delegate.selectedMode == .folders,
             let selectedFolder = delegate.selectedFolder,
             selectedFolder.id != driveID {
             
@@ -239,7 +272,7 @@ struct Filer_Footer : View {
 }
 
 
-
+import GoogleAPIClientForREST_Drive
 fileprivate struct SavedFolder : Identifiable, Codable {
     var id         : String
     var title      : String
@@ -255,5 +288,13 @@ fileprivate struct SavedFolder : Identifiable, Codable {
         } else {
             path.joined(separator: "/")
         }
+    }
+    
+    var asGoogleFolder : GTLRDrive_File {
+        let file = GTLRDrive_File()
+        file.identifier = id
+        file.name = title
+        file.mimeType = GTLRDrive_File.MimeType.folder.rawValue
+        return file
     }
 }

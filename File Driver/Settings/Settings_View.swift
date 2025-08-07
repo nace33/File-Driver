@@ -16,7 +16,7 @@ struct Settings_View : View {
         VStack {
             Picker("", selection:$sheet) {
                 ForEach(BOF_Settings.allCases, id: \.self) { sheet in
-                    Text(sheet.rawValue.camelCaseToWords())
+                    Text(sheet.rawValue.camelCaseToWords)
                 }
             }
                 .labelsHidden().fixedSize().pickerStyle(.segmented)

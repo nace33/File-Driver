@@ -123,8 +123,17 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
         }
     }
     
-    static func proposedFilename(for url:URL, thread:EmailThread?) -> String? {
-        let componentString = thread == nil ? BOF_Settings.Key.filingAutoRenameComponents.rawValue : BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue
+    static  func proposedFilename(for url:URL, thread:EmailThread?) -> String? {        
+        let componentString : String
+        if let thread, thread.headers.count > 0 {
+            guard UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRenameEmails.rawValue) else { return nil }
+            componentString = BOF_Settings.Key.filingAutoRenameEmailComponents.rawValue
+        } else {
+            guard UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRenameFiles.rawValue) else { return nil }
+            componentString = BOF_Settings.Key.filingAutoRenameComponents.rawValue
+        }
+        print(componentString)
+        
         guard var stringComponents = UserDefaults.standard.value(forKeyPath:componentString) as? String else { return nil}
         stringComponents = stringComponents.replacingOccurrences(of: "[", with: "")
         stringComponents = stringComponents.replacingOccurrences(of: "]", with: "")
@@ -142,8 +151,9 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
     }
 
     static func generateFilename(for url:URL, thread:EmailThread? = nil) throws -> String? {
-        let automaticallyRenameFiles = UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRename.rawValue)
-        guard automaticallyRenameFiles else { return nil }
+        let automaticallyRenameFiles  = UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRenameFiles.rawValue)
+        let automaticallyRenameEmails = UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRenameEmails.rawValue)
+        guard automaticallyRenameFiles || automaticallyRenameEmails else { return nil }
         guard url.isFileURL            else {  return nil }
         return  proposedFilename(for: url, thread:thread ?? url.emailThread)
     }

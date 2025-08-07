@@ -61,8 +61,10 @@ extension ContactDetail_Files {
 extension ContactDetail_Files {
     func showFileCategoryInDrive(_ category:String) async {
         do {
+#if os(macOS)
             let folder = try await Drive.shared.get(folder: category, parentID: contact.file.parents?.first ?? "")
             File_DriverApp.createWebViewTab(url: folder.showInDriveURL, title: category)
+            #endif
         }
         catch {
             self.error = error
@@ -139,10 +141,12 @@ extension ContactDetail_Files {
     @ViewBuilder func menu(_ file:Binding<Contact.File>) -> some View {
         Button("Preview") { previewFile = file.wrappedValue }
         Button("Edit")    { editFile    = file.wrappedValue }
+    #if os(macOS)
         Divider()
         Button("Show in Google Drive") {
             File_DriverApp.createWebViewTab(url: GTLRDrive_File.driveURL(id: file.wrappedValue.fileID), title: file.wrappedValue.filename)
         }
+        #endif
 
         Divider()
         Button("Remove File") { delete(file, trash: false)}

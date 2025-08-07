@@ -70,7 +70,7 @@ struct Drive_Rename: View {
     @ViewBuilder var renameFieldsSection : some View {
         Section {
             Picker("Style", selection:$renameIteratorStyle) {
-                ForEach(RenameIterator.allCases, id:\.self) { Text($0.rawValue.camelCaseToWords())}
+                ForEach(RenameIterator.allCases, id:\.self) { Text($0.rawValue.camelCaseToWords)}
             }
                 .onChange(of: renameIteratorStyle) { _, _ in
                     updateFilenames()
@@ -165,7 +165,9 @@ struct Drive_Rename: View {
                 }.padding(.vertical, 8)
             }
         }
+#if os(macOS)
             .alternatingRowBackgrounds()
+#endif
             .frame(minHeight: 400)
     }
     @ViewBuilder var renameButton : some View {

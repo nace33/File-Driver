@@ -433,6 +433,28 @@ extension Drive {
             throw error
         }
     }
+    func copy(files:[GTLRDrive_File], to destinationID:String) async throws -> GTLRBatchResult {
+        let batch = GTLRBatchQuery()
+        for file in files {
+            let newFile = GTLRDrive_File()
+            newFile.name = file.name
+            newFile.parents = [destinationID]
+
+            let query = GTLRDriveQuery_FilesCopy.query(withObject: newFile, fileId:file.id)
+            
+            query.fields = GTLRDrive_File.queryFileFields
+            query.supportsAllDrives = true
+            
+            batch.addQuery(query)
+        }
+        let fetcher = Google_Fetcher<GTLRBatchResult>(service: service, scopes: scopes)
+        do {
+        
+            return try await Google.executeBatch(batch, fetcher: fetcher)
+        } catch {
+            throw error
+        }
+    }
 }
 //MARK: -Move
 extension Drive {

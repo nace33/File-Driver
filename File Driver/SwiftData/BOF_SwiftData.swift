@@ -47,8 +47,17 @@ extension BOF_SwiftData {
             print("Error; \(error)")
         }
     }
-
-
+    func fetchSidebarItem(_ id:String) -> Sidebar_Item? {
+        var fetchDescriptor = FetchDescriptor<Sidebar_Item>()
+        fetchDescriptor.predicate = #Predicate { $0.id == id}
+        return fetch(fetchDescriptor)?.first
+    }
+    func fetchFirstSidebarItem(with category:Sidebar_Item.Category) -> Sidebar_Item? {
+        var fetchDescriptor = FetchDescriptor<Sidebar_Item>()
+        let catRaw = category.rawValue
+        fetchDescriptor.predicate = #Predicate { $0.categoryString == catRaw }
+        return fetch(fetchDescriptor)?.first
+    }
     
    func fetch<T:PersistentModel>(_ descriptor: FetchDescriptor<T>) -> [T]? {
         try? container.mainContext.fetch(descriptor)

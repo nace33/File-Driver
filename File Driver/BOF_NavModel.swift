@@ -10,10 +10,14 @@ import SwiftUI
 @Observable
 final class BOF_Nav : Codable, RawRepresentable{
     static let storageKey: String = "File-Driver_BOF_Nav"
-    
+
     var sidebar : Sidebar_Item.ID? = nil
+    var path = NavigationPath()
+    var caseID  : Case.ID?
+    var caseView : Case.ViewIndex = .allCases.first!
+    
     enum CodingKeys: String, CodingKey {
-        case sidebar
+        case sidebar, path, caseID, caseView
     }
     
     init() {
@@ -25,10 +29,19 @@ final class BOF_Nav : Codable, RawRepresentable{
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.sidebar = try container.decodeIfPresent(Sidebar_Item.ID.self, forKey: .sidebar)
+        self.caseID = try container.decodeIfPresent(Case.ID.self, forKey: .caseID)
+        self.caseView = try container.decodeIfPresent(Case.ViewIndex.self, forKey: .caseView) ?? .allCases.first!
+        
+        if let data = try container.decodeIfPresent(NavigationPath.CodableRepresentation.self, forKey: .path) {
+            self.path = .init(data)
+        }
     }
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(sidebar, forKey: .sidebar)
+        try container.encodeIfPresent(path.codable, forKey: .path)
+        try container.encodeIfPresent(caseID, forKey: .caseID)
+        try container.encodeIfPresent(caseView, forKey: .caseView)
 
     }
     
@@ -41,7 +54,10 @@ final class BOF_Nav : Codable, RawRepresentable{
              return
          }
          self.sidebar = result.sidebar
-     }
+         self.path    = result.path
+        self.caseID  = result.caseID
+        self.caseView  = result.caseView
+    }
 
      var rawValue: String {
          guard let data = try? JSONEncoder().encode(self),

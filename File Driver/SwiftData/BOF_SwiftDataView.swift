@@ -13,13 +13,13 @@ struct BOF_SwiftDataView: View {
         self.modelType = modelType
     }
     @State var modelType: ModelType
-    enum ModelType : String, CaseIterable, Codable { case sidebar, suggestions }
+    enum ModelType : String, CaseIterable, Codable { case sidebar, filing }
     var body: some View {
         Group {
             switch modelType {
             case .sidebar:
                 BOF_SwiftDataView_Sidebar()
-            case .suggestions:
+            case .filing:
                 SD_FilerView()
             }
         }

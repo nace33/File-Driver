@@ -15,12 +15,13 @@ struct DriveFileView: View {
     @State private var selectedFile : GTLRDrive_File?
     @State private var navDelegate : BOF_WebView.NavDelegate
     @State private var uiDelegate  : BOF_WebView.UIDelegate
-    @State private var isLoading = false
+    @State private var isLoading : Bool
     @State private var webView : WKWebView?
-    init(_ files: [GTLRDrive_File]) {
+    init(_ files: [GTLRDrive_File], isLoading:Bool = true) {
         self.files = files
         _navDelegate = State(initialValue: BOF_WebView.NavDelegate()) //ignore until called in.task because don't need loading UI on initial load
         _uiDelegate  = State(initialValue: BOF_WebView.UIDelegate()) //ignore until called in.task because don't need loading UI on initial load
+        _isLoading   = State(initialValue: isLoading)
     }
     
     

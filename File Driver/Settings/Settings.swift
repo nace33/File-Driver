@@ -15,7 +15,7 @@ enum BOF_Settings : String, CaseIterable {
         //General
         case textSuggestionStyle
         //filing
-        case filingDrive, filingAutoRename, filingAutoRenameComponents, filingAutoRenameEmailComponents, filingAllowSuggestions, filingSuggestionLimit, filingFormContactMatch, filingFormTagMatch
+        case filingDrive, filingAutoRenameFiles, filingAutoRenameEmails, filingAutoRenameComponents, filingAutoRenameEmailComponents, filingAllowSuggestions, filingSuggestionLimit, filingFormContactMatch, filingFormTagMatch
  
         //Inbox
         case inboxImmediateFilingKey

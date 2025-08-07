@@ -31,6 +31,11 @@ struct TemplateDetail: View {
     @State private var showEditSheet      = false
     @State private var showAddToCaseSheet = false
 
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.openURL) var openURL
+    @Environment(BOF_Nav.self) var navModel
+
+    
     enum Mode : String, CaseIterable, Codable {
         case preview
         case edit
@@ -59,14 +64,24 @@ struct TemplateDetail: View {
                     Button("Ooopsies!") { showEditSheet.toggle() }.padding(100)
                 }
             })
-            .sheet(isPresented: $showAddToCaseSheet, content: {
-                AddToCase_Template($template)
-            })
+            .sheet(isPresented: $showAddToCaseSheet) {
+                FilingSheet(showPreview: false, modes: [.cases], items: [Filer_Item(file: template.file, action: .copy)], actions:Filer_Delegate.Action.altSheetActs) { state in
+                    switch state {
+                    case .filed(let items, _):
+                        if let first = items.first, let casesItem = BOF_SwiftData.shared.fetchFirstSidebarItem(with: .cases) {
+                            navModel.sidebar = casesItem.id
+                            navModel.caseID  = first.filedToCase?.id
+                            if let id = first.filedToCase?.id {
+                                navModel.path.append(id)
+                            }
+                        }
+                    default:
+                        break
+                    }
+                }
+            }
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
-                    if template.file.isGoogleType {
-                        
-                    }
                     switch mode {
                     case .preview:
                         Menu("Edit") {
@@ -84,7 +99,7 @@ struct TemplateDetail: View {
             .onChange(of: mode, { _, _ in  updateWebView()  })
             .task(id:template.id) { updateWebView() }
     }
-    
+  
     func updateWebView() {
         switch mode {
          case .preview:
@@ -109,9 +124,9 @@ struct TemplateDetail: View {
             case .downloading:
                 print("Downloading")
             case .completed:
-                if let url = download.progress.fileURL {
-                    NSWorkspace.shared.open(url)
-                }
+//                if let url = download.progress.fileURL {
+//                    NSWorkspace.shared.open(url)
+//                }
                 print("Download: \(String(describing: download.progress.fileURL))")
             case .failed:
                 print("Unable to download")

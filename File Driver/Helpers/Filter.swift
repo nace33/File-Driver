@@ -38,6 +38,7 @@ class Filter  {
         }
 
         enum TokenPrefix : String, CaseIterable {
+            case atSign     = "@"
             case hashTag    = "#"
             case dollarSign = "$"
         }

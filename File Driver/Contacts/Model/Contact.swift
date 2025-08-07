@@ -97,7 +97,7 @@ public extension Contact {
     }
     enum Sort : String, CaseIterable {
         case firstName, lastName, client, group, status
-        var title : String { rawValue.camelCaseToWords() }
+        var title : String { rawValue.camelCaseToWords }
     }
 }
 

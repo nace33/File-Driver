@@ -27,7 +27,7 @@ extension Case {
     
         enum Priority : String, CaseIterable {
             case none, low, medium, high
-            var title : String { rawValue.camelCaseToWords() }
+            var title : String { rawValue.camelCaseToWords }
             var image : String {
                 switch self {
                 case .none:
@@ -55,7 +55,7 @@ extension Case {
         }
         enum Status : String, CaseIterable {
             case notStarted, inProgress, waiting, stayed, completed, unableToComplete, cancelled
-            var title : String { rawValue.camelCaseToWords() }
+            var title : String { rawValue.camelCaseToWords }
         }
     }
 }
