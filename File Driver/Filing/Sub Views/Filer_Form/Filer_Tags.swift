@@ -15,51 +15,10 @@ struct Filer_Tags: View {
 
     var body: some View {
         Section {
-            let current  = delegate.tags.compactMap({$0.name}).joined()
-            let eligible = delegate.selectedCase?.tags.filter({!current.ciContain($0.name)  }) ?? []
-            LabeledContent {
-                TextField("Tags", text:$tagText, prompt: Text("Add Tags"))
-                    .labelsHidden()
-#if os(macOS)
-                    .textInputSuggestions {
-                        if tagText.count > 0 {
-                            let matches = delegate.selectedCase?.tags.filter({$0.name.ciHasPrefix(tagText) && !current.ciContain($0.name)  }) ?? []
-                            ForEach(matches) {  Text($0.name) .textInputCompletion($0.name) }
-                        }
-                    }
-#endif
-                    .onSubmit {
-                        _ = addNewTag(tagText)
-                        tagText = ""
-                    }
-            } label: {
-                Menu("Tags") {
-                    if eligible.count > 10 {
-                        BOFSections(.menu, of: eligible , groupedBy: \.name, isAlphabetic: true) { letter in
-                            Text(letter)
-                        } row: { tag in
-                            Button(tag.name) { addTag(tag)  }
-                        }
-                    } else {
-                        ForEach(eligible.sorted(by: {$0.name.ciCompare($1.name)})) { tag in
-                            Button(tag.name) { addTag(tag)  }
-                        }
-                    }
-                }
-                    .menuStyle(.borderlessButton)
-                    .menuIndicator(eligible.isEmpty ? .hidden : .visible)
-                    .labelsHidden()
-                    .fixedSize()
-            }
-            if delegate.tags.count > 0 {
-                Flex_Stack(data: delegate.tags, alignment: .trailing) { tag in
-                    let isExisting = tagIsInSpreadsheet(tag.id)
-                    Text(tag.name)
-                        .tokenStyle(color:isExisting ? .green : .orange,  style:.strike) {
-                            removeTag(tag.id)
-                        }
-                }
-            }
+            let eligible = delegate.selectedCase?.tags ?? []
+            FormTokensPicker(title: "Tags", items: Bindable(delegate).tags, allItems:eligible, titleKey: \.name, tokenColor:.green, altColor:.orange, create:  { createString in
+                addNewTag(createString)
+            })
         }
             .task(id:delegate.items) {
                 loadFilerItemTags()
@@ -85,15 +44,6 @@ struct Filer_Tags: View {
             searchString.contains($0.name.lowercased())
         }
     }
-    
-    func tagIsInSpreadsheet(_ id:Case.Tag.ID) -> Bool {
-        delegate.selectedCase?.isInSpreadsheet(id, sheet: .tags) ?? false
-    }
-    func addTag(_ tag:Case.Tag) {
-        if !delegate.tags.contains(where: {$0.id == tag.id }) {
-            delegate.tags.append(tag)
-        }
-    }
     func addNewTag(_ text:String) -> Case.Tag {
         if let existing = delegate.selectedCase?.tags.first(where: {$0.name.lowercased() == text.lowercased()}) {
             addTag(existing)
@@ -104,8 +54,11 @@ struct Filer_Tags: View {
             return newTag
         }
     }
-    func removeTag(_ tagID:Case.Tag.ID) {
-        delegate.tags.removeAll(where: {$0.id == tagID})
+   
+    func addTag(_ tag:Case.Tag) {
+        if !delegate.tags.contains(where: {$0.id == tag.id }) {
+            delegate.tags.append(tag)
+        }
     }
 }
 

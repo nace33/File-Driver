@@ -15,54 +15,12 @@ struct Filer_Contacts: View {
 
     
     var body: some View {
-        let current  = delegate.contacts.compactMap({$0.name}).joined()
-        let eligible = delegate.selectedCase?.contacts.filter({!current.ciContain($0.name)  }) ?? []
+        let eligible = delegate.selectedCase?.contacts ?? []
+        
         Section {
-            LabeledContent {
-                TextField("Contacts", text:$contactText, prompt: Text("Add Contacts"))
-                    .labelsHidden()
-#if os(macOS)
-                    .textInputSuggestions {
-                        if contactText.count > 0 {
-                            let matches = delegate.selectedCase?.contacts.filter({$0.name.ciHasPrefix(contactText) && !current.ciContain($0.name)  }) ?? []
-                            ForEach(matches) {  Text($0.name) .textInputCompletion($0.name) }
-                        }
-                    }
-#endif
-                    .onSubmit {
-                        _ = addNewFilingContact(contactText)
-                        contactText = ""
-                    }
-            } label: {
-                Menu("Contacts") {
-                    if eligible.count > 10 {
-                        BOFSections(.menu, of: eligible , groupedBy: \.name, isAlphabetic: true) { letter in
-                            Text(letter)
-                        } row: { contact in
-                            Button(contact.name) { addFilingContact(contact)  }
-                        }
-                    } else {
-                        ForEach(eligible.sorted(by: {$0.name.ciCompare($1.name)})) { contact in
-                            Button(contact.name) { addFilingContact(contact)  }
-                        }
-                    }
-                }
-                    .menuStyle(.borderlessButton)
-                    .menuIndicator(eligible.isEmpty ? .hidden : .visible)
-                    .labelsHidden()
-                    .fixedSize()
-            }
-
-            if delegate.contacts.count > 0 {
-                Flex_Stack(data: delegate.contacts, alignment: .trailing) { contact in
-                    let isExisting = contactIsInSpreadsheet(contact.id)
-                    Text(contact.name)
-                        .tokenStyle(color:isExisting ? .blue : .orange,  style:.strike) {
-                            removeFilingContact(contact.id)
-                        }
-                }
-          
-            }
+            FormTokensPicker(title: "Contacts", items: Bindable(delegate).contacts, allItems:eligible, titleKey: \.name, altColor:.orange, create:  { createString in
+               addNewFilingContact(createString)
+            })
         }
             .task(id:delegate.items) {
                 loadFilerItemContacts()
@@ -72,6 +30,12 @@ struct Filer_Contacts: View {
             }
     }
     
+   
+}
+
+
+//MARK- Load
+fileprivate extension Filer_Contacts {
     //Found in Filer_Item
     func loadFilerItemContacts() {
         delegate.contacts.removeAll()
@@ -130,17 +94,7 @@ struct Filer_Contacts: View {
         //This is because it is far less reliable to be accurate as precise email and names coming from the EmailThread
     }
     
-    
     //Contacts
-    func contactIsInSpreadsheet(_ id:Case.Contact.ID) -> Bool {
-        //for UI
-        delegate.selectedCase?.isInSpreadsheet(id, sheet: .contacts) ?? false
-    }
-    func addFilingContact(_ contact:Case.Contact) {
-        if !delegate.contacts.contains(where: {$0.id == contact.id }) {
-            delegate.contacts.append(contact)
-        }
-    }
     func addNewFilingContact(_ name:String) -> Case.Contact {
         if let existing = delegate.selectedCase?.contacts.first(where: {$0.name.lowercased() == name.lowercased()}) {
             addFilingContact(existing)
@@ -151,15 +105,10 @@ struct Filer_Contacts: View {
             return newContact
         }
     }
-    func removeFilingContact(_ id:Case.Contact.ID) {
-        _ = delegate.contacts.remove(id:id)
-        removeAllContactData(for:id)
-    }
-    
-    //Contacts Data
-    func contactDataIsInSpreadsheet(_ id:Case.ContactData.ID) -> Bool {
-        //for UI
-        delegate.selectedCase?.isInSpreadsheet(id, sheet: .contactData) ?? false
+    func addFilingContact(_ contact:Case.Contact) {
+        if !delegate.contacts.contains(where: {$0.id == contact.id }) {
+            delegate.contacts.append(contact)
+        }
     }
     func addContactData(_ data:Case.ContactData) {
         //Filer_Delegate removes contactData that already exists in the spreadsheet
@@ -168,14 +117,7 @@ struct Filer_Contacts: View {
             delegate.contactData.append(data)
         }
     }
-    func removeContactData(_ id:String) {
-        _ =  delegate.contactData.remove(id: id)
-    }
-    func removeAllContactData(for contactID:Case.Contact.ID) {
-        delegate.contactData.removeAll(where: {$0.contactID == contactID})
-    }
 }
-
 
 #Preview {
     Form {

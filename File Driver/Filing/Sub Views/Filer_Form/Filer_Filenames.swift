@@ -9,6 +9,9 @@ import SwiftUI
 
 struct Filer_Filenames: View {
     @Environment(Filer_Delegate.self) var delegate
+    @State private var showRenameSheet = false
+    
+    
     var body: some View {
         
         Section {
@@ -23,13 +26,24 @@ struct Filer_Filenames: View {
                     }
                 }
             } label: {
-                
                 Menu("Filename\(delegate.items.count == 1 ? "" : "s")") {
                     Button("Reset filename\(delegate.items.count == 1 ? "" : "s")") { resetFilenames() }
+                    if delegate.items.count > 1 {
+                        Button("Rename In Sequence") { showRenameSheet = true }
+                    }
                 }
                     .fixedSize()
                     .menuStyle(.borderlessButton)
-                    .menuIndicator(hasFilenameToReset ? .visible : .hidden)
+                    .menuIndicator(hasFilenameToReset || delegate.items.count > 1 ? .visible : .hidden)
+            }
+        }
+        .sheet(isPresented: $showRenameSheet) {
+            Renamer(title: "Rename Files", items: delegate.items, key: \.filename, canReorder: false) { items in
+                for item in items {
+                    if let filingIndex = delegate.items.firstIndex(of: item.item) {
+                        delegate.items[filingIndex].filename = item.string
+                    }
+                }
             }
         }
  

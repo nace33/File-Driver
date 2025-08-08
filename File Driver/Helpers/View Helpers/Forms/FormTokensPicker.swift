@@ -118,7 +118,7 @@ struct FormTokensPicker<T : Identifiable & Hashable> : View {
         self.color = tokenColor
         self.create = create
     }
-    public init(title: String, items: Binding<[T]>, allItems: [T], titleKey: KeyPath<T, String>, tokenColor: Color, altColor:Color? = nil, create: ((String) -> (T)?)? = nil) {
+    public init(title: String, items: Binding<[T]>, allItems: [T], titleKey: KeyPath<T, String>, tokenColor: Color = .blue, altColor:Color? = nil, create: ((String) -> (T)?)? = nil) {
         self.title = title
         self.items = items
         self.allItems = allItems
@@ -203,6 +203,7 @@ struct FormTokensPicker<T : Identifiable & Hashable> : View {
     
     private func append(_ item: T) {
         if !items.wrappedValue.contains(item) {
+            print("\tAppending: \(item.id)")
             items.wrappedValue.append(item)
         }
     }

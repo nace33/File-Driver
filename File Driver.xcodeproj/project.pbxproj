@@ -32,6 +32,7 @@
 		E330A6DD2E44CE86004DF5A2 /* Filer_Trackers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6DC2E44CE86004DF5A2 /* Filer_Trackers.swift */; };
 		E330A6DF2E44EF97004DF5A2 /* Case.TrackersFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */; };
 		E330A6E12E44F781004DF5A2 /* SelectTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6E02E44F781004DF5A2 /* SelectTracker.swift */; };
+		E330A6E42E452FB2004DF5A2 /* Renamer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E330A6E32E452FB2004DF5A2 /* Renamer.swift */; };
 		E34BAB1C2DFB66ED0077AACA /* Drive_Imager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */; };
 		E34BAB1F2DFB9E920077AACA /* AddToCase_Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */; };
 		E34BAB242DFB9F9D0077AACA /* Contact.Case.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */; };
@@ -240,6 +241,7 @@
 		E330A6DC2E44CE86004DF5A2 /* Filer_Trackers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filer_Trackers.swift; sourceTree = "<group>"; };
 		E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Case.TrackersFilter.swift; sourceTree = "<group>"; };
 		E330A6E02E44F781004DF5A2 /* SelectTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTracker.swift; sourceTree = "<group>"; };
+		E330A6E32E452FB2004DF5A2 /* Renamer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renamer.swift; sourceTree = "<group>"; };
 		E34BAB1B2DFB66ED0077AACA /* Drive_Imager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drive_Imager.swift; sourceTree = "<group>"; };
 		E34BAB1E2DFB9E920077AACA /* AddToCase_Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCase_Contact.swift; sourceTree = "<group>"; };
 		E34BAB232DFB9F9D0077AACA /* Contact.Case.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.Case.swift; sourceTree = "<group>"; };
@@ -474,12 +476,8 @@
 			isa = PBXGroup;
 			children = (
 				E330A6BB2E41020C004DF5A2 /* Case.TrackersView.swift */,
-				E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */,
-				E330A6D22E42D79A004DF5A2 /* Case.TrackersTable.swift */,
-				E330A6D62E42D89D004DF5A2 /* Case.TrackersList.swift */,
-				E330A6D82E42DFB0004DF5A2 /* Case.TrackerInspector.swift */,
-				E330A6DA2E43ACD7004DF5A2 /* Case.TrackersRows.swift */,
 				E330A6D12E42B84D004DF5A2 /* Model */,
+				E330A6E22E452C97004DF5A2 /* Sub-Views */,
 				E330A6C92E425390004DF5A2 /* Actions */,
 			);
 			path = Trackers;
@@ -514,6 +512,18 @@
 				E330A6D42E42D84D004DF5A2 /* TrackerRoot.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		E330A6E22E452C97004DF5A2 /* Sub-Views */ = {
+			isa = PBXGroup;
+			children = (
+				E330A6DE2E44EF97004DF5A2 /* Case.TrackersFilter.swift */,
+				E330A6D22E42D79A004DF5A2 /* Case.TrackersTable.swift */,
+				E330A6D62E42D89D004DF5A2 /* Case.TrackersList.swift */,
+				E330A6D82E42DFB0004DF5A2 /* Case.TrackerInspector.swift */,
+				E330A6DA2E43ACD7004DF5A2 /* Case.TrackersRows.swift */,
+			);
+			path = "Sub-Views";
 			sourceTree = "<group>";
 		};
 		E34BAB1D2DFB78730077AACA /* Misc */ = {
@@ -872,6 +882,7 @@
 				E37E51D02DEF97EC00EF860C /* Filter.swift */,
 				E37E51B02DEEC30200EF860C /* Filing_WebView.swift */,
 				E32730D82DE9220100B6EDBD /* VStack_Loader.swift */,
+				E330A6E32E452FB2004DF5A2 /* Renamer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1399,6 +1410,7 @@
 				E3F5A1892DAFF276004100C3 /* Case_OLD.swift in Sources */,
 				E3F5A1B12DB082FB004100C3 /* Case_Contact_Details.swift in Sources */,
 				E359404D2E0B177800507A77 /* EditCase.swift in Sources */,
+				E330A6E42E452FB2004DF5A2 /* Renamer.swift in Sources */,
 				E3F5A18A2DAFF276004100C3 /* Case_Tag.swift in Sources */,
 				E35940292E099A2B00507A77 /* Drive.Delegate.NewFolder.swift in Sources */,
 				E37992612E022A00001B0E02 /* DriveView_RowLabel.swift in Sources */,
