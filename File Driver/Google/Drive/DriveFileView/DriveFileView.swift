@@ -12,20 +12,28 @@ import WebKit
 
 struct DriveFileView: View {
     let files : [GTLRDrive_File]
+    let isPreview : Bool
     @State private var selectedFile : GTLRDrive_File?
     @State private var navDelegate : BOF_WebView.NavDelegate
     @State private var uiDelegate  : BOF_WebView.UIDelegate
     @State private var isLoading : Bool
     @State private var webView : WKWebView?
-    init(_ files: [GTLRDrive_File], isLoading:Bool = true) {
+    init(_ files: [GTLRDrive_File], isLoading:Bool = true, isPreview:Bool = true) {
+        self.isPreview = isPreview
         self.files = files
         _navDelegate = State(initialValue: BOF_WebView.NavDelegate()) //ignore until called in.task because don't need loading UI on initial load
         _uiDelegate  = State(initialValue: BOF_WebView.UIDelegate()) //ignore until called in.task because don't need loading UI on initial load
         _isLoading   = State(initialValue: isLoading)
     }
     
-    
-    
+    func url(for file: GTLRDrive_File) -> URL {
+        switch isPreview {
+        case true:
+            file.previewURL
+        case false:
+            file.isGoogleType ? file.url : file.previewURL
+        }
+    }
     var body: some View {
         VStack(alignment: .leading, spacing:0) {
             if files.count > 1 {
@@ -34,19 +42,20 @@ struct DriveFileView: View {
             }
             ZStack {
                 if let selectedFile {
-                    BOF_WebView(selectedFile.previewURL, navDelegate: navDelegate, uiDelegate: uiDelegate)
+                    BOF_WebView(url(for:selectedFile), navDelegate: navDelegate, uiDelegate: uiDelegate)
                         .opacity(isLoading ? 0.25 : 1)
                 }
                 else {
                     ContentUnavailableView("File Preview", systemImage: "filemenu.and.selection", description: Text("Select a file to show a preview."))
                 }
-                if isLoading {
+                if isLoading, files.count > 0  {
                     Rectangle()
                         .fill(.black)
                     ProgressView("Loading Preview")
+                
                     Rectangle()
                         .fill(.gray)
-                        .opacity(0.5)
+                        .opacity(0.3)
                 }
             }
         }

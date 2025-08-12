@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct Settings_Cases: View {
-    @AppStorage(BOF_Settings.Key.caseTemplateID.rawValue) var templateID  = ""
 
     var body: some View {
         Form {
-            TextField("Case Template ID", text: $templateID)
+            CasesFilter()
         }
-        .formStyle(.grouped)
-
+            .formStyle(.grouped)
     }
 }
 

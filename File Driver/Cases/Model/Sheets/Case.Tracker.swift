@@ -192,9 +192,10 @@ extension Case.Tracker {
 }
 
 import GoogleAPIClientForREST_Sheets
-extension Case.Tracker : SheetRow {
+extension Case.Tracker : GoogleSheetRow {
     var sheetID: Int { Case.Sheet.trackers.intValue }
-    
+    var sheetName : String { Case.Sheet.trackers.rawValue}
+
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 11 else { return nil }

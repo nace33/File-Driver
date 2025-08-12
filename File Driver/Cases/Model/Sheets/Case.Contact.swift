@@ -37,9 +37,10 @@ extension Case.Contact : Hashable {
 
 
 import GoogleAPIClientForREST_Sheets
-extension Case.Contact : SheetRow {
+extension Case.Contact : GoogleSheetRow {
     var sheetID: Int { Case.Sheet.contacts.intValue }
-    
+    var sheetName : String { Case.Sheet.contacts.rawValue}
+
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 6 else { return nil }

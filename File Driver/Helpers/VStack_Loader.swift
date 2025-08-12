@@ -21,7 +21,13 @@ import SwiftUI
     init(isLoading:Bool = true) {
         self.isLoading = isLoading
     }
-    func start() { increment += 1}
+    func forceIsLoading() {
+        self.isLoading = true
+    }
+    func start(_ status:String? = nil) {
+        if let status { self.status = status}
+        increment += 1
+    }
     func stop(_ error:Error? = nil)  {
         increment -= 1
         if let error { self.error = error }

@@ -11,38 +11,50 @@ import SwiftUI
 final class BOF_Nav : Codable, RawRepresentable{
     static let storageKey: String = "File-Driver_BOF_Nav"
 
-    var sidebar : Sidebar_Item.ID? = nil
-    var path = NavigationPath()
+    var sidebarID : Sidebar_Item.ID? = nil
+
+    //Cases
+    var casePath = NavigationPath()
     var caseID  : Case.ID?
     var caseView : Case.ViewIndex = .allCases.first!
     
+    //Templates
+    var templatePath = NavigationPath()
+
     enum CodingKeys: String, CodingKey {
-        case sidebar, path, caseID, caseView
+        case sidebar, casePath, caseID, caseView, templatePath
     }
     
     init() {
-        self.sidebar = nil
+        self.sidebarID = nil
     }
     
     
     //MARK: Codable
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.sidebar = try container.decodeIfPresent(Sidebar_Item.ID.self, forKey: .sidebar)
+        self.sidebarID = try container.decodeIfPresent(Sidebar_Item.ID.self, forKey: .sidebar)
         self.caseID = try container.decodeIfPresent(Case.ID.self, forKey: .caseID)
         self.caseView = try container.decodeIfPresent(Case.ViewIndex.self, forKey: .caseView) ?? .allCases.first!
         
-        if let data = try container.decodeIfPresent(NavigationPath.CodableRepresentation.self, forKey: .path) {
-            self.path = .init(data)
+        if let data = try container.decodeIfPresent(NavigationPath.CodableRepresentation.self, forKey: .casePath) {
+            self.casePath = .init(data)
+        }
+        if let data = try container.decodeIfPresent(NavigationPath.CodableRepresentation.self, forKey: .templatePath) {
+            self.templatePath = .init(data)
         }
     }
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(sidebar, forKey: .sidebar)
-        try container.encodeIfPresent(path.codable, forKey: .path)
+        try container.encodeIfPresent(sidebarID, forKey: .sidebar)
+        try container.encodeIfPresent(casePath.codable, forKey: .casePath)
         try container.encodeIfPresent(caseID, forKey: .caseID)
         try container.encodeIfPresent(caseView, forKey: .caseView)
+      
+        //Templates
+        try container.encodeIfPresent(templatePath.codable, forKey: .templatePath)
 
+        
     }
     
     //MARK: RawRepresentable
@@ -53,10 +65,13 @@ final class BOF_Nav : Codable, RawRepresentable{
          else {
              return
          }
-         self.sidebar = result.sidebar
-         self.path    = result.path
+         self.sidebarID = result.sidebarID
+         self.casePath    = result.casePath
         self.caseID  = result.caseID
         self.caseView  = result.caseView
+        
+        //Templates
+        self.templatePath = result.templatePath
     }
 
      var rawValue: String {

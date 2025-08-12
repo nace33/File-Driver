@@ -8,14 +8,11 @@
 import SwiftUI
 
 struct Settings_Contacts: View {
-    @AppStorage(BOF_Settings.Key.contactTemplateIDKey.rawValue)  var centralID : String = "1_rQAShOsmeI2XiYY51TSD3G-uhJqKNie4QSGsr9ZAwo"
-    @AppStorage(BOF_Settings.Key.contactsDriveIDKey.rawValue)  var driveID : String = ""
+    @AppStorage(BOF_Settings.Key.contactsDriveID.rawValue)  var driveID : String = ""
     @AppStorage(BOF_Settings.Key.contactIconSizeKey.rawValue)   var iconSize : Int = 48
     
-    @AppStorage(BOF_Settings.Key.contactsShowVisibleKey.rawValue) var showVisible : Bool = true
-    @AppStorage(BOF_Settings.Key.contactsShowHiddenKey.rawValue)  var showHidden  : Bool = true
-    @AppStorage(BOF_Settings.Key.contactsShowPurgeKey.rawValue)   var showPurge   : Bool = true
-    @AppStorage(BOF_Settings.Key.contactsSortKey.rawValue)   var sortBy           : Contact.Sort = .lastName
+  
+    @AppStorage(BOF_Settings.Key.contactsGroupBy.rawValue)   var groupBy           : Contact.Group = .lastName
     @AppStorage(BOF_Settings.Key.contactsShowImage.rawValue)      var showImage   : Bool = true
     @AppStorage(BOF_Settings.Key.contactsLastNameFirst.rawValue)  var lastNameIsFirst  : Bool = true
     @AppStorage(BOF_Settings.Key.contactsShowColorsKey.rawValue)  var showColors  : Bool = true
@@ -25,7 +22,6 @@ struct Settings_Contacts: View {
         Form {
             Section {
                 TextField("Drive ID", text: $driveID, axis: .vertical)
-                TextField("Contact Template ID", text: $centralID, axis: .vertical)
             }
             
             Section {
@@ -68,17 +64,15 @@ struct Settings_Contacts: View {
             Section("Contacts List") {
                 LabeledContent("Show") {
                     VStack(alignment: .trailing) {
-                        Toggle("Visible", isOn: $showVisible)
-                        Toggle("Hidden", isOn: $showHidden)
-                        Toggle("Deleted", isOn: $showPurge)
+                   
                         Toggle(isOn: $showColors)  { Text("Colors In Name")}
                     }
                 }
          
                 
-                Picker("Sort By", selection:$sortBy) {
-                    ForEach(Contact.Sort.allCases, id:\.self) {sort in
-                        Text(sort.title)
+                Picker("Group By", selection:$groupBy) {
+                    ForEach(Contact.Group.allCases, id:\.self) {group in
+                        Text(group.title)
                     }
                 }
                 Picker("Display", selection:$lastNameIsFirst) {

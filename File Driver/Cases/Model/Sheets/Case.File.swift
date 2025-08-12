@@ -37,8 +37,9 @@ extension Case {
 
 
 
-extension Case.File : SheetRow {
+extension Case.File : GoogleSheetRow {
     var sheetID: Int { Case.Sheet.files.intValue }
+    var sheetName : String { Case.Sheet.files.rawValue}
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 8 else { return nil }

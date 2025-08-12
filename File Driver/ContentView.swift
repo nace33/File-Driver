@@ -29,17 +29,13 @@ struct ContentView: View {
     
     var initialSidebarItemID : Sidebar_Item.ID?
     init(sidebarItemID:Sidebar_Item.ID? = nil) {  initialSidebarItemID = sidebarItemID   }
-    var title : String {
-        Bundle.main.infoDictionary?["CFBundleName"] as? String ??
-        "My App Name"
-    }
+    var title : String { Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "My App Name"  }
     var body: some View {
         if roots.isEmpty || google.user == nil {
             if google.loginStatus == .signingIn { ProgressView("Logging into Google...")}
             else { getStartedView }
         } else {
             NavigationSplitView {
-                
                 VStack(alignment:.leading) {
                     Sidebar()
                     Google_SignInView().padding()
@@ -49,13 +45,38 @@ struct ContentView: View {
                 .navigationSplitViewColumnWidth(min: 180, ideal: 200)
 #endif
             } detail: {
-                detailView(navigation.sidebar)
+                contentView(navigation.sidebarID)
             }
+/*
+            NavigationSplitView {
+                VStack(alignment:.leading) {
+                    Sidebar()
+                    Google_SignInView().padding()
+                }
+                .navigationTitle(title)
+#if os(macOS)
+                .navigationSplitViewColumnWidth(min: 180, ideal: 200)
+#endif
+            }
+            content: {
+                contentView(navigation.sidebarID)
+#if os(macOS)
+                .navigationSplitViewColumnWidth(min: 250, ideal: 250)
+#endif
+            }
+            detail: {
+                detailView(navigation.sidebarID)
+            }
+ */
                 .onAppear() {
                     BOF_SwiftData.shared.container.mainContext.undoManager = undoManager
                     loadNavigationPassedFromWindowGroupIfAny()
+                    Task {
+                      await   Google_Labels.shared.printFields(labelID: "5dXa8qxUu5p2F2tXDmsjdRxIU9cj81MWozIRNNEbbFcb")
+                    }
                 }
                 .environment(navigation)
+                .navigationSplitViewStyle(.prominentDetail)
         }
     }
     
@@ -80,7 +101,7 @@ struct ContentView: View {
     //For when sidebaritems are passed in from the Window Group
     private func loadNavigationPassedFromWindowGroupIfAny() {
         if let initialSidebarItemID {
-            navigation.sidebar = initialSidebarItemID
+            navigation.sidebarID = initialSidebarItemID
         }
     }
 }
@@ -90,15 +111,17 @@ struct ContentView: View {
     ContentView()
         .modelContainer(for: Sidebar_Item.self, inMemory: true)
 }
+
+
 extension ContentView {
-    @ViewBuilder func detailView(_ id:Sidebar_Item.ID?) -> some View {
+    @ViewBuilder func contentView(_ id:Sidebar_Item.ID?) -> some View {
         if let item = Sidebar_Item.fetchItem(with:id, in:modelContext) {
             switch item.category {
             case .filing:
-                FilingView()
+                Filing_Content()
                     .navigationTitle(item.category.title)
             case .templates:
-                TemplatesList()
+                Templates_Content()
                     .navigationTitle(item.category.title)
             case .inbox:
                 Inbox_View(url: item.category.defaultURL)
@@ -107,13 +130,22 @@ extension ContentView {
                 Settings_View()
                     .navigationTitle(item.category.title)
             case .cases:
-                CasesView()
+                Cases_Content()
                     .navigationTitle(item.category.title)
             case .contacts:
-                ContactsList()
+                Contacts_Content()
                     .navigationTitle(item.category.title)
             case .drive:
-                BOF_WebView(URL(string:"https://drive.google.com")!, navDelegate: .init(), uiDelegate: .init())
+                Filing_WebView(URL(string:"https://drive.google.com")!)
+                    .navigationTitle(item.category.title)
+            case .calendar:
+                Filing_WebView(URL(string:"https://calendar.google.com")!)
+                    .navigationTitle(item.category.title)
+            case .gemini:
+                Filing_WebView(URL(string:"https://gemini.google.com")!)
+                    .navigationTitle(item.category.title)
+            case .research:
+                Research_Content()
                     .navigationTitle(item.category.title)
             default:
                 Text("Jimmy Build \(item.category.title)\n\n\(item.url)")
@@ -121,6 +153,23 @@ extension ContentView {
         } else {
             ContentUnavailableView("No Selection", systemImage: "filemenu.and.selection", description: Text("Select an item from the sidebar"))
                           .navigationTitle(title)
+        }
+    }
+    @ViewBuilder func detailView(_ id:Sidebar_Item.ID?) -> some View {
+        if let item = Sidebar_Item.fetchItem(with:id, in:modelContext) {
+            switch item.category {
+            case .filing:
+                Filing_Detail()
+            case .contacts:
+                Contacts_Detail()
+            case .cases:
+                Cases_Detail()
+            case .templates:
+                Templates_Detail()
+            default:
+                Spacer()
+                           .navigationSplitViewColumnWidth(0)
+            }
         }
     }
 }

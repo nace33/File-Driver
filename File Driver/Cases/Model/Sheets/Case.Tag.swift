@@ -19,9 +19,10 @@ extension Case {
 
 
 import GoogleAPIClientForREST_Sheets
-extension Case.Tag : SheetRow {
+extension Case.Tag : GoogleSheetRow {
     var sheetID: Int { Case.Sheet.tags.intValue }
-    
+    var sheetName : String { Case.Sheet.tags.rawValue}
+
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 2 else { return nil }

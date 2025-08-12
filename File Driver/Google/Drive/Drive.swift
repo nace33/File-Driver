@@ -690,6 +690,29 @@ extension Drive {
             throw error
         }
     }
+   
+    func lable(remove labelID:String, on fileIDs:[String]) async throws {
+        let batch = GTLRBatchQuery()
+
+        
+        for fileID in fileIDs {
+            let request = GTLRDrive_ModifyLabelsRequest()
+            let mod     = GTLRDrive_LabelModification()
+            mod.labelId     = labelID
+            mod.removeLabel = true as NSNumber
+            request.labelModifications = [mod]
+            let query = GTLRDriveQuery_FilesModifyLabels.query(withObject: request, fileId:fileID)
+            batch.addQuery(query)
+        }
+
+        do {
+            let fetcher = Google_Fetcher<GTLRBatchResult>(service:service, scopes:scopes)
+            //response is GTLRBatchResult
+            _ = try await Google.execute(batch, fetcher: fetcher)
+        } catch {
+            throw error
+        }
+    }
     
     //QUERY
     enum Label_Logic {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BOF_SecretSauce
 
 struct TextField_Suggestions: View {
     let label : String
@@ -13,6 +14,8 @@ struct TextField_Suggestions: View {
     let prompt : Text?
     let style : TextField_Suggestions.Style?
     let suggestions : [String]
+    let didSelect   : ((String) -> Void)?
+
     @AppStorage(BOF_Settings.Key.textSuggestionStyle.rawValue) var defaultStyle : TextField_Suggestions.Style = .menu
 
     var theStyle : TextField_Suggestions.Style {
@@ -48,12 +51,15 @@ struct TextField_Suggestions: View {
 
 //MARK: - Init
 extension TextField_Suggestions {
-    init(_ label:String, text:Binding<String>, prompt:Text? = nil, style : TextField_Suggestions.Style? = nil, suggestions:[String] ) {
+ 
+    init(_ label: String, text: Binding<String>, prompt: Text?, style: TextField_Suggestions.Style? = nil, suggestions: [String], didSelect:((String) -> Void)? = nil) {
         self.label = label
-        _text = text
+        self._text = text
         self.prompt = prompt
         self.style = style
         self.suggestions = suggestions
+        self.didSelect = didSelect
+        self.defaultStyle = defaultStyle
     }
 }
 
@@ -90,8 +96,26 @@ extension TextField_Suggestions {
     }
     @ViewBuilder var menu : some View {
         Menu("") {
-            ForEach(suggestions, id:\.self) { suggestion in
-                Button(suggestion) { text = suggestion}
+            if suggestions.count > 8 {
+                let letters = suggestions.filter({!$0.isEmpty}).compactMap { String($0.first!) }.unique().sorted(by: {$0.uppercased() < $1.uppercased()})
+                ForEach(letters, id:\.self) { letter in
+                    let matches = suggestions.filter { $0.lowercased().hasPrefix(letter.lowercased())  }
+                    Menu(letter.capitalized) {
+                        ForEach(matches, id:\.self) { suggestion in
+                            Button(suggestion) {
+                                text = suggestion
+                                didSelect?(suggestion)
+                            }
+                        }
+                    }
+                }
+            } else {
+                ForEach(suggestions, id:\.self) { suggestion in
+                    Button(suggestion) {
+                        text = suggestion
+                        didSelect?(suggestion)
+                    }
+                }
             }
         }
             .fixedSize()
@@ -120,20 +144,20 @@ extension TextField_Suggestions {
 #Preview {
     @Previewable @State var text = ""
     let suggestions : [String] = ["Frodo Baggins", "Samwise Gamgee", "Aragorn", "Legolas", "Gimli"]
-    TextField_Suggestions(label: "inline", text: $text, prompt: nil, style:.inline, suggestions:suggestions)
+    TextField_Suggestions(label: "inline", text: $text, prompt: nil, style:.inline, suggestions:suggestions, didSelect: nil)
         .textFieldStyle(.roundedBorder)
         .padding(20)
     
     
-    TextField_Suggestions(label: "menu", text: $text, prompt: nil, style:.menu, suggestions:suggestions)
+    TextField_Suggestions(label: "menu", text: $text, prompt: nil, style:.menu, suggestions:suggestions, didSelect: nil)
         .textFieldStyle(.roundedBorder)
         .padding(20)
     
-    TextField_Suggestions(label: "both", text: $text, prompt: nil, style:.both, suggestions:suggestions)
+    TextField_Suggestions(label: "both", text: $text, prompt: nil, style:.both, suggestions:suggestions, didSelect: nil)
         .textFieldStyle(.roundedBorder)
         .padding(20)
     
-    TextField_Suggestions(label: "Nil", text: $text, prompt: nil, style:nil, suggestions:suggestions)
+    TextField_Suggestions(label: "Nil", text: $text, prompt: nil, style:nil, suggestions:suggestions, didSelect: nil)
         .textFieldStyle(.roundedBorder)
         .padding(20)
 }

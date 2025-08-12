@@ -19,7 +19,7 @@ struct Sidebar : View {
     @State private var listDropTargeted : Bool = false
     
     var body: some View {
-        List(selection:Bindable(navigation).sidebar) {
+        List(selection:Bindable(navigation).sidebarID) {
             ForEach(roots) { root in
                 if let children = sortedChildren(root), children.isNotEmpty {
                     Section(isExpanded: Bindable(root).isExpanded) {

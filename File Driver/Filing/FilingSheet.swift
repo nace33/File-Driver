@@ -21,7 +21,7 @@ struct FilingSheet: View {
         self.state = state ?? { _ in }
     }
     init(showPreview:Bool = true,
-         modes: [Filer_Delegate.Mode] = [.cases, .folders],
+         modes: [Filer_Delegate.Mode] = [.cases, .contacts, .folders],
          items: [Filer_Item],
          actions:[Filer_Delegate.Action] = Filer_Delegate.Action.sheetActions,
          state:((Filer_Delegate.FilingState) -> Void)? = nil ) {

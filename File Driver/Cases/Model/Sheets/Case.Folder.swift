@@ -28,9 +28,10 @@ extension Case.Folder {
 
 
 import GoogleAPIClientForREST_Sheets
-extension Case.Folder : SheetRow {
+extension Case.Folder : GoogleSheetRow {
     var sheetID: Int { Case.Sheet.folders.intValue }
-    
+    var sheetName : String { Case.Sheet.folders.rawValue}
+
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 2 else { return nil }

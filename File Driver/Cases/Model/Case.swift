@@ -9,7 +9,7 @@ import Foundation
 import GoogleAPIClientForREST_Drive
 
 @Observable
-final class Case  {
+public final class Case  {
     var file  : GTLRDrive_File
     var label : DriveLabel
     
@@ -21,7 +21,9 @@ final class Case  {
         guard let label = DriveLabel(file: file) else { return nil }
         self.init(file: file, label: label)
     }
-
+    static func sample() -> Case {
+        Case(file: GTLRDrive_File(), label: Case.DriveLabel(folderID: ""))
+    }
     
     //variables that get loaded from the spreadsheet
     var isLoading                        = false
@@ -37,7 +39,7 @@ final class Case  {
     var permissions : [GTLRDrive_Permission] = []
 
     //Used for suggestions
-    var filingSheetRows : [any SheetRow] {
+    var filingSheetRows : [any GoogleSheetRow] {
        folders +
        contacts +
        contactData.filter ({ $0.category == "email"}) +
@@ -91,9 +93,9 @@ extension Case {
 
 //MARK: Protocols {
 extension Case : Hashable, Identifiable {
-    var id : String { file.id }
-    static func == (lhs: Case, rhs: Case) -> Bool { lhs.id == rhs.id  }
-    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+    public var id : String { file.id }
+    public static func == (lhs: Case, rhs: Case) -> Bool { lhs.id == rhs.id  }
+    public func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
 

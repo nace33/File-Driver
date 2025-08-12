@@ -22,9 +22,10 @@ extension Case {
 
 
 import GoogleAPIClientForREST_Sheets
-extension Case.ContactData : SheetRow {
+extension Case.ContactData : GoogleSheetRow {
     var sheetID: Int { Case.Sheet.contactData.intValue }
-    
+    var sheetName : String { Case.Sheet.contactData.rawValue}
+
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 5 else { return nil }

@@ -76,9 +76,9 @@ extension Case.Task {
     
 }
 
-extension Case.Task : SheetRow {
-    var sheetID: Int { Case.Sheet.tasks.intValue }
-    
+extension Case.Task : GoogleSheetRow {
+    var sheetID     : Int { Case.Sheet.tasks.intValue }
+    var sheetName : String { Case.Sheet.tasks.rawValue}
     init?(rowData: GTLRSheets_RowData) {
         guard let values = rowData.values else { return nil }
         guard values.count  >= 11 else { return nil }

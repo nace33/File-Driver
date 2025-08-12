@@ -10,9 +10,11 @@ import SwiftData
 
 @main
 struct File_DriverApp: App {
-    @State private var google = Google.shared
-    @State private var contacts = ContactsController.shared
-    @State private var templates = TemplatesController.shared
+    @State private var google   = Google.shared
+    @State private var contacts = ContactsDelegate.shared
+    @State private var templates = TemplatesDelegate.shared
+    @State private var cases = CasesDelegate.shared
+    @State private var research = ResearchDelegate.shared
 
     @State private var swiftData  = BOF_SwiftData.shared
     @Environment(\.openURL) var openURL
@@ -30,6 +32,9 @@ struct File_DriverApp: App {
             .environment(google)
             .environment(contacts)
             .environment(templates)
+            .environment(cases)
+            .environment(research)
+
             .modelContainer(swiftData.container)
 #if os(macOS)
             .commands {

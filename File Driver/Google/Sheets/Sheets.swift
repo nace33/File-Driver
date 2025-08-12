@@ -15,15 +15,10 @@ final class Sheets {
     let scopes  =  [kGTLRAuthScopeSheetsSpreadsheets]
 }
 
-extension Sheets {
-    struct Header {
-        let sheet:String
-        let names:[Any]
-    }
-}
 
 //MARK: - Create
 extension Sheets {
+    ///this creates the sheet in user's drive, no option to pick where the sheet is created.
     func create(_ spreadsheet:GTLRSheets_Spreadsheet) async throws -> GTLRSheets_Spreadsheet {
         do {
             let fetcher = Google_Fetcher<GTLRSheets_Spreadsheet>(service:service, scopes:scopes)
@@ -33,6 +28,8 @@ extension Sheets {
             throw error
         }
     }
+    
+    ///this is used immediately after a sheet is created in Drive.  try await Drive.shared.create(fileType: .sheet, name:"Sample", parentID: "DestiniationID")
     func initialize(id:String, gtlrSheets:[GTLRSheets_Sheet]) async throws {
         do {
             let spreadsheet = try await getSpreadsheet(id)
@@ -69,27 +66,6 @@ extension Sheets {
             let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: update, spreadsheetId: id)
             let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
 
-            _ = try await Google.execute(query, fetcher: fetcher)
-            
-        } catch {
-            throw error
-        }
-    }
-    func initialize(id:String, headers:[Sheets.Header]) async throws {
-        do {
-            let request              = GTLRSheets_BatchUpdateValuesRequest()
-            request.valueInputOption = kGTLRSheets_BatchUpdateValuesRequest_ValueInputOption_Raw
-            
-            request.data = headers.compactMap { header in
-                let valueRange = GTLRSheets_ValueRange()
-                valueRange.majorDimension = kGTLRSheets_ValueRange_MajorDimension_Rows
-                valueRange.range = "\(header.sheet)!A1"
-                valueRange.values = [header.names]
-                return valueRange
-            }
-            
-            let query = GTLRSheetsQuery_SpreadsheetsValuesBatchUpdate.query(withObject: request, spreadsheetId:id)
-            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateValuesResponse>(service:service, scopes:scopes)
             _ = try await Google.execute(query, fetcher: fetcher)
             
         } catch {
@@ -171,14 +147,13 @@ extension Sheets {
             throw error
         }
     }
-    func getRowNumbers(spreadsheetID:String, sheetRows:[any SheetRow], columnLetter:String = "A") async throws -> [(any SheetRow, Int)]? {
-        let sheetInts:Set<Int> = Set(sheetRows.compactMap(\.sheetID))
-        let sheets             = sheetInts.compactMap({Case.Sheet.sheet($0)})
-        let ranges             = sheets.compactMap({"\($0.rawValue)!\(columnLetter):\(columnLetter)"})
+    func getRowNumbers(spreadsheetID:String, sheetRows:[any GoogleSheetRow], columnLetter:String = "A") async throws -> [(any GoogleSheetRow, Int)]? {
+        
+        let ranges = sheetRows.compactMap({"\($0.sheetName)!\(columnLetter):\(columnLetter)"})
         
         do {
             let rangeValues = try await getValues(spreadsheetID, ranges: ranges, removeHeader: false)
-            var foundIndexes: [(any SheetRow, Int)] = []
+            var foundIndexes: [(any GoogleSheetRow, Int)] = []
             for sheetRow in sheetRows {
                 var found = false
                 for rangeValue in rangeValues {
@@ -192,6 +167,7 @@ extension Sheets {
             }
             return foundIndexes.count == sheetRows.count ? foundIndexes : nil
         } catch {
+            print(#function + " Error: \(error.localizedDescription)")
             throw error
         }
     }
@@ -199,27 +175,68 @@ extension Sheets {
 }
 
 
+//MARK: - Formatting
+extension Sheets {
+    func addHeaders(_ headers:[Sheets.Header], in spreadsheetID:String) async throws {
+        do {
+            let request              = GTLRSheets_BatchUpdateValuesRequest()
+            request.valueInputOption = kGTLRSheets_BatchUpdateValuesRequest_ValueInputOption_Raw
+            
+            request.data = headers.compactMap { header in
+                let valueRange = GTLRSheets_ValueRange()
+                valueRange.majorDimension = kGTLRSheets_ValueRange_MajorDimension_Rows
+                valueRange.range = "\(header.sheet)!A1"
+                valueRange.values = [header.names]
+                return valueRange
+            }
+            
+            let query = GTLRSheetsQuery_SpreadsheetsValuesBatchUpdate.query(withObject: request, spreadsheetId:spreadsheetID)
+            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateValuesResponse>(service:service, scopes:scopes)
+            _ = try await Google.execute(query, fetcher: fetcher)
+            
+        } catch {
+            throw error
+        }
+    }
+    func addNamedRanges(_ namedRanges:[GTLRSheets_NamedRange], in spreadsheetID:String) async throws {
+        let batch              = GTLRSheets_BatchUpdateSpreadsheetRequest()
+        batch.requests = requests(for:namedRanges)
+        do {
+            let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: batch, spreadsheetId:spreadsheetID)
+            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateValuesResponse>(service:service, scopes:scopes)
+            _ = try await Google.execute(query, fetcher: fetcher)
+        } catch {
+            throw error
+        }
+    }
+    func format(wrap:WrapStrategy? = nil, vertical:Vertical? = nil, horizontal:Horizontal? = nil, sheets:[Int], in spreadsheetID:String) async throws {
+        guard sheets.count > 0 else { throw NSError.quick("No Sheets Specified")}
+        guard wrap != nil || vertical != nil || horizontal != nil else { throw NSError.quick("No Alignment Specified") }
+        
+        let batch = GTLRSheets_BatchUpdateSpreadsheetRequest()
+
+        batch.requests = requests(wrap: wrap, vertical: vertical, horizontal: horizontal, sheets: sheets)
+   
+        do {
+            let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: batch, spreadsheetId:spreadsheetID)
+            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
+            
+            _ = try await Google.execute(query, fetcher: fetcher)
+        } catch {
+            throw error
+        }
+        
+    }
+}
+
+
 //MARK: - Append
 extension Sheets {
-    func append(_ sheetRows:[any SheetRow], to spreadsheetID:String,) async throws {
+    func append(_ sheetRows:[any GoogleSheetRow], to spreadsheetID:String,) async throws {
         do {
             let update = GTLRSheets_BatchUpdateSpreadsheetRequest()
-            var requests = [GTLRSheets_Request]()
-            
-            let sheetIDs = sheetRows.compactMap { $0.sheetID }.unique()
-            for sheetID in sheetIDs {
-                let rows = sheetRows.filter { $0.sheetID == sheetID}
-
-                let request = GTLRSheets_Request()
-                let append  = GTLRSheets_AppendCellsRequest()
-                append.fields = "*"
-                append.sheetId = NSNumber(value: sheetID)
-                append.rows = rows.compactMap(\.rowData)
-                request.appendCells = append
-                
-                requests.append(request)
-            }
-            update.requests = requests
+        
+            update.requests = requests(append:sheetRows)
 
             let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: update, spreadsheetId:spreadsheetID)
             let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
@@ -231,98 +248,15 @@ extension Sheets {
             throw error
         }
     }
-    func appendStringRows(_ sheetRows:[any SheetStringsRow], to spreadsheetID:String,) async throws {
-        do {
-
-            let update = GTLRSheets_BatchUpdateSpreadsheetRequest()
-            let uniqueIDs = sheetRows.compactMap { $0.sheetID }.unique()
-            var requests : [GTLRSheets_Request] = []
-            
-            for uniqueID in uniqueIDs {
-                let request = GTLRSheets_Request()
-                let append  = GTLRSheets_AppendCellsRequest()
-                append.fields = "userEnteredValue"
-                append.sheetId = NSNumber(value:uniqueID)
-                
-                let rows = sheetRows.filter { $0.sheetID == uniqueID}
-                let rowData = GTLRSheets_RowData()
-                for row in rows {
-                    let rowCellData : [GTLRSheets_CellData] = row.strings.compactMap { string in
-                        let cellData = GTLRSheets_CellData()
-                        let userData = GTLRSheets_ExtendedValue()
-                        userData.stringValue = string
-                        cellData.userEnteredValue = userData
-                        return cellData
-                    }
-                    rowData.values = rowCellData
-                }
-                append.rows = [rowData]
-                request.appendCells = append
-                requests.append(request)
-            }
-        
-            update.requests = requests
-
-            
-            let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: update, spreadsheetId: spreadsheetID)
-            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
-
-           _ = try await Google.execute(query, fetcher: fetcher)
-        } catch {
-            throw error
-        }
-    }
 }
 
 
 //MARK: - Update
 extension Sheets {
-    func update(spreadsheetID:String, rows:[(sheetName:String, row:Int, values:[String])]) async throws -> Bool {
-        do {
-            let request = GTLRSheets_BatchUpdateValuesRequest()
-            request.valueInputOption = kGTLRSheets_BatchUpdateValuesRequest_ValueInputOption_Raw
-            
-            request.data = rows.compactMap({ tuple in
-                let valueRange = GTLRSheets_ValueRange()
-                valueRange.majorDimension = kGTLRSheets_ValueRange_MajorDimension_Rows
-                valueRange.range = "\(tuple.sheetName)!A\(tuple.row)"
-                valueRange.values = [tuple.values]
-                return valueRange
-            })
-            
-            let query = GTLRSheetsQuery_SpreadsheetsValuesBatchUpdate.query(withObject: request, spreadsheetId:spreadsheetID)
-            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateValuesResponse>(service:service, scopes:scopes)
-            _ = try await Google.execute(query, fetcher: fetcher)
-            return true
-        } catch {
-            throw error
-        }
-    }
-    func update(spreadsheetID:String, sheetRowPairs:[(any SheetRow, Int)]) async throws -> Bool {
+    func update(spreadsheetID:String, sheetRowPairs:[(any GoogleSheetRow, Int)]) async throws -> Bool {
         do {
             let batch    = GTLRSheets_BatchUpdateSpreadsheetRequest()
-            var requests : [GTLRSheets_Request] = []
-            let sheetIDs = sheetRowPairs.compactMap { $0.0.sheetID }.unique()
-
-            for sheetID in sheetIDs {
-                let pairsForSheet = sheetRowPairs.filter { $0.0.sheetID == sheetID }
-                for rowPair in pairsForSheet {
-                    let request         = GTLRSheets_Request()
-                    let update          = GTLRSheets_UpdateCellsRequest()
-                    update.fields       = "userEnteredValue"
-                    let range           = GTLRSheets_GridRange()
-                    range.sheetId       = NSNumber(value:sheetID)
-                    range.startRowIndex = NSNumber(value:rowPair.1)
-                    range.endRowIndex   = NSNumber(value:rowPair.1 + 1)//without this it will delete everything between lowest and highest row where a value is not supplied.
-                    update.range        = range
-                    let rowData         = GTLRSheets_RowData()
-                    rowData.values      = rowPair.0.rowData.values
-                    update.rows = [rowData]
-                    request.updateCells = update
-                    requests.append(request)
-                }
-            }
-            batch.requests = requests
+            batch.requests = requests(update:sheetRowPairs)
             let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: batch, spreadsheetId: spreadsheetID)
             let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
             _ = try await Google.execute(query, fetcher: fetcher)
@@ -331,7 +265,7 @@ extension Sheets {
             throw error
         }
     }
-    func update(spreadsheetID:String, sheetRows:[any SheetRow] ) async throws  {
+    func update(spreadsheetID:String, sheetRows:[any GoogleSheetRow] ) async throws  {
         do {
             guard sheetRows.count > 0 else { throw NSError.quick("No rows to update.") }
             guard let sheetRowPairs = try await getRowNumbers(spreadsheetID: spreadsheetID, sheetRows: sheetRows) else { throw NSError.quick("Not all items found in spreadsheet.") }
@@ -343,7 +277,31 @@ extension Sheets {
 }
 
 
+
 //MARK: - Delete
 extension Sheets {
     
+}
+
+
+//MARK: - Find & Replace
+extension Sheets {
+    ///Does NOT find a value in one column and replace in another column
+    ///only replaces the value found
+    func find(_ string:String, replace:String, sheetID:Int? = nil, in spreadsheetID:String) async throws {
+       
+        let batch = GTLRSheets_BatchUpdateSpreadsheetRequest()
+     
+        batch.requests = requests(find: string, replace: replace, sheetID: sheetID)
+        
+        do {
+            let query = GTLRSheetsQuery_SpreadsheetsBatchUpdate.query(withObject: batch, spreadsheetId: spreadsheetID)
+            let fetcher = Google_Fetcher<GTLRSheets_BatchUpdateSpreadsheetResponse>(service:service, scopes:scopes)
+
+           _ = try await Google.execute(query, fetcher: fetcher)
+        } catch {
+            throw error
+        }
+      
+    }
 }

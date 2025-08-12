@@ -7,7 +7,6 @@
 
 import Foundation
 
-import Foundation
 import GoogleAPIClientForREST_Drive
 
 public extension Template {
@@ -24,7 +23,7 @@ public extension Template {
         
         //Not in DriveLabel - just a convenince
         var filename    : String
-        static func new() -> Template.Label {
+        static func new(name:String = "") -> Template.Label {
             Template.Label(status: .drafting,
                             category: "",
                             subCategory: "",
@@ -33,7 +32,7 @@ public extension Template {
                             lastUsedBy: Google.shared.user?.profile?.email ?? "",
                             note: "",
                             reference: "",
-                           filename: "")
+                           filename: name)
         }
        
         var labelFieldModifications : [GTLRDrive_LabelFieldModification] {

@@ -132,7 +132,6 @@ enum AutoFile_Rename : String, CaseIterable, Codable {
             guard UserDefaults.standard.bool(forKey: BOF_Settings.Key.filingAutoRenameFiles.rawValue) else { return nil }
             componentString = BOF_Settings.Key.filingAutoRenameComponents.rawValue
         }
-        print(componentString)
         
         guard var stringComponents = UserDefaults.standard.value(forKeyPath:componentString) as? String else { return nil}
         stringComponents = stringComponents.replacingOccurrences(of: "[", with: "")

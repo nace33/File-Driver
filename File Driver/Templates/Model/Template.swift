@@ -73,7 +73,7 @@ extension Template {
         self.file.mimeType  = type.rawValue
         self.file.name      = name
         
-        self.label = Label.new()
+        self.label = Label.new(name:name)
     }
     func copy(file:GTLRDrive_File) {
         self.file.parents        = file.parents

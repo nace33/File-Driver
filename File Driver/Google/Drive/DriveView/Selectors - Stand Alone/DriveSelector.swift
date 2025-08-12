@@ -14,7 +14,7 @@ struct DriveSelector: View {
     let showCancelButton : Bool
     @Binding var file   : GTLRDrive_File
     @Binding var fileID : String
-    typealias fileSelection = (GTLRDrive_File)-> Void
+    typealias fileSelection = (GTLRDrive_File)-> Bool //returning false will present dismiss from being called
     var selected : fileSelection?
     @State private var driveDelegate : DriveDelegate
     @Environment(\.dismiss) var dismiss
@@ -55,10 +55,10 @@ struct DriveSelector: View {
             }
             .onChange(of: driveDelegate.selectItem) { _, newValue in
                 if let newValue {
-                    selected?(newValue)
+                    let shouldDismiss = selected?(newValue) ?? true
                     self.file = newValue
                     self.fileID = newValue.id
-                    if showCancelButton {
+                    if shouldDismiss, showCancelButton {
                         dismiss()
                     }
                 }
@@ -70,5 +70,7 @@ struct DriveSelector: View {
                     }
                 }
             }
+            .presentationSizing(.fitted) // Allows resizing, sizes to content initially
+            .frame(idealWidth: 500, minHeight:400, idealHeight:  400 ) 
     }
 }

@@ -20,18 +20,18 @@ enum BOF_Settings : String, CaseIterable {
         //Inbox
         case inboxImmediateFilingKey
         //Contacts
-        case contactsDriveIDKey, contactTemplateIDKey, contactsSortKey, contactsLastNameFirst, contactIconSizeKey, contactSheetKey, contactsShowVisibleKey, contactsShowHiddenKey, contactsShowPurgeKey, contactsShowColorsKey, contactsShowImage
+        case contactsDriveID, contactsGroupBy, contactsShow, contactsLastNameFirst, contactIconSizeKey, contactSheetKey, contactsShowColorsKey, contactsShowImage
 
         //templates
-        case templateDriveID, templatesShowDrafting, templatesShowActive, templatesShowRetired, templatesSortKey, templatesListSort
+        case templateDriveID, templatesSortBy, templateGroupBy, templatesShow
         
         //cases
         case casesFilingShowSeetingsKey, casesFilingTableSortKey, casesFilingTableColumnKey, casesFilingSortKey, casesFilingFilterClosedKey, caseFilingShowStatusColorsKey
-        case caseConsultationDriveID, caseTemplateID, casesSort
+        case caseConsultationDriveID, casesGroupBy, casesShow
         
         
         //Research
-        case researchDriveID, researchTemplateID
+        case researchDriveID, researchGroupBy, researchShow
     }
 }
 
